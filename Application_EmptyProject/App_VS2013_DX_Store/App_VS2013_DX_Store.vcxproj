@@ -1,0 +1,329 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{90347322-85ff-4500-95e8-aafdc8cfa1bf}</ProjectGuid>
+    <RootNamespace>App_VS2013_DX_Store</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <AppContainerApplication>true</AppContainerApplication>
+    <ApplicationType>Windows Store</ApplicationType>
+    <ApplicationTypeRevision>8.1</ApplicationTypeRevision>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <PackageCertificateKeyFile>App_VS2013_DX_Store_TemporaryKey.pfx</PackageCertificateKeyFile>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <ClCompile>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>USES_WINDOWS8_METRO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;dxgi.lib;ole32.lib;windowscodecs.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;shell32.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <FxCompile>
+      <ObjectFileOutput>$(OutDir)\shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>USES_WINDOWS8_METRO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;dxgi.lib;ole32.lib;windowscodecs.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;shell32.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <FxCompile>
+      <ObjectFileOutput>$(OutDir)\shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+    <None Include="App_VS2013_DX_Store_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Logo.scale-100.png" />
+    <Image Include="Assets\SmallLogo.scale-100.png" />
+    <Image Include="Assets\StoreLogo.scale-100.png" />
+    <Image Include="Assets\SplashScreen.scale-100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\AbstractBar.h" />
+    <ClInclude Include="..\..\include\AbstractMainClass.h" />
+    <ClInclude Include="..\..\include\AppSetupInfos.h" />
+    <ClInclude Include="..\..\include\BasicMath.h" />
+    <ClInclude Include="..\..\include\BasicVertex.h" />
+    <ClInclude Include="..\..\include\Bitmap.h" />
+    <ClInclude Include="..\..\include\BoundingBoxes.h" />
+    <ClInclude Include="..\..\include\BufferUtils.h" />
+    <ClInclude Include="..\..\include\Camera.h" />
+    <ClInclude Include="..\..\include\CompressUtil.h" />
+    <ClInclude Include="..\..\include\CoreUtils.h" />
+    <ClInclude Include="..\..\include\Cube3D.h" />
+    <ClInclude Include="..\..\include\EditText.h" />
+    <ClInclude Include="..\..\include\Engine.h" />
+    <ClInclude Include="..\..\include\FileUtil.h" />
+    <ClInclude Include="..\..\include\GroupOfQuads.h" />
+    <ClInclude Include="..\..\include\Image.h" />
+    <ClInclude Include="..\..\include\JoystickManager.h" />
+    <ClInclude Include="..\..\include\KeyboardManager.h" />
+    <ClInclude Include="..\..\include\Material.h" />
+    <ClInclude Include="..\..\include\MathUtils.h" />
+    <ClInclude Include="..\..\include\MemoryPool.h" />
+    <ClInclude Include="..\..\include\Meshes3D.h" />
+    <ClInclude Include="..\..\include\MessageDialog.h" />
+    <ClInclude Include="..\..\include\MouseManager.h" />
+    <ClInclude Include="..\..\include\Network.h" />
+    <ClInclude Include="..\..\include\Obj3D.h" />
+    <ClInclude Include="..\..\include\ParallelTasks.h" />
+    <ClInclude Include="..\..\include\PositionsGraph.h" />
+    <ClInclude Include="..\..\include\RenderGroup.h" />
+    <ClInclude Include="..\..\include\Scene2D.h" />
+    <ClInclude Include="..\..\include\Scene3D.h" />
+    <ClInclude Include="..\..\include\SimpleConfig.h" />
+    <ClInclude Include="..\..\include\Sound.h" />
+    <ClInclude Include="..\..\include\SoundManager.h" />
+    <ClInclude Include="..\..\include\Sphere3D.h" />
+    <ClInclude Include="..\..\include\Sprite.h" />
+    <ClInclude Include="..\..\include\stdint.h" />
+    <ClInclude Include="..\..\include\Thread.h" />
+    <ClInclude Include="..\..\include\Utils.h" />
+    <ClInclude Include="..\..\source\AppSetup.h" />
+    <ClInclude Include="..\..\source\Connection.h" />
+    <ClInclude Include="..\..\source\ConstantBuffer.h" />
+    <ClInclude Include="..\..\source\directx\AbstractWindow.h" />
+    <ClInclude Include="..\..\source\directx\basicreaderwriter.h" />
+    <ClInclude Include="..\..\source\directx\BasicTimer.h" />
+    <ClInclude Include="..\..\source\directx\DesktopApp.h" />
+    <ClInclude Include="..\..\source\directx\DesktopAppControls.h" />
+    <ClInclude Include="..\..\source\directx\DesktopWindow.h" />
+    <ClInclude Include="..\..\source\directx\DirectXBase.h" />
+    <ClInclude Include="..\..\source\directx\DirectXDraw.h" />
+    <ClInclude Include="..\..\source\directx\DirectXHelper.h" />
+    <ClInclude Include="..\..\source\directx\DXMain.h" />
+    <ClInclude Include="..\..\source\directx\FileUtilAsync.h" />
+    <ClInclude Include="..\..\source\directx\MediaStreamer.h" />
+    <ClInclude Include="..\..\source\directx\Multisampling.h" />
+    <ClInclude Include="..\..\source\directx\Picking3D.h" />
+    <ClInclude Include="..\..\source\directx\RandomAccessReader.h" />
+    <ClInclude Include="..\..\source\directx\ScenarioImageSource.h" />
+    <ClInclude Include="..\..\source\directx\Scene3DPrivate.h" />
+    <ClInclude Include="..\..\source\directx\Shader.h" />
+    <ClInclude Include="..\..\source\directx\SoundFileReader.h" />
+    <ClInclude Include="..\..\source\directx\Sound_Basic.h" />
+    <ClInclude Include="..\..\source\directx\Sound_Stream.h" />
+    <ClInclude Include="..\..\source\directx\StreamEffect.h" />
+    <ClInclude Include="..\..\source\directx\TextElement.h" />
+    <ClInclude Include="..\..\source\directx\VBO.h" />
+    <ClInclude Include="..\..\source\directx\WinStoreApp.h" />
+    <ClInclude Include="..\..\source\directx\WinStoreAppControls.h" />
+    <ClInclude Include="..\..\source\directx\WinStoreAppWindow.h" />
+    <ClInclude Include="..\..\source\directx\XAudio2SoundPlayer.h" />
+    <ClInclude Include="..\..\source\EngineError.h" />
+    <ClInclude Include="..\..\source\Font.h" />
+    <ClInclude Include="..\..\source\GroupOfQuadsByTexture.h" />
+    <ClInclude Include="..\..\source\lodepng.h" />
+    <ClInclude Include="..\..\source\network_stdincludes.h" />
+    <ClInclude Include="..\..\source\Server.h" />
+    <ClInclude Include="..\..\source\StackWalker.h" />
+    <ClInclude Include="..\..\source\Texture.h" />
+    <ClInclude Include="..\..\source\TextureReal.h" />
+    <ClInclude Include="..\..\source\VBOGroup.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\AppSetup.cpp" />
+    <ClCompile Include="..\..\source\Bitmap.cpp" />
+    <ClCompile Include="..\..\source\BoundingBoxes.cpp" />
+    <ClCompile Include="..\..\source\Camera.cpp" />
+    <ClCompile Include="..\..\source\CompressUtil.cpp" />
+    <ClCompile Include="..\..\source\Connection.cpp" />
+    <ClCompile Include="..\..\source\CoreUtils.cpp" />
+    <ClCompile Include="..\..\source\Cube3D.cpp" />
+    <ClCompile Include="..\..\source\directx\BasicReaderWriter.cpp" />
+    <ClCompile Include="..\..\source\directx\BasicTimer.cpp" />
+    <ClCompile Include="..\..\source\directx\DesktopApp.cpp" />
+    <ClCompile Include="..\..\source\directx\DesktopAppControls.cpp" />
+    <ClCompile Include="..\..\source\directx\DesktopWindow.cpp" />
+    <ClCompile Include="..\..\source\directx\DirectXBase.cpp" />
+    <ClCompile Include="..\..\source\directx\DirectXDraw.cpp" />
+    <ClCompile Include="..\..\source\directx\DirectXHelper.cpp" />
+    <ClCompile Include="..\..\source\directx\DXMain.cpp" />
+    <ClCompile Include="..\..\source\directx\FileUtilAsync.cpp" />
+    <ClCompile Include="..\..\source\directx\MediaStreamer.cpp" />
+    <ClCompile Include="..\..\source\directx\Multisampling.cpp" />
+    <ClCompile Include="..\..\source\directx\Picking3D.cpp" />
+    <ClCompile Include="..\..\source\directx\RandomAccessReader.cpp" />
+    <ClCompile Include="..\..\source\directx\ScenarioImageSource.cpp" />
+    <ClCompile Include="..\..\source\directx\Scene3DPrivate.cpp" />
+    <ClCompile Include="..\..\source\directx\Shader.cpp" />
+    <ClCompile Include="..\..\source\directx\SoundFileReader.cpp" />
+    <ClCompile Include="..\..\source\directx\Sound_Basic.cpp" />
+    <ClCompile Include="..\..\source\directx\Sound_Stream.cpp" />
+    <ClCompile Include="..\..\source\directx\StreamEffect.cpp" />
+    <ClCompile Include="..\..\source\directx\TextElement.cpp" />
+    <ClCompile Include="..\..\source\directx\TextureReal.cpp" />
+    <ClCompile Include="..\..\source\directx\VBO.cpp" />
+    <ClCompile Include="..\..\source\directx\WinStoreApp.cpp" />
+    <ClCompile Include="..\..\source\directx\WinStoreAppControls.cpp" />
+    <ClCompile Include="..\..\source\directx\WinStoreAppWindow.cpp" />
+    <ClCompile Include="..\..\source\directx\XAudio2SoundPlayer.cpp" />
+    <ClCompile Include="..\..\source\EditText.cpp" />
+    <ClCompile Include="..\..\source\Engine.cpp" />
+    <ClCompile Include="..\..\source\FileUtil.cpp" />
+    <ClCompile Include="..\..\source\Font.cpp" />
+    <ClCompile Include="..\..\source\GroupOfQuads.cpp" />
+    <ClCompile Include="..\..\source\GroupOfQuadsByTexture.cpp" />
+    <ClCompile Include="..\..\source\Image.cpp" />
+    <ClCompile Include="..\..\source\JoystickManager.cpp" />
+    <ClCompile Include="..\..\source\KeyboardManager.cpp" />
+    <ClCompile Include="..\..\source\lodepng.cpp" />
+    <ClCompile Include="..\..\source\main.cpp" />
+    <ClCompile Include="..\..\source\Material.cpp" />
+    <ClCompile Include="..\..\source\MathUtils.cpp" />
+    <ClCompile Include="..\..\source\MemoryPool.cpp" />
+    <ClCompile Include="..\..\source\MessageDialog.cpp" />
+    <ClCompile Include="..\..\source\MouseManager.cpp" />
+    <ClCompile Include="..\..\source\Network.cpp" />
+    <ClCompile Include="..\..\source\Obj3D.cpp" />
+    <ClCompile Include="..\..\source\ParallelTasks.cpp" />
+    <ClCompile Include="..\..\source\PositionsGraph.cpp" />
+    <ClCompile Include="..\..\source\RenderGroup.cpp" />
+    <ClCompile Include="..\..\source\Scene2D.cpp" />
+    <ClCompile Include="..\..\source\Scene3D.cpp" />
+    <ClCompile Include="..\..\source\Server.cpp" />
+    <ClCompile Include="..\..\source\SimpleConfig.cpp" />
+    <ClCompile Include="..\..\source\SoundManager.cpp" />
+    <ClCompile Include="..\..\source\Sphere3D.cpp" />
+    <ClCompile Include="..\..\source\Sprite.cpp" />
+    <ClCompile Include="..\..\source\StackWalker.cpp" />
+    <ClCompile Include="..\..\source\Texture.cpp" />
+    <ClCompile Include="..\..\source\Thread.cpp" />
+    <ClCompile Include="..\..\source\Utils.cpp" />
+    <ClCompile Include="..\..\source\VBOGroup.cpp" />
+    <ClCompile Include="..\MainClass.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\shaders\SimplePixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\SimpleVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+    </FxCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
