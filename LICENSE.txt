@@ -28,8 +28,10 @@ source/directx/MediaStreamer.cpp, include/BasicMath.h, and maybe some other
 are made from Microsoft samples, undef Microsoft Limited Public License.
 
 Note: In this license, rights are only granted to developers of Microsoft 
-Windows-based software, so you may need to remove BasicMath.h when using under Linux
-(even if I modified it a bit).
+Windows-based software, so you may need to make it work without BasicMath.h 
+when using under Linux (even if I modified it a bit). 
+No need to remove the sources within source/directx/ though, they are compiled 
+only on Windows platforms.
 
 https://www.openhub.net/licenses/mslpl
 
