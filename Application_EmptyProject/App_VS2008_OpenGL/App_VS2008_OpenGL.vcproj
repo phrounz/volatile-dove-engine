@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="C:\progs\GnuWin32\include;&quot;d:\progs\OpenAL 1.1 SDK\include&quot;;&quot;$(SolutionDir)\..\..\dependancy_libraries\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\dependancy_libraries\OpenAL 1.1 SDK\include&quot;;&quot;$(SolutionDir)\..\..\dependancy_libraries\include&quot;"
 				PreprocessorDefinitions="USES_WINDOWS_OPENGL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib libpng.lib jpeg.lib pthreadVC2.lib &quot;d:\progs\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib&quot; WSock32.Lib libxml2.lib libiconv.lib zlib.lib alut.lib glew32.lib libvorbis_static.lib libvorbisfile_static.lib libogg_static.lib XInput.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib libpng.lib pthreadVC2.lib OpenAL32.lib WSock32.Lib libxml2.lib libiconv.lib zlib.lib alut.lib glew32.lib libvorbis_static.lib libvorbisfile_static.lib libogg_static.lib XInput.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\..\dependancy_libraries\lib&quot;;c:\progs\GnuWin32\lib"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\..\dependancy_libraries\OpenAL 1.1 SDK\libs\Win32&quot;;&quot;$(SolutionDir)\..\..\dependancy_libraries\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -117,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="C:\progs\GnuWin32\include;&quot;d:\progs\OpenAL 1.1 SDK\include&quot;;&quot;$(SolutionDir)\..\..\dependancy_libraries\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\dependancy_libraries\OpenAL 1.1 SDK\include&quot;;&quot;$(SolutionDir)\..\..\dependancy_libraries\include&quot;"
 				PreprocessorDefinitions="USES_WINDOWS_OPENGL"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -136,9 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib libpng.lib jpeg.lib pthreadVC2.lib &quot;d:\progs\OpenAL 1.1 SDK\libs\Win32\OpenAL32.lib&quot; WSock32.Lib libxml2.lib libiconv.lib zlib.lib alut.lib glew32.lib libvorbis_static.lib libvorbisfile_static.lib libogg_static.lib XInput.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib libpng.lib pthreadVC2.lib OpenAL32.lib WSock32.Lib libxml2.lib libiconv.lib zlib.lib alut.lib glew32.lib libvorbis_static.lib libvorbisfile_static.lib libogg_static.lib XInput.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\..\dependancy_libraries\lib&quot;;c:\progs\GnuWin32\lib"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\..\..\dependancy_libraries\OpenAL 1.1 SDK\libs\Win32&quot;;&quot;$(SolutionDir)\..\..\dependancy_libraries\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -676,7 +676,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy $(InputPath) $(ProjectDir)\..\WorkDir\shaders\$(InputFileName)"
+						CommandLine="copy $(InputPath) $(ProjectDir)\..\WorkDir\shaders\$(InputFileName)&#x0D;&#x0A;"
 						Outputs=" $(ProjectDir)\..\WorkDir\shaders\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -685,7 +685,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy $(InputPath) $(ProjectDir)\..\WorkDir\shaders\$(InputFileName)"
+						CommandLine="copy $(InputPath) $(ProjectDir)\..\WorkDir\shaders\$(InputFileName)&#x0D;&#x0A;"
 						Outputs=" $(ProjectDir)\..\WorkDir\shaders\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -698,7 +698,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy $(InputPath) $(ProjectDir)\..\WorkDir\shaders\$(InputFileName)"
+						CommandLine="copy $(InputPath) $(ProjectDir)\..\WorkDir\shaders\$(InputFileName)&#x0D;&#x0A;"
 						Outputs=" $(ProjectDir)\..\WorkDir\shaders\$(InputFileName)"
 					/>
 				</FileConfiguration>
@@ -707,7 +707,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy $(InputPath) $(ProjectDir)\..\WorkDir\shaders\$(InputFileName)"
+						CommandLine="copy $(InputPath) $(ProjectDir)\..\WorkDir\shaders\$(InputFileName)&#x0D;&#x0A;"
 						Outputs=" $(ProjectDir)\..\WorkDir\shaders\$(InputFileName)"
 					/>
 				</FileConfiguration>
