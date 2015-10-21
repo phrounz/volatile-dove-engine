@@ -1,7 +1,8 @@
 ============================================================================
-Sources by me (François Braud) which means most of the source code, are under ZLib license:
+Sources by me (François Braud) which means most of the source code, are under 
+ZLib license:
 
-  Copyright (C) 2015 François Braud
+  Copyright (C) 2015 Francois Braud
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -20,14 +21,32 @@ Sources by me (François Braud) which means most of the source code, are under ZL
   3. This notice may not be removed or altered from any source distribution.
 
 ============================================================================
-source/lodepng.cpp is copyright (c) 2005-2011 Lode Vandevenne a bit modified 
-and also under ZLib license
+Sounds in "Application_AnUnconventionalWeapon/WorkDir/data/sounds" is under 
+rights of their respective authors.
+
+They are taken http://www.freesound.org/ 
+The filename was not changed (except that I sometimes added __mod at the end 
+of the basename, this means that I modified it) so you can find the authors.
+I think they are all free for use for commercial projects, but you should check.
+
+The ogg music is taken from http://opengameart.org/content/battle-theme-a 
+(public domain)
+
+============================================================================
+Other data in "Application_AnUnconventionalWeapon/WorkDir/data" by me 
+(Francois Braud) and under Attribution-NonCommercial 4.0 International license
+http://creativecommons.org/licenses/by-nc/4.0/
+If you want to use this data in a commercial project, please contact me.
+
+============================================================================
+source/lodepng.cpp is copyright (c) 2005-2011 Lode Vandevenne,
+It's under ZLib license, and it's a bit modified by me.
 
 ============================================================================
 source/directx/MediaStreamer.cpp, include/BasicMath.h, and maybe some other 
 (everything with "Copyright (c) Microsoft Corporation")
-are a bit modified, made from Microsoft samples, 
-under Microsoft Limited Public License.
+are also a bit modified, made from Microsoft samples, 
+and under Microsoft Limited Public License.
 
 Note: In this license, rights are only granted to developers of Microsoft 
 Windows-based software, so you may need to make it work without BasicMath.h 
