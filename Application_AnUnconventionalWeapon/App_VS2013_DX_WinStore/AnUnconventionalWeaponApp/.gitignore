@@ -2,4 +2,4 @@ Debug
 Release
 *.ncb
 *.suo
-*.vcproj.*.moi.user
+*.vcproj.*.user
