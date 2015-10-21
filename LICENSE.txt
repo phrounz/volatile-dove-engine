@@ -20,16 +20,18 @@ Sources by me (François Braud) which means most of the source code, are under ZL
   3. This notice may not be removed or altered from any source distribution.
 
 ============================================================================
-source/lodepng.cpp is copyright (c) 2005-2011 Lode Vandevenne and also under ZLib license
+source/lodepng.cpp is copyright (c) 2005-2011 Lode Vandevenne a bit modified 
+and also under ZLib license
 
 ============================================================================
 source/directx/MediaStreamer.cpp, include/BasicMath.h, and maybe some other 
 (everything with "Copyright (c) Microsoft Corporation")
-are made from Microsoft samples, undef Microsoft Limited Public License.
+are a bit modified, made from Microsoft samples, 
+under Microsoft Limited Public License.
 
 Note: In this license, rights are only granted to developers of Microsoft 
 Windows-based software, so you may need to make it work without BasicMath.h 
-when using under Linux (even if I modified it a bit). 
+when using under Linux. 
 No need to remove the sources within source/directx/ though, they are compiled 
 only on Windows platforms.
 
