@@ -88,6 +88,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy $(SolutionDir)\..\..\dependancy_libraries\dll\*.dll $(SolutionDir)\..\WorkDir\"
 			/>
 		</Configuration>
 		<Configuration
@@ -165,6 +166,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy $(SolutionDir)\..\..\dependancy_libraries\dll\*.dll $(SolutionDir)\..\WorkDir\"
 			/>
 		</Configuration>
 	</Configurations>
