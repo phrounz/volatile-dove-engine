@@ -55,7 +55,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\..\..\dependancy_libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAsWinRT>true</CompileAsWinRT>
-      <AdditionalUsingDirectories>C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
@@ -83,7 +83,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\..\..\dependancy_libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAsWinRT>true</CompileAsWinRT>
-      <AdditionalUsingDirectories>C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

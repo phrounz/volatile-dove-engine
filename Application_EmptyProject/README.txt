@@ -11,6 +11,8 @@ App_VS2013_DX_Desktop
 	Should work just by opening the solution with Visual Studio 2013 Express for Desktop
 	and compiling+running it (with F5).
 	Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
+	Note: if your Visual Studio is not in "C:\Program files (x86)\", you have to change 
+	the option C/C++->General->"Additional #using directory".
 
 App_VS2013_DX_WinStore
 	Requires to compile+run the solution with Visual Studio 2013 Express For Windows, 
