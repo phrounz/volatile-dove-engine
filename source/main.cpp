@@ -26,6 +26,9 @@ int main(int argc, char* argv[])
 #include "../source/opengl/OpenGLApp.h"
 #include "../include/Utils.h"
 
+// workaround for http://stackoverflow.com/a/30498392/205768
+extern "C" int _forceCRTManifestCUR = 0;
+
 extern AbstractMainClass* createAbstractMainClass(const std::vector<std::string>& arguments);
 
 const bool REDIRECT_STDOUT_AND_STDERR = false;
