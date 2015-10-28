@@ -59,7 +59,7 @@ namespace Threading
 
 	void Thread::sleepCurrentThread(int miliseconds)
 	{
-		Concurrency::wait(miliseconds);
+		Sleep(miliseconds);
 	}
 
 	void Thread::initSemaphore()

@@ -6,7 +6,7 @@
 class Texture;
 
 class Material;
-typedef const Material* const MaterialId;// material identifier
+typedef const Material* MaterialId;// material identifier
 
 //---------------------------------------------------------------------
 /**
