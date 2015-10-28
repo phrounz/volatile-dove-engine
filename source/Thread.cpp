@@ -57,11 +57,6 @@ namespace Threading
 	}
 	*/
 
-	void Thread::sleepCurrentThread(int miliseconds)
-	{
-		Sleep(miliseconds);
-	}
-
 	void Thread::initSemaphore()
 	{
 	}
@@ -176,13 +171,6 @@ namespace Threading
 
 	//------------------------------------------------
 
-	void Thread::sleepCurrentThread(int miliseconds)
-	{
-		Utils::sleepMs(miliseconds);
-	}
-
-	//------------------------------------------------
-
 	Thread::~Thread()
 	{
 		void* val;
@@ -199,3 +187,11 @@ namespace Threading
 #else
 	#error
 #endif
+
+namespace Threading
+{
+	void Thread::sleepCurrentThread(int miliseconds)
+	{
+		Utils::sleepMs(miliseconds);
+	}
+}

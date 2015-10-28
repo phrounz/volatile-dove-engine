@@ -109,7 +109,8 @@ void WinStoreAppControls::OnPointerMoved(_In_ Windows::UI::Core::CoreWindow^ sen
 	auto pt = args->CurrentPoint->Position;
 	Int2 pos = AppSetup::instance().convertRealPositionToVirtualPosition(Int2((int)(pt.X), (int)(pt.Y)));
 
-	posPointers[args->CurrentPoint->PointerId] = pos;
+	if (posPointers.find(args->CurrentPoint->PointerId) != posPointers.end())
+		posPointers[args->CurrentPoint->PointerId] = pos;
 
 
 	if (posPointers.size() == 2 && m_mainClass->getSemanticZoomIsEnabled())

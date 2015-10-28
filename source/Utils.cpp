@@ -643,6 +643,7 @@ void sleepMs(unsigned int miliseconds)
 #elif defined(USES_WINDOWS_OPENGL)
   Sleep (miliseconds);
 #elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
+	//Concurrency::wait(miliseconds);
 	HANDLE m_event;
 	m_event= CreateEventEx(NULL, NULL, CREATE_EVENT_MANUAL_RESET, EVENT_ALL_ACCESS);
 	WaitForSingleObjectEx(m_event, miliseconds, false);
