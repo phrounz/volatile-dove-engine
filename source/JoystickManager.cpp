@@ -166,5 +166,10 @@ JoystickManager::Button JoystickManager::convertStrToButton(const std::string& s
 //---------------------------------------------------------------------
 
 #else
-	#error TODO
+
+bool JoystickManager::isConnected(PlayerId playerId) const { return false; }
+bool JoystickManager::isPressed(PlayerId playerId, Button button) const { return false; }
+float JoystickManager::getIntensityStick(PlayerId playerId, Stick stick) const { return 0.f; }
+void JoystickManager::vibrate(PlayerId playerId, float vibrationLeft, float vibrationRight) {}
+
 #endif

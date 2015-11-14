@@ -162,7 +162,7 @@ namespace Meshes3D
 
 		unsigned char* tableDeleted = new unsigned char[m_nbQuads];
 
-		std::map<std::pair<float3, float3>, std::set<int>> indexesByPosition;
+		std::map<std::pair<float3, float3>, std::set<int> > indexesByPosition;
 
 		int nbQuadsToRemove = 0;
 
@@ -172,7 +172,7 @@ namespace Meshes3D
 
 			if (DEBUG_PERFS) outputln("=> " << this << " 1 " << Utils::getMicrosecondTime() << " " << m_nbQuads);
 
-			for (std::map<std::pair<float3, float3>, std::set<int >>::iterator itz = indexesByPosition.begin(); itz != indexesByPosition.end(); itz++)
+			for (std::map<std::pair<float3, float3>, std::set<int > >::iterator itz = indexesByPosition.begin(); itz != indexesByPosition.end(); itz++)
 			{
 				(*itz).second.clear();
 			}
@@ -200,9 +200,9 @@ namespace Meshes3D
 			//---------------
 			// get pairs
 
-			std::set<std::pair<int, int>> pairIndexes;
+			std::set<std::pair<int, int> > pairIndexes;
 
-			for (std::map<std::pair<float3, float3>, std::set<int >>::iterator itz = indexesByPosition.begin(); itz != indexesByPosition.end(); itz++)
+			for (std::map<std::pair<float3, float3>, std::set<int > >::iterator itz = indexesByPosition.begin(); itz != indexesByPosition.end(); itz++)
 			{
 				std::set<int>& indexes = (*itz).second;
 				if (indexes.size() <= 1) continue;
@@ -229,8 +229,8 @@ namespace Meshes3D
 			std::vector<BasicQuad> quadsToAdd;
 			quadsToAdd.reserve(m_nbQuads);
 
-			std::vector<std::pair<int, int>> pairIndexesAsVector;
-			for (std::set<std::pair<int, int>>::const_iterator it = pairIndexes.begin(); it != pairIndexes.end(); it++)
+			std::vector<std::pair<int, int> > pairIndexesAsVector;
+			for (std::set<std::pair<int, int> >::const_iterator it = pairIndexes.begin(); it != pairIndexes.end(); it++)
 			{
 				pairIndexesAsVector.push_back(*it);
 			}
@@ -238,7 +238,7 @@ namespace Meshes3D
 			if (DEBUG_PERFS) outputln("=> " << this << " 4 " << Utils::getMicrosecondTime());
 
 			int nbEquals = 0;
-			for (std::vector<std::pair<int, int>>::const_iterator it = pairIndexesAsVector.begin(); it != pairIndexesAsVector.end(); it++)
+			for (std::vector<std::pair<int, int> >::const_iterator it = pairIndexesAsVector.begin(); it != pairIndexesAsVector.end(); it++)
 			{
 				int i = (*it).first;
 				int j = (*it).second;

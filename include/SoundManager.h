@@ -47,8 +47,8 @@ private:
 #endif
 	std::list<Sound_Stream*> m_soundStreams;
 
-	static std::map<std::string, Sound*> SoundManager::m_database;
-	static std::map<Sound*, int> SoundManager::m_counter;
+	static std::map<std::string, Sound*> m_database;
+	static std::map<Sound*, int> m_counter;
 
 };
 

@@ -2,6 +2,11 @@
 #include <Windows.h>
 #include <string>
 
+#ifdef USES_LINUX
+	#include <sys/stat.h>
+	#include <cstdlib>
+#endif
+
 #include "directx/BasicReaderWriter.h"
 #include "../include/Utils.h"
 #include "../include/FileUtil.h"
@@ -24,10 +29,13 @@ namespace FileUtil
 			char c[2];
 			c[0] = '\0';
 			c[1] = '\0';
+#ifdef USES_LINUX
+			wcstombs(c, &str[i], 1);
+#else
 			size_t res_str;
 			errno_t res = wcstombs_s(&res_str, c, 2, &str[i], 1);
 			if (res != 0) Utils::die();
-			//wcstombs(&c, &str[i], 1);
+#endif
 			out += c;
 		}
 		return out;
@@ -169,7 +177,7 @@ namespace FileUtil
 
 	//-----------------------------------------------------------------------------------
 
-#ifndef USES_WINDOWS8_METRO
+#if defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS_OPENGL)
 	void setAppDataFolderBasename(const wchar_t* name)
 	{
 		s_appDataFolderBasename = name;
@@ -184,6 +192,15 @@ namespace FileUtil
 		str += L"\\";// TODO
 		str += s_appDataFolderBasename;
 		return str;
+	}
+#elif (defined USES_LINUX)
+	void setAppDataFolderBasename(const wchar_t* name)
+	{
+		s_appDataFolderBasename = name;
+	}
+	std::wstring getAppDataFolderPath()
+	{
+		return Utils::convertStringToWString(std::string(getenv("HOME"))) + std::wstring(L"/") + s_appDataFolderBasename;
 	}
 #else
 	std::wstring getAppDataFolderPath()
@@ -226,7 +243,7 @@ namespace FileUtil
 		return CreateDirectoryW(fullpath.c_str(), NULL) ? true : false;
 #elif defined(USES_LINUX)
 		std::wstring fullfilepath = getFullPathUnicode(fileLocalization, filepath);
-		return mkdir(Utils::convertWStringToString(fullfilepath).c_str()) == 0;
+		return ::mkdir(Utils::convertWStringToString(fullfilepath).c_str()) == 0;
 #else
 	#error
 #endif
@@ -243,7 +260,7 @@ namespace FileUtil
 		return RemoveDirectoryW(fullpath.c_str()) ? true : false;
 #elif defined(USES_LINUX)
 		std::wstring fullfilepath = getFullPathUnicode(fileLocalization, filepath);
-		return rmdir(Utils::convertWStringToString(fullfilepath).c_str()) == 0;
+		return ::rmdir(Utils::convertWStringToString(fullfilepath).c_str()) == 0;
 #else
 #error
 #endif
@@ -335,7 +352,17 @@ namespace FileUtil
 #elif defined(USES_WINDOWS8_METRO)
 		str = getStorageFolder(fileLocalization)->Path->Data();
 #elif defined(USES_LINUX)
-	#error todo
+		if (fileLocalization == APPLICATION_FOLDER)
+		{
+		}
+		else if (fileLocalization == APPLICATION_DATA_FOLDER)
+		{
+			str += getAppDataFolderPath();
+		}
+		else
+		{
+			Assert(false);// TODO
+		}
 #endif
 		str += L"\\";
 		str += Utils::convertStringToWString(filepath);

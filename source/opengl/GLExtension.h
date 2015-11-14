@@ -29,7 +29,7 @@
 
 namespace GLExtension
 {
-	static bool isExtensionSupported( char* szTargetExtension )
+	static bool isExtensionSupported( const char* szTargetExtension )
 	{
 		const unsigned char *pszExtensions = NULL;
 		const unsigned char *pszStart;

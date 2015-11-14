@@ -44,7 +44,7 @@ Texture::Texture(const Color& color, bool isShared) :m_isShared(isShared)
 		outputln("Loading texture (unshared) with color: (" << (int)color.r() << "," << (int)color.g() << "," << (int)color.b() << "," << (int)color.a() << ")");
 		Utils::indentLog();
 		Image* image = new Image(Int2(16, 16), color);
-		m_textureReal = new TextureReal(*image, false, false, true);
+		m_textureReal = new TextureReal(*image, NULL, false, true);
 		delete image;
 		Utils::unindentLog();
 	}
@@ -118,7 +118,7 @@ TextureReal* Texture::getTexture(const Color& color)
 	{
 		outputln("Loading texture with color: (" << (int)color.r() << "," << (int)color.g() << "," << (int)color.b() << "," << (int)color.a() << ") (shared)");
 		Image* image = new Image(Int2(16, 16), color);
-		texture = new TextureReal(*image, false, false, true);
+		texture = new TextureReal(*image, NULL, false, true);
 		delete image;
 
 		m_database[key] = texture;

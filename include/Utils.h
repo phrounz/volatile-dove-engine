@@ -90,9 +90,9 @@ namespace Utils
 
 #define output( a ) {std::stringstream sstr;sstr << a ;Utils::print(sstr.str().c_str());}
 #define outputln( a ) {std::stringstream sstr;sstr << a << std::endl;Utils::print(sstr.str().c_str());}
-#ifdef USES_LINUX
+/*#ifdef USES_LINUX
   #define Assert( a ) {if ( ! (a) ) {std::stringstream sstr;sstr << "ASSERTION FAILED: " << __FILE__ << ":" << __LINE__ <<"\n";Utils::print(sstr.str().c_str());exit(1);}}
-#else
+#else*/
   #ifdef _DEBUG
     //#define Assert( a )
     #define Assert( a ) Utils::assertion(__LINE__, __FILE__, ( a ) )
@@ -106,7 +106,7 @@ namespace Utils
 	#endif
 	#define AssertMessage( a , b ) {if ( ! (a) ) {Utils::dieErrorMessageToUser( b );}}
   #endif
-#endif
+//#endif
 
 #define AssertRelease Utils::assertion
 

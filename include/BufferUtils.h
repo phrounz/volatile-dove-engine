@@ -63,7 +63,7 @@ namespace BufferUtils
 		ResizeableBuffer(MemoryPool* memoryPoolOrNull) :m_buf(NULL), m_size(0), m_realSize(0), m_memoryPoolOrNull(memoryPoolOrNull)
 		{
 		}
-		ResizeableBuffer& ResizeableBuffer::operator=(const ResizeableBuffer& res)
+		ResizeableBuffer& operator=(const ResizeableBuffer& res)
 		{
 			this->resize(res.size());
 			memcpy(m_buf, res.m_buf, res.size()*sizeof(T));
@@ -209,7 +209,7 @@ namespace BufferUtils
 		{
 			*this = otherInstance;
 		}
-		TridimensionalBuffer& TridimensionalBuffer::operator=(const TridimensionalBuffer& otherInstance)
+		TridimensionalBuffer& operator=(const TridimensionalBuffer& otherInstance)
 		{
 			this->copyFrom(otherInstance);
 			return *this;
@@ -285,13 +285,13 @@ namespace BufferUtils
 		inline std::set<T> getAllValuesInRange(const Int3& begin, const Int3& end) const
 		{
 			std::set<T> vals;
-			T lastValForOptim = getValue(begin);
+			T lastValForOptim = getValueAsCopy(begin);//getValue
 			vals.insert(lastValForOptim);
 			for (int x = begin.x(); x <= end.x(); ++x)
 				for (int y = begin.y(); y <= end.y(); ++y)
 					for (int z = begin.z(); z <= end.z(); ++z)
-						if (lastValForOptim != getValue(x, y, z))
-							vals.insert(getValue(x, y, z));
+						if (lastValForOptim != getValueAsCopy(x, y, z))//getValue
+							vals.insert(getValueAsCopy(x, y, z));//getValue
 			return vals;
 		}
 		inline bool areAllValuesInRangeEqualsTo(const Int3& begin, const Int3& end, const T& value) const
@@ -369,7 +369,7 @@ namespace BufferUtils
 		ShiftedTridimensionalBuffer(ShiftedTridimensionalBuffer& otherInstance)
 			: TridimensionalBuffer<T>(otherInstance), m_minimum(otherInstance.m_minimum) {}
 
-		ShiftedTridimensionalBuffer& ShiftedTridimensionalBuffer::operator=(const ShiftedTridimensionalBuffer& otherInstance)
+		ShiftedTridimensionalBuffer& operator=(const ShiftedTridimensionalBuffer& otherInstance)
 		{
 			this->copyFrom(otherInstance);
 			m_minimum = otherInstance.m_minimum;
@@ -417,14 +417,25 @@ namespace BufferUtils
 
 		ConstIterator begin() const { return ConstIterator(this, false); }
 		ConstIterator end()   const { return ConstIterator(this, true); }
-		ConstIterator find(const Int3& pos) const { if (!isIn(pos)) return end(); ConstIterator(this, false) it; it.m_pos = pos; return it; }
+		ConstIterator find(const Int3& pos) const
+		{
+			if (!isIn(pos))
+				return end();
+			//ConstIterator(this, false) it;
+			ConstIterator it(this, false);
+			it.m_pos = pos;
+			return it;
+		}
 
 		void clearAndResize(const Int3& newSize, const Int3& newMinimum) // note: this invalidates all iterators
 		{
-			TridimensionalBuffer::clearAndResize(newSize);
+			TridimensionalBuffer<T>::clearAndResize(newSize);
 			m_minimum = newMinimum;
 		}
-		void setAllValues(T value) { TridimensionalBuffer::setAllValues(value); }
+		void setAllValues(T value)
+		{
+			TridimensionalBuffer<T>::setAllValues(value);
+		}
 
 	private:
 		Int3 m_minimum;

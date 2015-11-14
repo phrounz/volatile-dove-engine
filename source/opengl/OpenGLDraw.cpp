@@ -195,7 +195,7 @@ void resetColor()
 
 //---------------------------------------------------------------------
 
-void OpenGLDraw::clearScreen(const Color& color)
+void clearScreen(const Color& color)
 {
 	glClearColor(color.r() / 255.f, color.g() / 255.f, color.b() / 255.f, color.a() / 255.f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

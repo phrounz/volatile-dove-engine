@@ -14,3 +14,6 @@ App_VS2013_DX_WinStore
 	then run copy_work_dir_to_appx.bat, 
 	then run the solution again.
 	Working directory is set to "WorkDirStore" (Not included on Git).
+
+App_Linux
+	Ongoing work, not working yet

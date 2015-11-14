@@ -5,14 +5,34 @@
 //---------------------------------------------------------------------
 #if defined(USES_LINUX)
 
-#include "../code_lowlevel/include/opengl/OpenGLApp.h"
+#include "opengl/OpenGLApp.h"
 
-extern Engine* createAbstractMainClass(const std::vector<std::string>& arguments);
+#include "../include/FileUtil.h"
+#include "../include/Utils.h"
+
+const bool REDIRECT_STDOUT_AND_STDERR = false;
+
+extern AbstractMainClass* createAbstractMainClass(const std::vector<std::string>& arguments);
 
 int main(int argc, char* argv[])
 {
-	Engine* mainClass = createAbstractMainClass(argv0.c_str());
-	OpenGLApp* openGLApp = new OpenGLApp(mainClass, argv[0]);
+	if (REDIRECT_STDOUT_AND_STDERR)
+	{
+		std::ofstream out("stdout.txt");
+		std::cout.rdbuf(out.rdbuf());
+		std::ofstream err("stderr.txt");
+		std::cerr.rdbuf(err.rdbuf());
+	}
+
+	std::vector<std::string> arguments;
+
+	for (int i = 0; i < __argc; ++i)
+	{
+		arguments.push_back(argv[i]);
+	}
+
+	AbstractMainClass* mainClass = createAbstractMainClass(arguments);
+	OpenGLApp* openGLApp = new OpenGLApp(mainClass, arguments[0].c_str());//"todo");///*lpCmdLine*/);//
 	openGLApp->run();
 	delete openGLApp;
 	return 0;
@@ -22,8 +42,10 @@ int main(int argc, char* argv[])
 #elif defined(USES_WINDOWS_OPENGL)
 
 #include <Windows.h>
+
+#include "opengl/OpenGLApp.h"
+
 #include "../include/FileUtil.h"
-#include "../source/opengl/OpenGLApp.h"
 #include "../include/Utils.h"
 
 // workaround for http://stackoverflow.com/a/30498392/205768

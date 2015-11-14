@@ -21,7 +21,7 @@ namespace
 class ImprovedVBO
 {
 public:
-	ImprovedVBO::ImprovedVBO(int nbVertices, const Meshes3D::BasicVertex* basicVertex, bool renderAsQuadsInsteadOfTriangles)
+	ImprovedVBO(int nbVertices, const Meshes3D::BasicVertex* basicVertex, bool renderAsQuadsInsteadOfTriangles)
 	{
 		//Assert(size%4==0);
 		float3 sumPos(0.f, 0.f, 0.f);
@@ -77,7 +77,7 @@ public:
 
 	//---------------------------------------------------------------------
 
-	void ImprovedVBO::draw() const
+	void draw() const
 	{
 		iterateVectorConst(m_vbos, VBO*)
 		{
@@ -87,18 +87,18 @@ public:
 
 	//---------------------------------------------------------------------
 
-	void ImprovedVBO::computeDistanceToCamera(const Float3& cameraPosition) const
+	void computeDistanceToCamera(const Float3& cameraPosition) const
 	{
 		m_distanceToCamera = m_globalPositionForTransparency.distanceTo(cameraPosition);
 	}
 
 	//---------------------------------------------------------------------
 
-	float ImprovedVBO::getDistanceToCamera() const { return m_distanceToCamera; }
+	float getDistanceToCamera() const { return m_distanceToCamera; }
 	
 	//---------------------------------------------------------------------
 
-	ImprovedVBO::~ImprovedVBO()
+	~ImprovedVBO()
 	{
 		iterateVector(m_vbos, VBO*)
 		{
@@ -108,7 +108,7 @@ public:
 
 	//---------------------------------------------------------------------
 #if defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
-	Float3 ImprovedVBO::get3DPosFrom2D(const Int2& pos2d)
+	Float3 get3DPosFrom2D(const Int2& pos2d)
 	{
 		bool defined = false;
 		Float3 nearestPoint;
@@ -137,7 +137,7 @@ public:
 		return nearestPoint;
 	}
 
-	void ImprovedVBO::removeFromPicking()
+	void removeFromPicking()
 	{
 		iterateVector(m_vbos, VBO*)
 		{
@@ -152,7 +152,7 @@ private:
 	Float3 m_globalPositionForTransparency;
 	mutable float m_distanceToCamera;
 
-};
+}; // class ImprovedVBO
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
