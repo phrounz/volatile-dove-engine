@@ -1359,10 +1359,10 @@ void Scene3DPrivate::drawQuad(const Float2& parSize, const Float3 pts[4], unsign
 {
 	Float2 size = parSize / 2;
 	
-	if (parTextureId != -1)
-	{
+	//if (parTextureId != -1)
+	//{
 		glBindTexture(GL_TEXTURE_2D, parTextureId);
-	}
+	//}
 	glBegin(GL_QUADS);
 
 	glNormal3f(0.f, -1.f, 0.f);

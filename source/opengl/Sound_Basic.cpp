@@ -61,7 +61,7 @@ Sound_Basic::~Sound_Basic()
 	ALint sourceState;
 	alGetSourcei(sourceID, AL_SOURCE_STATE, &sourceState);
 	if (sourceState == AL_PLAYING) alSourceStop(sourceID);
-	alSourcei(sourceID, AL_BUFFER, NULL);
+	alSourcei(sourceID, AL_BUFFER, 0);//NULL);
 
     // Clean up sound buffer
     alDeleteBuffers(1, &bufferID);

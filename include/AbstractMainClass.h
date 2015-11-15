@@ -30,13 +30,13 @@ public:
 
 	virtual std::vector<std::pair<std::string, std::string> > getCharmSettings() { return std::vector<std::pair<std::string, std::string> >(); }
 
-	virtual void init() = 0;					//! initialization - called at startup	
+	virtual void init() = 0;					//! initialization - called at startup
 	virtual void deinit() = 0;					//! un-initialization
 
 	virtual bool update() = 0;					//! do everything in your program
 	virtual void render() = 0;					//! do any render in your program
 
-	~AbstractMainClass()
+	virtual ~AbstractMainClass()
 	{
 		delete &Engine::instance();
 	}
