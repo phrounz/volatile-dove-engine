@@ -6,6 +6,7 @@
 	#include <Windows.h>
 	#include "directx/DXMain.h"
 #endif
+
 #include "Font.h"
 
 #include "AppSetup.h"
@@ -25,7 +26,8 @@ AppSetup::AppSetup(const AppSetupInfos& appSetupInfos) : m_inf(appSetupInfos), m
 void AppSetup::init()
 {
 #if defined(USES_LINUX)
-	#error TODO
+	#warning TODO
+	//changeResolution();
 #elif defined(USES_WINDOWS8_METRO)
 	// no way to change the resolution
 #else

@@ -27,7 +27,7 @@ private:
 	};
 	std::vector<PGNode*> allNodes;
 	int findPathLengthRecursiveCall(PGNode* node, const Float3& endPosition) const;
-	std::pair<bool,std::vector<Float3> > PositionsGraph::findPathRecursiveCall(PGNode* node, const Float3& endPosition, int stack) const;
+	std::pair<bool,std::vector<Float3> > findPathRecursiveCall(PGNode* node, const Float3& endPosition, int stack) const;
 };
 
 //---------------------------------------------------------------------

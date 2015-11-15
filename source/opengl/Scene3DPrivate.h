@@ -6,7 +6,9 @@ Done by Francois Braud, with help of
 http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=06
 ******************************************************************/
 
-#include <cmath>
+#ifdef USES_LINUX
+	#include <GL/glew.h>
+#endif
 
 #define GL_GLEXT_PROTOTYPES
 #include <cstdlib>
@@ -20,6 +22,8 @@ http://nehe.gamedev.net/data/lessons/lesson.asp?lesson=06
 #ifdef _MSC_VER
 	#include <GL/glext.h>
 #endif
+
+#include <cmath>
 
 //---------------------------------------------------------------------
 
@@ -92,7 +96,7 @@ public:
 
 	~Scene3DPrivate();
 private:
-	
+
 	void* quadric;
 	float angleDebugFPSVision;
 	Int2 previousMousePosition;

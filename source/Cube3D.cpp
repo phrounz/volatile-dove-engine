@@ -242,7 +242,7 @@ namespace Meshes3D
 
 		//---------------------------------------------------------------------
 
-		void Cube3D::getVerticesAndTexCoordCubeFace(
+		void getVerticesAndTexCoordCubeFace(
 			const FaceId faceId,
 			BasicQuad* basicQuad,
 			const Float3& parTexCoordBegin, const Float3& parTexCoordEnd,

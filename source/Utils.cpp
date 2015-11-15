@@ -165,8 +165,10 @@ void print(const char* text)
 
 	std::cout << finalText << std::flush;
 
-#if defined(USES_WINDOWS_OPENGL)
-	OutputDebugStringW(Utils::convertStringToWString(finalText).c_str());
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+	#ifdef USES_WINDOWS_OPENGL
+		OutputDebugStringW(Utils::convertStringToWString(finalText).c_str());
+	#endif
 	#ifdef LOG_MESSAGES
 		if (fdLog == NULL) fdLog = fopen("stdout.txt", "w");
 		fprintf(fdLog, finalText.c_str());
@@ -192,8 +194,6 @@ void print(const char* text)
 		delete [] buffer;
 		delete [] buffer2;
 	#endif
-#else
-	#error
 #endif
 }
 
@@ -446,7 +446,7 @@ std::wstring getCurrentDirectoryUnicode()
 {
 #ifdef USES_LINUX
 	char pwdtmp[MAX_PATH];
-	return std::string(getcwd(pwdtmp, MAX_PATH));
+	return Utils::convertStringToWString(std::string(getcwd(pwdtmp, MAX_PATH)));
 #else
 	return std::wstring(getCurrentDirectoryStatic());
 #endif

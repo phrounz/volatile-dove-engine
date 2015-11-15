@@ -1,13 +1,18 @@
 
-#include <Windows.h>
-#include <string>
 
 #ifdef USES_LINUX
 	#include <sys/stat.h>
 	#include <cstdlib>
+	#include <unistd.h>
+#else
+	#include <Windows.h>
 #endif
 
-#include "directx/BasicReaderWriter.h"
+#include <string>
+
+#if defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
+	#include "directx/BasicReaderWriter.h"
+#endif
 #include "../include/Utils.h"
 #include "../include/FileUtil.h"
 
@@ -79,16 +84,16 @@ namespace FileUtil
 	Platform::Array<byte>^ readFile(FileLocalization fileLocalization, const char* filepath)
 	{
 		size_t size;
-		void* data = readFile(fileLocalization, filepath, &size);
+		unsigned char* data = readFile(fileLocalization, filepath, &size);
 		Platform::Array<byte>^ bytes = ref new Platform::Array<byte>(static_cast<unsigned int>(size));
-		memcpy(bytes->Data, data, size);
+		memcpy(bytes->Data, (void*)data, size);
 		delete [] data;
 		return bytes;
 	}
 #endif
 	//-----------------------------------------------------------------------------------
 
-	void* readFile(FileLocalization fileLocalization, const char* filepath, size_t* outSize)
+	unsigned char* readFile(FileLocalization fileLocalization, const char* filepath, size_t* outSize)
 	{
 #if defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS_OPENGL)
 		FILE* file = NULL;
@@ -122,7 +127,9 @@ namespace FileUtil
 		return dataCopy;
 #elif defined(USES_LINUX)
 		std::wstring fullpath = getFullPathUnicode(fileLocalization, filepath);
-		FILE* file = fopen(Utils::convertWStringToString(fullpath).c_str(), "rb");
+		std::string fullpathstr = Utils::convertWStringToString(fullpath);
+		FILE* file = fopen(fullpathstr.c_str(), "rb");
+		AssertMessage(file != NULL, (std::string("Could not open ") + fullpathstr).c_str());
 		fseek(file, 0, SEEK_END);
 		size_t size = ftell(file);
 		*outSize = size;
@@ -243,7 +250,7 @@ namespace FileUtil
 		return CreateDirectoryW(fullpath.c_str(), NULL) ? true : false;
 #elif defined(USES_LINUX)
 		std::wstring fullfilepath = getFullPathUnicode(fileLocalization, filepath);
-		return ::mkdir(Utils::convertWStringToString(fullfilepath).c_str()) == 0;
+		return ::mkdir(Utils::convertWStringToString(fullfilepath).c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0;
 #else
 	#error
 #endif
@@ -354,6 +361,7 @@ namespace FileUtil
 #elif defined(USES_LINUX)
 		if (fileLocalization == APPLICATION_FOLDER)
 		{
+			str += L".";
 		}
 		else if (fileLocalization == APPLICATION_DATA_FOLDER)
 		{
@@ -364,7 +372,11 @@ namespace FileUtil
 			Assert(false);// TODO
 		}
 #endif
+#ifdef USES_LINUX
+		str += L"/";
+#else
 		str += L"\\";
+#endif
 		str += Utils::convertStringToWString(filepath);
 		return str;
 	}
@@ -382,12 +394,12 @@ namespace FileUtil
 	size_t getFileSize(std::ifstream& file)
 	{
 		if(!file.good()) return 0;
-	    
+
 		//size_t pos = file.tellg();
 		file.seekg(0,std::ios::end);
 		std::streamoff len = file.tellg();
 		file.seekg(std::ios::beg);
-	    
+
 		return (size_t)len;
 	}
 
@@ -396,8 +408,9 @@ namespace FileUtil
 	void copyFile(FileLocalization fileLocalizationSrc, const char* filepathSrc, FileLocalization fileLocalizationDest, const char* filepathDest)
 	{
 		size_t size;
-		void* buffer = readFile(fileLocalizationSrc, filepathSrc, &size);
+		unsigned char* buffer = readFile(fileLocalizationSrc, filepathSrc, &size);
 		writeFile(fileLocalizationDest, filepathDest, buffer, size);
+		delete [] buffer;
 	}
 
 

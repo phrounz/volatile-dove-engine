@@ -21,7 +21,7 @@ namespace FileUtil
 #if defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
 	Platform::Array<byte>^ readFile(FileLocalization fileLocalization, const char* filepath);
 #endif
-	void* readFile(FileLocalization fileLocalization, const char* filepath, size_t* outSize);
+	unsigned char* readFile(FileLocalization fileLocalization, const char* filepath, size_t* outSize);
 	//! write buffer on disk
 	void writeFile(FileLocalization fileLocalization, const char* filepath, const void* buffer, size_t size);
 	//! return true if the file exists

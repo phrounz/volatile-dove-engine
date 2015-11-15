@@ -5,6 +5,7 @@
 
 #include <map>
 #include <algorithm>
+#include <cstring>
 
 //MemoryPool* MemoryPool::instance = NULL;
 

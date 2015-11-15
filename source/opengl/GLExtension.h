@@ -25,6 +25,11 @@
 	#include <gl/glext.h>		//GL extensions
 #endif
 
+#ifdef USES_LINUX
+	#include <stdio.h>
+	#include <string.h>
+#endif
+
 //---------------------------------------------------------------------
 
 namespace GLExtension

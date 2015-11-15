@@ -11,7 +11,7 @@ public:
 	template <class T>
 	static void cleanupList(std::list<T*>& listToCleanup)
 	{
-		for(std::list<T*>::iterator it = listToCleanup.begin(); it != listToCleanup.end();)
+		for(typename std::list<T*>::iterator it = listToCleanup.begin(); it != listToCleanup.end();)
 		{
 			if ((*it)->isDestroyed())
 			{

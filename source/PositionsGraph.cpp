@@ -150,7 +150,7 @@ std::pair<bool,std::vector<Float3> > PositionsGraph::findPath(const Float3& star
 
 std::pair<bool,std::vector<Float3> > PositionsGraph::findPathRecursiveCall(PGNode* node, const Float3& endPosition, int stack) const
 {
-	std::pair<bool,std::vector<Float3>> result;
+	std::pair<bool,std::vector<Float3> > result;
 	if (DEBUG_VERBOSE) { for (int i = 0; i < stack; ++i) output("  ");outputln( "node: "<< node->pos ); }
 	result.second.push_back(node->pos);
 

@@ -35,8 +35,8 @@ Image::Image(const char* imageFile, bool isInAppData):m_containsTransparency(fal
 {
 	size_t size;
 	outputln("Loading image: " << imageFile);
-	void* buf = FileUtil::readFile(isInAppData?FileUtil::APPLICATION_DATA_FOLDER:FileUtil::APPLICATION_FOLDER, imageFile, &size);
-	this->init((unsigned char*)buf, size);
+	unsigned char* buf = FileUtil::readFile(isInAppData?FileUtil::APPLICATION_DATA_FOLDER:FileUtil::APPLICATION_FOLDER, imageFile, &size);
+	this->init(buf, size);
 	delete [] buf;
 }
 

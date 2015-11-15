@@ -5,16 +5,19 @@
 #include <cmath>
 
 #define GL_GLEXT_PROTOTYPES
-#include <cstdlib>
-#ifdef _MSC_VER
-#include <Windows.h>
-#include <WinGDI.h>
 
-#include <GL/glew.h>
+#include <cstdlib>
+
+#ifdef _MSC_VER
+	#include <Windows.h>
+	#include <WinGDI.h>
 #endif
+#include <GL/glew.h>
+
 #include <GL/glut.h>
 #ifdef _MSC_VER
 #include <GL/glext.h>
+	
 #endif
 
 //#define GL_FOG_COORDINATE_SOURCE_EXT	0x8450					// Value Taken From GLEXT.H

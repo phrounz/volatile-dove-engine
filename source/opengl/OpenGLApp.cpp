@@ -122,7 +122,7 @@ void OpenGLApp::run()
 		outputln("Caught EngineError");
 		m_isCrashedState = true;
 
-		MSG msg = { 0 };
+		//MSG msg = { 0 };
 
 		while (true)
 		{
