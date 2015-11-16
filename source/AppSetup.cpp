@@ -6,9 +6,7 @@
 	#include "directx/DXMain.h"
 #endif
 
-#ifdef USES_LINUX
-	#include "ResolutionChanger.h"
-#endif
+#include "ResolutionChanger.h"
 
 #include "Font.h"
 
