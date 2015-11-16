@@ -465,14 +465,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\source\opengl\LinuxResolutionChanger.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\source\opengl\LinuxResolutionChanger.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\source\lodepng.cpp"
 				>
 			</File>
@@ -558,6 +550,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\RenderGroup.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\ResolutionChanger.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\ResolutionChanger.h"
 				>
 			</File>
 			<File

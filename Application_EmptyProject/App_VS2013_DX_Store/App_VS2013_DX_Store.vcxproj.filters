@@ -236,6 +236,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\MainClass.cpp" />
+    <ClCompile Include="..\..\source\ResolutionChanger.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\AbstractBar.h">
@@ -479,6 +482,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\directx\XAudio2SoundPlayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ResolutionChanger.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

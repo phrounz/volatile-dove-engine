@@ -156,12 +156,12 @@ namespace ResolutionChanger
 		memset(&devMode, 0, sizeof(devMode));
 
 		EnumDisplaySettings(NULL, ENUM_REGISTRY_SETTINGS, &devMode);
-		devMode.dmPelsWidth = m_inf.windowSize.width();
-		devMode.dmPelsHeight = m_inf.windowSize.height();
+		devMode.dmPelsWidth = width;
+		devMode.dmPelsHeight = height;
 		LONG res = ChangeDisplaySettingsEx(NULL, &devMode, NULL, CDS_FULLSCREEN, NULL);
 		if (res == DISP_CHANGE_SUCCESSFUL)
 		{
-			SendMessage(HWND_BROADCAST, WM_DISPLAYCHANGE, (WPARAM)32, MAKELPARAM(m_inf.windowSize.width(), m_inf.windowSize.height()));
+			SendMessage(HWND_BROADCAST, WM_DISPLAYCHANGE, (WPARAM)32, MAKELPARAM(width, height));
 		}
 		return (res == DISP_CHANGE_SUCCESSFUL);
 	}

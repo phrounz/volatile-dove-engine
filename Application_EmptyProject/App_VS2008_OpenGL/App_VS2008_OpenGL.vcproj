@@ -553,6 +553,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\source\ResolutionChanger.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\source\ResolutionChanger.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\source\Scene2D.cpp"
 				>
 			</File>

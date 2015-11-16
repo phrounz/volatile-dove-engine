@@ -313,6 +313,9 @@
     <ClInclude Include="..\..\..\source\directx\XAudio2SoundPlayer.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\source\ResolutionChanger.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\App_VS2008GL\AnUnconventionalWeapon\Burning.cpp">
@@ -547,6 +550,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\directx\XAudio2SoundPlayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\ResolutionChanger.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

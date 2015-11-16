@@ -158,6 +158,7 @@
     <ClCompile Include="..\..\source\ParallelTasks.cpp" />
     <ClCompile Include="..\..\source\PositionsGraph.cpp" />
     <ClCompile Include="..\..\source\RenderGroup.cpp" />
+    <ClCompile Include="..\..\source\ResolutionChanger.cpp" />
     <ClCompile Include="..\..\source\Scene2D.cpp" />
     <ClCompile Include="..\..\source\Scene3D.cpp" />
     <ClCompile Include="..\..\source\Server.cpp" />
@@ -261,6 +262,7 @@
     <ClInclude Include="..\..\source\GroupOfQuadsByTexture.h" />
     <ClInclude Include="..\..\source\lodepng.h" />
     <ClInclude Include="..\..\source\network_stdincludes.h" />
+    <ClInclude Include="..\..\source\ResolutionChanger.h" />
     <ClInclude Include="..\..\source\Server.h" />
     <ClInclude Include="..\..\source\StackWalker.h" />
     <ClInclude Include="..\..\source\Texture.h" />
