@@ -6,7 +6,7 @@
 //---------------------------------------------------------------------
 
 namespace
-{	
+{
 	GLfloat openglColorWhite[4]		= {1.0f,1.0f,1.0f,1.0f};
 
 	GLfloat openglColorDiffuse[4]	= {1.f,1.f,1.f,1.0f};
@@ -35,7 +35,7 @@ Scene3DPrivate::Scene3DPrivate():angleDebugFPSVision(0)
 	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);//GL_DONT_CARE);
 	//glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);//GL_DONT_CARE);
 	//glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);//GL_DONT_CARE);
-	
+
     quadric = (void*)gluNewQuadric();
     gluQuadricTexture((GLUquadricObj*)quadric, GL_TRUE);
     gluQuadricDrawStyle((GLUquadricObj*)quadric, GLU_FILL);
@@ -60,11 +60,11 @@ Scene3DPrivate::Scene3DPrivate():angleDebugFPSVision(0)
 	glGetFloatv(GL_MAX_LIGHTS, &maxLights);
 	PrintValue(maxLights);
 	Assert(maxLights > 1);*/
-	
+
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, openglColorAmbient);
 	//glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
     //glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, 0);
-	
+
 	//glEnable(GL_COLOR_MATERIAL);
 
 	for (int i = 0; i < MAX_LIGHTS; ++i)
@@ -73,17 +73,17 @@ Scene3DPrivate::Scene3DPrivate():angleDebugFPSVision(0)
 		m_lightIsEnable[i] = false;
 		m_lightIntensity[i] = 1.f;
 	}
-	
+
 	for (int i=0; i<GL_MAX_LIGHTS; ++i)
         glDisable(GL_LIGHT0 + i);
-	
+
 	for (int i = 0; i < 16; ++i)
 		eyeMatrix[i] = 0;
 
 	//this->configureLight(0, true, Float3(100,100,100), 1000);
 
 	//glutInitContextProfile(GLUT_CORE_PROFILE);
-	
+
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{
@@ -127,11 +127,11 @@ void Scene3DPrivate::setRenderOppositeFace(bool yesNo)
 }
 
 //---------------------------------------------------------------------
-// this function is useful because opengl fog is calculated using Z distance to camera, 
+// this function is useful because opengl fog is calculated using Z distance to camera,
 // instead of absolute distance
 
 void Scene3DPrivate::adjustFog(float distanceToCameraInWorldCoord, float distanceToCameraInCameraCoord)
-{		
+{
 	//glFogf(GL_FOG_START, (3.f*fogMaxDistance/4.f) * distanceToCameraInCameraCoord/distanceToCameraInWorldCoord);
 	//glFogf(GL_FOG_END, fogMaxDistance * distanceToCameraInCameraCoord/distanceToCameraInWorldCoord);
 	;//TODO
@@ -274,7 +274,7 @@ void Scene3DPrivate::drawCylinder(unsigned int textureId, float width, float hei
 void Scene3DPrivate::updateCameraSyncronisedWith2D(const Int2& virtualWindowSize, Camera& camera)
 {
 	Assert(false);
-	
+
 	glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 	gluPerspective(camera.getFieldOfView(),(GLfloat)virtualWindowSize.width()/(GLfloat)virtualWindowSize.height(),0.1f,100.0f);
@@ -287,7 +287,7 @@ void Scene3DPrivate::updateCameraSyncronisedWith2D(const Int2& virtualWindowSize
 
     //gluPerspective(90.f, (widthWindow/heightWindow));
 	glTranslatef(-camera.getPosition().x(),-camera.getPosition().y(),-camera.getPosition().z());
-    
+
     glScalef(0.1f * 768.f * (widthWindow/heightWindow) / widthWindow,-0.1f * 768.f / heightWindow, 0.036f);
     glTranslatef(-widthWindow/2,-heightWindow/2,-1000.f);
 
@@ -305,7 +305,7 @@ void Scene3DPrivate::updateCameraSyncronisedWith2D(const Int2& virtualWindowSize
     /*lightDirection[0] = -0.70710678f;//-sqrt(2)/2
     lightDirection[1] = 0.70710678f;//sqrt(2)/2
     lightDirection[2] = 0;*/
-	
+
 	nbTrianglesDrawn = 0;
 }
 
@@ -333,7 +333,7 @@ void Scene3DPrivate::drawFaceWithIntPos(unsigned int textureId, const BoundingBo
     float Y0 = (float)(int)!mirrorY;
     float X1 = (float)(int)mirrorX;
     float Y1 = (float)(int)mirrorY;
-    
+
     glBindTexture(GL_TEXTURE_2D, (GLuint)textureId);
     glBegin(GL_QUADS);
     // Front Face
@@ -428,12 +428,12 @@ void Scene3DPrivate::injectMouseMotionForCameraAngle(const Int2& parMousePositio
 //---------------------------------------------------------------------
 /*
 float Scene3DPrivate::updateCameraDebugFPSVisionAndManageFall(Object3D* model)
-{	
+{
 	set3DMode();
 	//fall
 	float fallValue = 0;
 	//Float3 newPositionFromLook = positionFromLook;
-	//do 
+	//do
 	//{
 	//	positionFromLook.data[1] = newPositionFromLook.data[1];
 	//	newPositionFromLook.data[1] -= 3.f;
@@ -448,7 +448,7 @@ float Scene3DPrivate::updateCameraDebugFPSVisionAndManageFall(Object3D* model)
 		m_camera.setPosition(newPositionFromLook);
 		fallValue = 1;
 	}
-	
+
 	//set camera position and angle
 	glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -456,7 +456,7 @@ float Scene3DPrivate::updateCameraDebugFPSVisionAndManageFall(Object3D* model)
 	glRotatef(-angleDebugFPSVision, 0.f, 1.f, 0.f);
 	glTranslatef(-m_camera.getPosition().x(),-m_camera.getPosition().y(),-m_camera.getPosition().z());
 	glTranslatef(-0,-10,0);
-	
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	updateLight();
@@ -469,7 +469,7 @@ float Scene3DPrivate::updateCameraDebugFPSVisionAndManageFall(Object3D* model)
 //---------------------------------------------------------------------
 
 void Scene3DPrivate::updateLight()
-{   
+{
 	for (int i = 0; i < MAX_LIGHTS; ++i)
 	{
 		if (m_lightIsEnable[i])
@@ -508,7 +508,7 @@ void Scene3DPrivate::updateLight()
 void Scene3DPrivate::set3DMode(Camera& camera)
 {
 	glViewport(0,0,Engine::instance().getScene2DMgr().getWindowRealSize().width(), Engine::instance().getScene2DMgr().getWindowRealSize().height());
-	
+
 	// if (enableLighting)
     //{
     //    glEnable(GL_LIGHTING);
@@ -536,7 +536,7 @@ void Scene3DPrivate::set3DMode(Camera& camera)
 	glMultMatrixf(matrix);
 	glTranslatef(-camera.getPosition().x(), -camera.getPosition().y(), -camera.getPosition().z());
 	glGetFloatv(GL_MODELVIEW_MATRIX, eyeMatrix);
-	
+
 	updateLight();
 
 	nbTrianglesDrawn = 0;
@@ -551,8 +551,8 @@ void Scene3DPrivate::set3DModeLookAtMode(const Float3& parCenter, float distance
 	float angleYRad = MathUtils::PI /2 - camera.getAngleY() * MathUtils::PI_OVER_180;
 
 	camera.move(Float3(
-		distance * sin(angleXRad) * cos(angleYRad), 
-		distance * cos(angleXRad), 
+		distance * sin(angleXRad) * cos(angleYRad),
+		distance * cos(angleXRad),
 		distance * sin(angleXRad) * sin(angleYRad)));
 	this->set3DMode(camera);
 }
@@ -562,16 +562,16 @@ void Scene3DPrivate::set3DModeLookAtMode(const Float3& parCenter, float distance
 void Scene3DPrivate::injectKeyForDebugFPSCollision(unsigned char key, Object3D* model)
 {
 	const u8 keylower = tolower(key);
-    
+
 	const float movingCapacity = 10.f;
 	const float climbAbility = 5.f;
 	const float rotationCapacity = 10.f;
-	
+
 	if (keylower == 'h')
         angleDebugFPSVision += rotationCapacity;
     else if (keylower == 'k')
         angleDebugFPSVision -= rotationCapacity;
-	
+
 	if (keylower == 'e')
 	{
 		m_camera.setPosition(m_camera.getPosition().x(), m_camera.getPosition().y() +500, m_camera.getPosition().z());
@@ -587,7 +587,7 @@ void Scene3DPrivate::injectKeyForDebugFPSCollision(unsigned char key, Object3D* 
 		m_camera.setPosition(Float3(0.f,0.f,0.f));
 		return;
 	}
-	
+
 	//move
 	float angleRadians = (angleDebugFPSVision + 90.f) * MathUtils::PI / 180.f;
     Float3 newPositionFromLook = m_camera.getPosition();
@@ -661,7 +661,7 @@ void Scene3DPrivate::startDrawingTriangles(const int textureId)
 		glDisable(GL_TEXTURE_2D);
 	else
 		glBindTexture(GL_TEXTURE_2D, (unsigned int)textureId);
-	
+
 	glBegin(GL_TRIANGLES);
 }
 
@@ -710,7 +710,7 @@ static bool renderPlaneCheckOutOfRange(
 	bool pb2 = false;
 	bool pb3 = false;
 	bool pb4 = false;
-	for (int i = 0; ; ++i) 
+	for (int i = 0; ; ++i)
 	{
 		Float3 posCamCoord = camera.convertPositionInCameraCoordinates(cubePos + pt[i]);
 		float distanceZToCameraInCameraCoord = -posCamCoord.z();
@@ -720,12 +720,12 @@ static bool renderPlaneCheckOutOfRange(
 		float midVerticalFOV   = (camera.getFieldOfView()/2.f) * MathUtils::PI_OVER_180;
 		float angleSpherical = MathUtils::getAngleInPiRange(sphericalCoord.data[2] + MathUtils::PI/2);
 		float angleSpherical2 = MathUtils::getAngleInPiRange(sphericalCoord.data[1] - MathUtils::PI/2);
-	
+
 		bool outOfRangeFog = false;
 		if (false //Engine::instance().getScene3DMgr().isFogEnabled()
-			&& distanceZToCameraInCameraCoord  > fogMaxDistance+MARGIN_VIEW_RANGE) 
+			&& distanceZToCameraInCameraCoord  > fogMaxDistance+MARGIN_VIEW_RANGE)
 			outOfRangeFog = true;
-		
+
 		if (distanceZToCameraInCameraCoord < -MARGIN_VIEW_RANGE) pb1 = true;
 		else if (!(angleSpherical  > -midHorizontalFOV && angleSpherical  < midHorizontalFOV)) pb2 = true;
 		//else if (!(angleSpherical2 > -midVerticalFOV && angleSpherical2 < midVerticalFOV)) pb3 = true;
@@ -762,7 +762,7 @@ static Float2 ptTextureCoordinates[4];
 
 //return false if not rendered because out of camera range
 bool Scene3DPrivate::drawCubeFace(
-   const Float3& parSize, unsigned int textureId, const Float3& parTextureRepeat, 
+   const Float3& parSize, unsigned int textureId, const Float3& parTextureRepeat,
    int faceToDraw, const Float3& cubePosition, bool doOptimizations, float horizontalFOV, const Camera& camera, float fogMaxDistance)
 {
 	Float3 size = parSize / 2;
@@ -786,14 +786,14 @@ bool Scene3DPrivate::drawCubeFace(
 	}*/
 
 	movePosition(pos);
-	
+
 	if (textureId)
 		glBindTexture(GL_TEXTURE_2D, textureId);
 	else
 		setWireframeMode(true);
-	
+
 	glBegin(GL_QUADS);
-	
+
 	switch (faceToDraw)
 	{
 	case 0:
@@ -898,10 +898,10 @@ bool Scene3DPrivate::drawCubeFace(
 void Scene3DPrivate::drawCube(const Float3& parSize, const unsigned int parTextureId[6], const Float3& parTextureRepeat, bool reverseToSkyBox)
 {
 	Float3 size = parSize / 2;
-	
+
 	GLuint currentTextureId = 0;
 	if (!parTextureId) {setWireframeMode(true);glBegin(GL_QUADS);}
-	
+
 	float reverse = reverseToSkyBox?-1.f:1.f;
 
 	//---------------
@@ -909,13 +909,13 @@ void Scene3DPrivate::drawCube(const Float3& parSize, const unsigned int parTextu
 
 	if (parTextureId)
 	{
-		currentTextureId = parTextureId[0];    
+		currentTextureId = parTextureId[0];
 		glBindTexture(GL_TEXTURE_2D, currentTextureId);
 		glBegin(GL_QUADS);
 	}
-	
+
 	glNormal3f(0.f, 1.f, 0.f);
-    
+
 	glTexCoord2f(parTextureRepeat.x(), parTextureRepeat.z());
 	glVertex3f(-size.x(), size.y() * reverse, -size.z());	// Top Left Of The Texture and Quad
 	glTexCoord2f(parTextureRepeat.x(), 0.f);
@@ -924,10 +924,10 @@ void Scene3DPrivate::drawCube(const Float3& parSize, const unsigned int parTextu
 	glVertex3f(size.x(), size.y() * reverse,  size.z());	// Bottom Right Of The Texture and Quad
 	glTexCoord2f(0.f, parTextureRepeat.z());
 	glVertex3f(size.x(), size.y() * reverse, -size.z());	// Top Right Of The Texture and Quad
-	
+
     //---------------
     // Bottom Face
-	
+
 	if (parTextureId && currentTextureId != parTextureId[1])
 	{
 		currentTextureId = parTextureId[1];
@@ -946,7 +946,7 @@ void Scene3DPrivate::drawCube(const Float3& parSize, const unsigned int parTextu
 	glVertex3f(size.x(), -size.y() * reverse, size.z());	// Bottom Right Of The Texture and Quad
 	glTexCoord2f(parTextureRepeat.x(), 0.f);
 	glVertex3f(-size.x(), -size.y() * reverse, size.z());	// Bottom Left Of The Texture and Quad
-	
+
     //---------------
     // Front Face
 
@@ -968,7 +968,7 @@ void Scene3DPrivate::drawCube(const Float3& parSize, const unsigned int parTextu
 	glVertex3f(size.x(), size.y(),  size.z() * reverse);	// Top Right Of The Texture and Quad
 	glTexCoord2f(0.f, 0.f);
 	glVertex3f(-size.x(), size.y(),  size.z() * reverse);	// Top Left Of The Texture and Quad
-	
+
     //---------------
     // Back Face
 
@@ -990,7 +990,7 @@ void Scene3DPrivate::drawCube(const Float3& parSize, const unsigned int parTextu
 	glVertex3f(size.x(), -size.y(),  -size.z() * reverse);
 	glTexCoord2f(parTextureRepeat.x(), parTextureRepeat.y());
 	glVertex3f(-size.x(), -size.y(),  -size.z() * reverse);
-	
+
     //---------------
     // Left Face
 
@@ -1012,10 +1012,10 @@ void Scene3DPrivate::drawCube(const Float3& parSize, const unsigned int parTextu
 	glVertex3f(-size.x() * reverse, size.y(), size.z());	// Top Right Of The Texture and Quad
 	glTexCoord2f(0.f, 0.f);
 	glVertex3f(-size.x() * reverse, size.y(), -size.z());	// Top Left Of The Texture and Quad
-	
+
 	//---------------
     // Right face
-    
+
 	if (parTextureId && currentTextureId != parTextureId[5])
 	{
 		currentTextureId = parTextureId[5];
@@ -1034,7 +1034,7 @@ void Scene3DPrivate::drawCube(const Float3& parSize, const unsigned int parTextu
 	glVertex3f(size.x() * reverse, size.y(), size.z());	// Top Left Of The Texture and Quad
 	glTexCoord2f(0.f, parTextureRepeat.y());
 	glVertex3f(size.x() * reverse, -size.y(), size.z());	// Bottom Left Of The Texture and Quad
-	
+
 	//---------------
 	// finished
 
@@ -1046,7 +1046,7 @@ void Scene3DPrivate::drawCube(const Float3& parSize, const unsigned int parTextu
 //---------------------------------------------------------------------
 
 void Scene3DPrivate::getVerticesAndTexCoordCube(
-	Float3* vertices, Float2* texCoord, const Float3& parTexCoordBegin, const Float3& parTexCoordEnd, 
+	Float3* vertices, Float2* texCoord, const Float3& parTexCoordBegin, const Float3& parTexCoordEnd,
 	const Float3& parTexCoordBeginOtherSide, const Float3& parTexCoordEndOtherSide, const Float3& size, bool randomTexCoord) // must be size 24
 {
 	float reverse = 1.f;
@@ -1067,7 +1067,7 @@ void Scene3DPrivate::getVerticesAndTexCoordCube(
 	vertices[5] = Float3(size.x(), -size.y() * reverse, -size.z());
 	vertices[6] = Float3(size.x(), -size.y() * reverse, size.z());
 	vertices[7] = Float3(-size.x(), -size.y() * reverse, size.z());
-	
+
 	texCoord[4] = Float2(parTexCoordBegin.x(), parTexCoordBegin.z());
 	texCoord[5] = Float2(parTexCoordEnd.x(),   parTexCoordBegin.z());
 	texCoord[6] = Float2(parTexCoordEnd.x(),   parTexCoordEnd.z());
@@ -1078,34 +1078,34 @@ void Scene3DPrivate::getVerticesAndTexCoordCube(
 	vertices[9]  = Float3(size.x(), -size.y(),  size.z() * reverse);
 	vertices[10] = Float3(size.x(), size.y(),  size.z() * reverse);
 	vertices[11] = Float3(-size.x(), size.y(),  size.z() * reverse);
-	
+
 	texCoord[8]  = Float2(parTexCoordBegin.x(), parTexCoordBegin.y());
 	texCoord[9]  = Float2(parTexCoordEnd.x(),   parTexCoordBegin.y());
 	texCoord[10] = Float2(parTexCoordEnd.x(),   parTexCoordEnd.y());
 	texCoord[11] = Float2(parTexCoordBegin.x(), parTexCoordEnd.y());
-	
+
 	//back
 	vertices[12] = Float3(-size.x(), size.y(),  -size.z() * reverse);
 	vertices[13] = Float3(size.x(), size.y(),  -size.z() * reverse);
 	vertices[14] = Float3(size.x(), -size.y(),  -size.z() * reverse);
 	vertices[15] = Float3(-size.x(), -size.y(),  -size.z() * reverse);
-	
+
 	texCoord[12] = Float2(1.f-parTexCoordEndOtherSide.x(),   parTexCoordEndOtherSide.y());
 	texCoord[13] = Float2(1.f-parTexCoordBeginOtherSide.x(), parTexCoordEndOtherSide.y());
 	texCoord[14] = Float2(1.f-parTexCoordBeginOtherSide.x(), parTexCoordBeginOtherSide.y());
 	texCoord[15] = Float2(1.f-parTexCoordEndOtherSide.x(),   parTexCoordBeginOtherSide.y());
-	
+
 	//left
 	vertices[16] = Float3(-size.x() * reverse, -size.y(), -size.z());
 	vertices[17] = Float3(-size.x() * reverse, -size.y(), size.z());
 	vertices[18] = Float3(-size.x() * reverse, size.y(), size.z());
 	vertices[19] = Float3(-size.x() * reverse, size.y(), -size.z());
-	
+
 	texCoord[16] = Float2(parTexCoordBegin.z(), parTexCoordBegin.y());
 	texCoord[17] = Float2(parTexCoordEnd.z(),   parTexCoordBegin.y());
 	texCoord[18] = Float2(parTexCoordEnd.z(),   parTexCoordEnd.y());
 	texCoord[19] = Float2(parTexCoordBegin.z(), parTexCoordEnd.y());
-	
+
 	//right
 	vertices[20] = Float3(size.x() * reverse, -size.y(), -size.z());
 	vertices[21] = Float3(size.x() * reverse, size.y(), -size.z());
@@ -1158,27 +1158,27 @@ void Scene3DPrivate::getVerticesAndTexCoordCube(
 void Scene3DPrivate::drawCube2(const Float3& parSize, const unsigned int parTextureId[6], const Float3& parTextureRepeat, bool reverseToSkyBox, bool alphaTestEffect)
 {
 	Float3 size = parSize / 2;
-	
+
 	GLuint currentTextureId = 0;
 	if (!parTextureId) {setWireframeMode(true);glBegin(GL_QUADS);}
-	
+
 	float reverse = reverseToSkyBox?-1.f:1.f;
-	
+
 	if (alphaTestEffect)
 		glAlphaFunc(GL_GREATER, 0.9f);
-	
+
 	//---------------
     // Bottom Facef
 
 	if (parTextureId)
 	{
-		currentTextureId = parTextureId[0];    
+		currentTextureId = parTextureId[0];
 		glBindTexture(GL_TEXTURE_2D, currentTextureId);
 		glBegin(GL_QUADS);
 	}
-	
+
 	glNormal3f(0.f, 1.f, 0.f);
-    
+
 	glTexCoord2f(0.f, parTextureRepeat.z());
 	glVertex3f(-size.x(), size.y() * reverse, -size.z());	// Top Left Of The Texture and Quad
 	glTexCoord2f(0.f, 0.f);
@@ -1187,10 +1187,10 @@ void Scene3DPrivate::drawCube2(const Float3& parSize, const unsigned int parText
 	glVertex3f(size.x(), size.y() * reverse,  size.z());	// Bottom Right Of The Texture and Quad
 	glTexCoord2f(parTextureRepeat.x(), parTextureRepeat.z());
 	glVertex3f(size.x(), size.y() * reverse, -size.z());	// Top Right Of The Texture and Quad
-	
+
     //---------------
     // Top Face
-	
+
 	if (parTextureId && currentTextureId != parTextureId[1])
 	{
 		currentTextureId = parTextureId[1];
@@ -1209,7 +1209,7 @@ void Scene3DPrivate::drawCube2(const Float3& parSize, const unsigned int parText
 	glVertex3f(size.x(), -size.y() * reverse, size.z());	// Bottom Right Of The Texture and Quad
 	glTexCoord2f(0.f, parTextureRepeat.z());
 	glVertex3f(-size.x(), -size.y() * reverse, size.z());	// Bottom Left Of The Texture and Quad
-	
+
     //---------------
     // Front Face
 
@@ -1231,7 +1231,7 @@ void Scene3DPrivate::drawCube2(const Float3& parSize, const unsigned int parText
 	glVertex3f(size.x(), size.y(),  size.z() * reverse);	// Top Right Of The Texture and Quad
 	glTexCoord2f(0.f, parTextureRepeat.y());
 	glVertex3f(-size.x(), size.y(),  size.z() * reverse);	// Top Left Of The Texture and Quad
-	
+
     //---------------
     // Back Face
 
@@ -1253,7 +1253,7 @@ void Scene3DPrivate::drawCube2(const Float3& parSize, const unsigned int parText
 	glVertex3f(size.x(), -size.y(),  -size.z() * reverse);
 	glTexCoord2f(parTextureRepeat.x(), 0.f);
 	glVertex3f(-size.x(), -size.y(),  -size.z() * reverse);
-	
+
     //---------------
     // Left Face
 
@@ -1275,10 +1275,10 @@ void Scene3DPrivate::drawCube2(const Float3& parSize, const unsigned int parText
 	glVertex3f(-size.x() * reverse, size.y(), size.z());	// Top Right Of The Texture and Quad
 	glTexCoord2f(0.f, parTextureRepeat.y());
 	glVertex3f(-size.x() * reverse, size.y(), -size.z());	// Top Left Of The Texture and Quad
-	
+
 	//---------------
     // Right face
-    
+
 	if (parTextureId && currentTextureId != parTextureId[5])
 	{
 		currentTextureId = parTextureId[5];
@@ -1297,7 +1297,7 @@ void Scene3DPrivate::drawCube2(const Float3& parSize, const unsigned int parText
 	glVertex3f(size.x() * reverse, size.y(), size.z());	// Top Left Of The Texture and Quad
 	glTexCoord2f(0.f, 0.f);
 	glVertex3f(size.x() * reverse, -size.y(), size.z());	// Bottom Left Of The Texture and Quad
-	
+
 	//---------------
 	// finished
 
@@ -1312,10 +1312,10 @@ void Scene3DPrivate::drawCube2(const Float3& parSize, const unsigned int parText
 //---------------------------------------------------------------------
 // look at top if angle=(0,0,0)
 
-void Scene3DPrivate::drawPlane(const Float2& parSize, unsigned int parTextureId, const Float2& parTextureRepeat, const Float3& parAngle, bool reverse)
+void Scene3DPrivate::drawPlane(const Float2& parSize, int parTextureId, const Float2& parTextureRepeat, const Float3& parAngle, bool reverse)
 {
 	Float2 size = parSize / 2;
-	
+
 	if (parTextureId != -1)
 	{
 		glBindTexture(GL_TEXTURE_2D, parTextureId);
@@ -1325,7 +1325,7 @@ void Scene3DPrivate::drawPlane(const Float2& parSize, unsigned int parTextureId,
 	glRotatef(-parAngle.x(), 1.f, 0.f, 0.f);
 	glRotatef(-parAngle.y(), 0.f, 1.f, 0.f);
 	glRotatef(-parAngle.z(), 0.f, 0.f, 1.f);
-	
+
 	if (!reverse)
 	{
 		glNormal3f(0.f, 1.f, 0.f);
@@ -1358,7 +1358,7 @@ void Scene3DPrivate::drawPlane(const Float2& parSize, unsigned int parTextureId,
 void Scene3DPrivate::drawQuad(const Float2& parSize, const Float3 pts[4], unsigned int parTextureId, const Float2& parTextureRepeat)
 {
 	Float2 size = parSize / 2;
-	
+
 	//if (parTextureId != -1)
 	//{
 		glBindTexture(GL_TEXTURE_2D, parTextureId);
@@ -1466,7 +1466,7 @@ int sizeRenderToTexture = 1024;
 void Scene3DPrivate::startRenderToTexture(float aspectRatio, bool lightingEnable, int parSizeRenderToTexture, Camera& camera)
 {
 	sizeRenderToTexture = parSizeRenderToTexture;
-	
+
 	glViewport (0, 0, sizeRenderToTexture, sizeRenderToTexture);
 	glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -1488,7 +1488,7 @@ void Scene3DPrivate::stopRenderToTexture(unsigned int textureId)
 	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, sizeRenderToTexture, sizeRenderToTexture, 0);
 	Int2 winSize = Engine::instance().getScene2DMgr().getWindowSize();
 	glViewport(0, 0, winSize.width(), winSize.height());
-	
+
 	//return (int)renderTex;
 }
 
@@ -1532,18 +1532,18 @@ Float3 Scene3DPrivate::get3DPosFrom2D(const Int2& pos) const
     GLdouble modelview[16];
     GLdouble projection[16];
     GLdouble posX, posY, posZ;
- 
+
     glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
     glGetDoublev( GL_PROJECTION_MATRIX, projection );
     glGetIntegerv( GL_VIEWPORT, viewport );
- 
+
     GLfloat winX = (float)pos.x();
     GLfloat winY = (float)viewport[3] - (float)pos.y();
 	GLfloat winZ = 0.f;
     glReadPixels( pos.x(), int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
- 
+
     gluUnProject( winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
- 
+
     return Float3((float)posX, (float)posY, (float)posZ);
 }
 

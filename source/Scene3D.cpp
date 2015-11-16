@@ -17,7 +17,7 @@
 #include <GL/glut.h>
 #ifdef _MSC_VER
 #include <GL/glext.h>
-	
+
 #endif
 
 //#define GL_FOG_COORDINATE_SOURCE_EXT	0x8450					// Value Taken From GLEXT.H
@@ -250,7 +250,7 @@ void Scene3D::drawCube2(const Float3& parSize, const unsigned int parTextureId[6
 	m_private->drawCube2(parSize, parTextureId, parTextureRepeat, reverseToSkyBox, alphaTestEffect);
 }
 
-void Scene3D::drawPlane(const Float2& parSize, unsigned int parTextureId, const Float2& parTextureRepeat, const Float3& parAngle, bool reverse)
+void Scene3D::drawPlane(const Float2& parSize, int parTextureId, const Float2& parTextureRepeat, const Float3& parAngle, bool reverse)
 {
 	m_private->drawPlane(parSize, parTextureId, parTextureRepeat, parAngle, reverse);
 }

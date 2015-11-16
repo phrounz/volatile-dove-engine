@@ -3,8 +3,11 @@
 	#include "opengl/OpenGL.h"
 	#include "opengl/Shader.h"
 #else
-	#include <Windows.h>
 	#include "directx/DXMain.h"
+#endif
+
+#ifdef USES_LINUX
+	#include "ResolutionChanger.h"
 #endif
 
 #include "Font.h"
@@ -25,25 +28,11 @@ AppSetup::AppSetup(const AppSetupInfos& appSetupInfos) : m_inf(appSetupInfos), m
 
 void AppSetup::init()
 {
-#if defined(USES_LINUX)
-	#warning TODO
-	//changeResolution();
-#elif defined(USES_WINDOWS8_METRO)
-	// no way to change the resolution
-#else
-	// http://www.gamedev.net/topic/602791-c-change-screen-resolution/
-	// http://www.codeproject.com/Articles/15072/Programmatically-change-display-resolution
+#ifndef USES_WINDOWS8_METRO // no way to change the resolution if USES_WINDOWS8_METRO
 	if (m_inf.changeDesktopResolution)
 	{
-		DEVMODE devMode;
-		memset(&devMode, 0, sizeof(devMode));
-
-		EnumDisplaySettings(NULL, ENUM_REGISTRY_SETTINGS, &devMode);
-		devMode.dmPelsWidth = m_inf.windowSize.width();
-		devMode.dmPelsHeight = m_inf.windowSize.height();
-		LONG res = ChangeDisplaySettingsEx(NULL, &devMode, NULL, CDS_FULLSCREEN, NULL);
-		Assert(res == DISP_CHANGE_SUCCESSFUL);
-		SendMessage(HWND_BROADCAST, WM_DISPLAYCHANGE, (WPARAM)32, MAKELPARAM(m_inf.windowSize.width(), m_inf.windowSize.height()));
+		bool res = ResolutionChanger::changeResolution(m_inf.windowSize.width(), m_inf.windowSize.height());
+		AssertMessage(res, "Could not change resolution");
 	}
 #endif
 
@@ -88,7 +77,7 @@ void AppSetup::onResizeWindow(const Int2& newSize)
 			ppp = Float2(ratioW,ratioW);
 			virtualPos = Int2(0, (int)((newSizeF.height()-virtualSizeF.height()*ratioW)/2.f));
 		}
-		
+
 		this->setPixelPerPointLowLevel(ppp, virtualPos);
 	}
 	else
@@ -199,33 +188,33 @@ void AppSetup::manageRender()
 		Int2 sizeOrtho2DWindow = this->getSizeOrtho2DWindow();
 
 		this->setPixelPerPointLowLevel(Float2(1.f,1.f), Int2(0,0));
-		
+
 		if (m_inf.virtualSizeBorderColor.a() != 0)
 		{
 			if (m_inf.virtualSize.width() < sizeOrtho2DWindow.width())
 			{
 				Engine::instance().getScene2DMgr().drawRectangle(
-					Int2(0,0), 
-					Int2(virtualPos.width(), m_inf.windowSize.height()), 
+					Int2(0,0),
+					Int2(virtualPos.width(), m_inf.windowSize.height()),
 					m_inf.virtualSizeBorderColor, true);
 				Engine::instance().getScene2DMgr().drawRectangle(
-					Int2(m_inf.windowSize.width()-virtualPos.width(), 0), 
+					Int2(m_inf.windowSize.width()-virtualPos.width(), 0),
 					m_inf.windowSize,
 					m_inf.virtualSizeBorderColor, true);
 			}
 			else if (m_inf.virtualSize.height() < sizeOrtho2DWindow.height())
 			{
 				Engine::instance().getScene2DMgr().drawRectangle(
-					Int2(0, 0), 
-					Int2(m_inf.windowSize.width(), virtualPos.height()), 
+					Int2(0, 0),
+					Int2(m_inf.windowSize.width(), virtualPos.height()),
 					m_inf.virtualSizeBorderColor, true);
 				Engine::instance().getScene2DMgr().drawRectangle(
-					Int2(0, m_inf.windowSize.height()-virtualPos.height()), 
+					Int2(0, m_inf.windowSize.height()-virtualPos.height()),
 					m_inf.windowSize,
 					m_inf.virtualSizeBorderColor, true);
 			}
 		}
-		
+
 		this->setPixelPerPointLowLevel(ppp, virtualPos);
 	}
 

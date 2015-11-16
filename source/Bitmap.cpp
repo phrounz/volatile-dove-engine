@@ -46,7 +46,7 @@ struct ID2D1Bitmap
 	void copyFromImage(const Image* image)
 	{
 		//Image* imageNew = new Image(*image, 1);
-		m_texture = new TextureReal(*image, false, true, m_useMipmap);
+		m_texture = new TextureReal(*image, NULL, true, m_useMipmap);
 		//delete imageNew;
 	}
 	~ID2D1Bitmap()

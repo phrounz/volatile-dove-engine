@@ -53,7 +53,7 @@ struct VBOImpl
 	unsigned int idFogCoords;
 	unsigned int fogCoordsSize;
 
-	unsigned int idIndices;
+	int idIndices;
 	unsigned int indicesSize;
 
 	bool m_quadsInsteadOfTriangles;
@@ -117,7 +117,7 @@ void VBO::commonConstructor(const Meshes3D::BasicVertex* vertices, int verticesS
 	//Thread::claimSemaphore();
 
 	//std::cout << "Adding VBO of " << vboImpl->vertexCount << " vertices." << std::endl;
-	
+
 	glGenBuffersARB( 1, &vboImpl->idVertices );
 	if (DEBUG_VERBOSE) outputln("        Gen buffers ok.");
 	glBindBufferARB( GL_ARRAY_BUFFER, vboImpl->idVertices );
@@ -127,15 +127,17 @@ void VBO::commonConstructor(const Meshes3D::BasicVertex* vertices, int verticesS
 
 	if (indices != NULL)
 	{
-		glGenBuffersARB( 1, &vboImpl->idIndices );
-		glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER, vboImpl->idIndices );
+		unsigned int idIndicesUnsigned;
+		glGenBuffersARB( 1, &idIndicesUnsigned );
+		glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER, idIndicesUnsigned );
+		vboImpl->idIndices = static_cast<int>(idIndicesUnsigned);
 		glBufferDataARB( GL_ELEMENT_ARRAY_BUFFER, indicesSize*sizeof(TypeIndex), indices, GL_STATIC_DRAW );
 		vboImpl->indicesSize = indicesSize;
 		if (DEBUG_VERBOSE) outputln("        Indices done.");
 	}
 
 	//Thread::releaseSemaphore();
-	
+
 	//http://stackoverflow.com/questions/10545479/why-does-binding-a-gl-element-array-buffer-to-0-produce-a-memmove-error
 	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -181,7 +183,7 @@ void VBO::draw() const
 /*
 //Define this somewhere in your header file
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
- 
+
   glBindBufferARB( GL_ARRAY_BUFFER_ARB, vboImpl->idVertices);
   glEnableVertexAttribArray(0);    //We like submitting vertices on stream 0 for no special reason
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(BasicVertex), BUFFER_OFFSET(0));   //The starting point of the VBO, for the vertices
@@ -220,7 +222,7 @@ void VBO::draw() const
 		else if (sizeof(TypeIndex)==sizeof(unsigned short)) typeIndices = GL_UNSIGNED_SHORT;
 		else Utils::die();
 
-		glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER, vboImpl->idIndices );
+		glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER, static_cast<unsigned int>(vboImpl->idIndices) );
 		glDrawElements( vboImpl->m_quadsInsteadOfTriangles ? GL_QUADS : GL_TRIANGLES, vboImpl->indicesSize, typeIndices, (void*)NULL);
 	}
 
@@ -252,7 +254,7 @@ VBO::~VBO()
 	//std::cout << "Removing VBO of " << vboImpl->vertexCount << " vertices." << std::endl;
 	glBindBufferARB( GL_ARRAY_BUFFER, vboImpl->idVertices );
 	glDeleteBuffersARB(1, &vboImpl->idVertices );
-	if (Fog::isVolumetricFog()) 
+	if (Fog::isVolumetricFog())
 	{
 		glBindBufferARB( GL_ARRAY_BUFFER, vboImpl->idFogCoords );
 		glDeleteBuffersARB(1, &vboImpl->idFogCoords );

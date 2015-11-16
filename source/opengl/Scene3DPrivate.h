@@ -69,7 +69,7 @@ public:
 	void drawCube(const Float3& parSize, const unsigned int parTextureId[6], const Float3& parTextureRepeat, bool reverseToSkyBox);
 	void getVerticesAndTexCoordCube(Float3* vertices, Float2* texCoord, const Float3& parTexCoordBegin, const Float3& parTexCoordEnd, const Float3& parTexCoordBeginOtherSide, const Float3& parTexCoordEndOtherSide, const Float3& size, bool randomTexCoord); // must be size 24
 	void drawCube2(const Float3& parSize, const unsigned int parTextureId[6], const Float3& parTextureRepeat, bool reverseToSkyBox, bool alphaTestEffect);
-	void drawPlane(const Float2& parSize, unsigned int parTextureId, const Float2& parTextureRepeat, const Float3& parAngle, bool reverse);
+	void drawPlane(const Float2& parSize, int parTextureId, const Float2& parTextureRepeat, const Float3& parAngle, bool reverse);
 	void drawQuad(const Float2& parSize, const Float3 pts[4], unsigned int parTextureId, const Float2& parTextureRepeat);
 	void pushPosition();
 	void popPosition();

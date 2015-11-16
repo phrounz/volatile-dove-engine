@@ -49,7 +49,7 @@ CompressedGroupsOfQuadsByTexture::~CompressedGroupsOfQuadsByTexture()
 		std::vector<CompressUtil::CompressedBuffer*>& vgoq = (*it).second;
 		iterateVector(vgoq, CompressUtil::CompressedBuffer*)
 		{
-			delete (*it)->dataCompressed;
+			(*it)->dropData();
 			delete (*it);
 		}
 		vgoq.clear();

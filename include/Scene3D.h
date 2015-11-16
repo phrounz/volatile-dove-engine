@@ -112,11 +112,11 @@ public:
 	//void setRenderBlurLevel(int blurLevel);
 
 private:
-	
+
 	void createWindowSizeDependentResources();
 
 #endif
-	
+
 //---------------------------------------------------------------------
 
 #if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
@@ -134,7 +134,7 @@ public:
 
 	//void setRenderOppositeFace(bool yesNo);
 
-	
+
 	void adjustFog(float distanceToCameraInWorldCoord, float distanceToCameraInCameraCoord);
 	bool isFogEnabled() const;
 	void setFogDisable();
@@ -142,18 +142,18 @@ public:
 	//! Camera
 	//void setSlowlyCameraAngle(Float3 parAngleCamera);
 
-	
+
 	void set3DModeLookAtMode(bool enableLighting, const Float3& parCenter, float distance);
 	//float updateCameraDebugFPSVisionAndManageFall(Object3D* model);
 	void updateCameraSyncronisedWith2D(const Int2& virtualWindowSize);
-	
+
 	//void injectMouseMotionForCameraAngle(const Int2& parMousePosition, bool parIsClicking);
-	
+
 	//! Drawing primitives using an advanced box or integer positions. Useful for set3DModeSyncronisedWith2D mode.
 	void drawCube5FacesWithIntPos(unsigned int textureSidesId, unsigned int textureTopId, unsigned int textureBottomId, const BoundingBoxes::AdvancedBox& box, int depth, bool calculateNormals);
     void drawFaceWithIntPos(unsigned int textureId, const BoundingBoxes::AdvancedBox& box, bool mirrorX, bool mirrorY);
 	void drawCylinderWithIntPos(unsigned int textureId, const Int2& position, float rotationAngle, float width, float height, int subDiv1, int subDiv2);
-	
+
 	//! Drawing primitives
 	void drawCylinder(unsigned int textureId, float width, float height, int subDiv1, int subDiv2);
 	void draw3DSegment(const Float3& parSegmentPt1, const Float3& parSegmentPt2);
@@ -163,37 +163,37 @@ public:
 	void stopDrawingTriangles();
 	//parTextureId: top, bottom, front, back, left, right
 	void drawCube(
-		const Float3& parSize, 
-		const unsigned int parTextureId[6] = NULL, 
-		const Float3& parTextureRepeat = Float3(1.f,1.f,1.f), 
+		const Float3& parSize,
+		const unsigned int parTextureId[6] = NULL,
+		const Float3& parTextureRepeat = Float3(1.f,1.f,1.f),
 		bool reverseToSkyBox = false);
 	void drawCube2(
-		const Float3& parSize, 
-		const unsigned int parTextureId[6] = NULL, 
-		const Float3& parTextureRepeat = Float3(1.f,1.f,1.f), 
+		const Float3& parSize,
+		const unsigned int parTextureId[6] = NULL,
+		const Float3& parTextureRepeat = Float3(1.f,1.f,1.f),
 		bool reverseToSkyBox = false,
 		bool alphaTestEffect = false);
 	bool drawCubeFace(
-		const Float3& parSize, unsigned int textureId, const Float3& parTextureRepeat, 
+		const Float3& parSize, unsigned int textureId, const Float3& parTextureRepeat,
 		int faceToDraw, const Float3& cubePosition, bool doOptimizations);
 
 	void getVerticesAndTexCoordCube(Float3* vertices, Float2* texCoord, const Float3& parTexCoordBegin, const Float3& parTexCoordEnd, const Float3& parTexCoordBeginOtherSide, const Float3& parTexCoordEndOtherSide, const Float3& size, bool randomTexCoord); // vertices must be size 24
-	
+
 	void drawPlane(
-		const Float2& parSize, 
-		unsigned int parTextureId = -1, 
-		const Float2& parTextureRepeat = Float2(1.f,1.f), 
+		const Float2& parSize,
+		int parTextureId = -1, 
+		const Float2& parTextureRepeat = Float2(1.f,1.f),
 		const Float3& parAngle = Float3(0,0,0),
 		bool reverse = false);
 
 	void drawQuad(const Float2& parSize, const Float3 pts[4], unsigned int parTextureId, const Float2& parTextureRepeat);
-	
+
 	//! Move in 3D world
-	
+
 	void movePosition(const Float3& parMovement);
 	void rotatePosition(float angleX, float angleY, float angleZ);//in degree
 	void scalePosition(float x, float y, float z);
-	
+
 	//if parIntensity == 0.f: light has no attenuation
 	void configureLight(int idLight, bool enable, const Float3& pos, float parIntensity);
 

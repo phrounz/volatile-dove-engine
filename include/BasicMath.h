@@ -1,3 +1,56 @@
+#ifdef USES_LINUX
+//---------------------------------------------------------------------
+// This part of code (until #else) is rewritten for Linux by me, because of the
+// license problem the usage of Microsoft code (under Microsoft Limited
+// Public License) implies.
+// When targeting non-Windows platforms, you have to USES_LINUX.
+#pragma once
+
+struct float2
+{
+	float x;
+	float y;
+};
+
+struct float3
+{
+	float3() {}
+	float3(float px, float py, float pz) : x(px), y(py), z(pz) {}
+	float x;
+	float y;
+	float z;
+};
+
+static bool operator<(const float3& a, const float3& b)
+{
+	if (a.x == b.x)
+	{
+		if (a.y == b.y) return (a.z == b.z ? false : (a.z < b.z));
+		return a.y < b.y;
+	}
+	return a.x < b.x;
+}
+
+struct float4
+{
+	float4() {}
+	float4(float px, float py, float pz, float pw) : x(px), y(py), z(pz), w(pw) {}
+	float x;
+	float y;
+	float z;
+	float w;
+};
+
+struct float4x4
+{
+	float _11; float _12; float _13; float _14;
+	float _21; float _22; float _23; float _24;
+	float _31; float _32; float _33; float _34;
+	float _41; float _42; float _43; float _44;
+};
+
+#else
+//---------------------------------------------------------------------
 //// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -557,3 +610,5 @@ namespace BasicMath
 	}
 	return a.x < b.x;
 }*/
+
+#endif

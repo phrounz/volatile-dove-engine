@@ -1,5 +1,5 @@
 ============================================================================
-Sources by me (François Braud) which means most of the source code, are under 
+Sources by me (Franï¿½ois Braud) which means most of the source code, are under
 ZLib license:
 
   Copyright (C) 2015 Francois Braud
@@ -21,19 +21,19 @@ ZLib license:
   3. This notice may not be removed or altered from any source distribution.
 
 ============================================================================
-Sounds in "Application_AnUnconventionalWeapon/WorkDir/data/sounds" is under 
+Sounds in "Application_AnUnconventionalWeapon/WorkDir/data/sounds" is under
 rights of their respective authors.
 
-They are taken http://www.freesound.org/ 
-The filename was not changed (except that I sometimes added __mod at the end 
+They are taken http://www.freesound.org/
+The filename was not changed (except that I sometimes added __mod at the end
 of the basename, this means that I modified it) so you can find the authors.
 I think they are all free for use for commercial projects, but you should check.
 
-The ogg music is taken from http://opengameart.org/content/battle-theme-a 
+The ogg music is taken from http://opengameart.org/content/battle-theme-a
 (public domain)
 
 ============================================================================
-Other data in "Application_AnUnconventionalWeapon/WorkDir/data" by me 
+Other data in "Application_AnUnconventionalWeapon/WorkDir/data" by me
 (Francois Braud) and under Attribution-NonCommercial 4.0 International license
 http://creativecommons.org/licenses/by-nc/4.0/
 If you want to use this data in a commercial project, please contact me.
@@ -43,40 +43,40 @@ source/lodepng.cpp is copyright (c) 2005-2011 Lode Vandevenne,
 It's under ZLib license, and it's a bit modified by me.
 
 ============================================================================
-source/directx/MediaStreamer.cpp, include/BasicMath.h, and maybe some other 
+source/directx/MediaStreamer.cpp, include/BasicMath.h, and maybe some other
 (everything with "Copyright (c) Microsoft Corporation")
-are also a bit modified, made from Microsoft samples, 
+are also a bit modified, made from Microsoft samples,
 and under Microsoft Limited Public License.
 
-Note: In this license, rights are only granted to developers of Microsoft 
-Windows-based software, so you may need to make it work without BasicMath.h 
-when using under Linux. 
-No need to remove the sources within source/directx/ though, they are compiled 
+Note: In this license, rights are only granted to developers of Microsoft
+Windows-based software, so that's why I rewrited a part of BasicMath.h
+exclusively for Linux.
+No need to remove the sources within source/directx/ , they are compiled
 only on Windows platforms.
 
 https://www.openhub.net/licenses/mslpl
 
 ============================================================================
-source\Stackwalker.cpp is from Jochen Kalmbach 
+source\Stackwalker.cpp is from Jochen Kalmbach
 http://www.codeproject.com/Articles/11132/Walking-the-callstack
 and under BSD 2-clause license:
 
-Redistribution and use in source and binary forms, with or without modification, 
+Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
-1. Redistributions of source code must retain the above copyright notice, this list 
+1. Redistributions of source code must retain the above copyright notice, this list
 of conditions and the following disclaimer.
 
-2. Redistributions in binary form must reproduce the above copyright notice, this list 
-of conditions and the following disclaimer in the documentation and/or other materials 
+2. Redistributions in binary form must reproduce the above copyright notice, this list
+of conditions and the following disclaimer in the documentation and/or other materials
 provided with the distribution.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
-EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
-OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT 
-SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT 
-OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
-HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR 
-TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
