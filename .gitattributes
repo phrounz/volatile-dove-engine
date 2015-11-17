@@ -4,6 +4,12 @@
 # Custom for Visual Studio
 *.cs     diff=csharp
 
+# Overriding for language choice 
+# https://github.com/github/linguist#troubleshooting 
+# https://github.com/github/linguist#overrides
+dependancy_libraries/*/*/*.h linguist-vendored
+dependancy_libraries/*/*.h linguist-vendored
+
 # Standard to msysgit
 *.doc	 diff=astextplain
 *.DOC	 diff=astextplain
