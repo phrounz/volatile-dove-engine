@@ -10,8 +10,8 @@
  * *Application_EmptyProject* is a small example tutorial program.
    It contains several Visual Studio solutions for several platforms.
 
- * *dependancy_libraries* are all the dependancies
-   (includes, lib and dll already compiled for Windows)
+ * *dependancy_libraries* are all the dependancies for Windows
+   (includes, lib and dll already compiled)
 
  * *include* are the Volatile Dove Engine include files
 
