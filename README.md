@@ -25,4 +25,4 @@
   This will automatically generates the documentation in the directory "html".
   It is currently set up to browse the "include" directory only.
 
- * [LICENSE.txt](./LICENSE.txt) describe the engine license. Read it before use!
+ * [LICENSE.txt](./LICENSE.txt) describes the engine license. Read it before use!
