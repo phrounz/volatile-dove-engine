@@ -16,6 +16,7 @@ Done by Francois Braud
 namespace MathUtils
 {
 	extern const float PI;//3.14...
+	extern const float PI2;//6.28...
 	extern const float PI_OVER_180;
 	extern const float ANGLE_180_OVER_PI;
 	extern const float PI_X2;//pi*2
