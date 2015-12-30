@@ -1,12 +1,7 @@
 #ifndef TextElement_h_INCLUDED
 #define TextElement_h_INCLUDED
 
-#include <wrl.h>
-#include <d3d11_1.h>
-#include <d2d1_1.h>
-#include <d2d1effects.h>
-#include <dwrite_1.h>
-#include <wincodec.h>
+#include "directx_inc.h"
 
 #include "../../include/CoreUtils.h"
 

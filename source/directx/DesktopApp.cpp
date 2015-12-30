@@ -15,6 +15,7 @@
 
 #include "../AppSetup.h"
 #include "../EngineError.h"
+#include "../Steam.h"
 #include "DesktopWindow.h"
 
 #include "DesktopApp.h"
@@ -23,6 +24,10 @@
 
 DesktopApp::DesktopApp(HINSTANCE hInstance, int nCmdShow, AbstractMainClass* abstractMainClass) :m_isCrashedState(false)
 {
+#ifdef USES_STEAM_INTEGRATION
+	Steam::init();
+#endif
+
 	m_mainClass = abstractMainClass;
 
 	desktopAppHandlerHelp.father = this;
@@ -136,6 +141,10 @@ void DesktopApp::Run()
 			Engine::instance().getScene2DMgr().drawText(NULL, e.getFullText().c_str(), Int2(20, 40), 18, CoreUtils::colorWhite);
 			this->EndDraw();
 			Engine::instance().m_frameDuration = DirectXBase::computeFrameDuration();
+
+#ifdef USES_STEAM_INTEGRATION
+			Steam::runStep();
+#endif
 		}
 	}
 
@@ -160,6 +169,9 @@ void DesktopApp::Run()
 
 DesktopApp::~DesktopApp()
 {
+#ifdef USES_STEAM_INTEGRATION
+	Steam::deinit();
+#endif
 	//s_directXMainObjects->uninitializeWindow();
 }
 

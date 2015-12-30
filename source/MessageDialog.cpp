@@ -1,11 +1,6 @@
 
 #if defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
-	#include <wrl.h>
-	#include <d3d11_1.h>
-	#include <d2d1_1.h>
-	#include <d2d1effects.h>
-	#include <dwrite_1.h>
-	#include <wincodec.h>
+	#include "directx/directx_inc.h"
 #endif
 
 #include "../include/Utils.h"

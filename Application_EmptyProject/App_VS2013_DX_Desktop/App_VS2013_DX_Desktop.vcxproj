@@ -167,6 +167,7 @@
     <ClCompile Include="..\..\source\Sphere3D.cpp" />
     <ClCompile Include="..\..\source\Sprite.cpp" />
     <ClCompile Include="..\..\source\StackWalker.cpp" />
+    <ClCompile Include="..\..\source\Steam.cpp" />
     <ClCompile Include="..\..\source\Texture.cpp" />
     <ClCompile Include="..\..\source\Thread.cpp" />
     <ClCompile Include="..\..\source\Utils.cpp" />
@@ -238,6 +239,7 @@
     <ClInclude Include="..\..\source\directx\DirectXBase.h" />
     <ClInclude Include="..\..\source\directx\DirectXDraw.h" />
     <ClInclude Include="..\..\source\directx\DirectXHelper.h" />
+    <ClInclude Include="..\..\source\directx\directx_inc.h" />
     <ClInclude Include="..\..\source\directx\DXMain.h" />
     <ClInclude Include="..\..\source\directx\FileUtilAsync.h" />
     <ClInclude Include="..\..\source\directx\MediaStreamer.h" />
@@ -265,6 +267,7 @@
     <ClInclude Include="..\..\source\ResolutionChanger.h" />
     <ClInclude Include="..\..\source\Server.h" />
     <ClInclude Include="..\..\source\StackWalker.h" />
+    <ClInclude Include="..\..\source\Steam.h" />
     <ClInclude Include="..\..\source\Texture.h" />
     <ClInclude Include="..\..\source\TextureReal.h" />
   </ItemGroup>

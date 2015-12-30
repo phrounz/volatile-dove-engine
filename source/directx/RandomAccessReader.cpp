@@ -5,17 +5,13 @@
 ////
 //// Copyright (c) Microsoft Corporation. All rights reserved
 
-#include <wrl.h>
-#include <d3d11_1.h>
-#include <d2d1_1.h>
-#include <d2d1effects.h>
-#include <dwrite_1.h>
-#include <wincodec.h>
 #include <vector>
 #include "strsafe.h"
 #include <memory>
 #include <xaudio2.h>
 #include <mmreg.h>
+
+#include "directx_inc.h"
 
 #include "../../include/BasicMath.h"
 #include "../../include/Utils.h"
