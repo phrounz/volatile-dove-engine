@@ -3,26 +3,33 @@
 
 ... is a lightweight video game engine. See http://www.volatiledove.com/Engine for more informations.
 
- * [Application_AnUnconventionalWeapon](./Application_AnUnconventionalWeapon) contains the stuff 
-   required to make and run the game "Big Bertha vs alien robots!". 
-   It contains several Visual Studio solutions for several platforms.
+See [LICENSE.txt](./LICENSE.txt) to know the engine license. Read it before use!
 
- * [Application_EmptyProject](./Application_EmptyProject) is a small example tutorial program.
-   It contains several Visual Studio solutions for several platforms.
-
+### Engine source code and dependancies
+   
  * [dependancy_libraries](./dependancy_libraries) are all the dependancies for Windows
    (includes, lib and dll already compiled)
 
- * [include](./include) are the Volatile Dove Engine include files
+ * [include](./include) are the Volatile Dove Engine "include" files
 
  * [shaders](./shaders) are the default source shaders files used in the application
    you build, in HLSL (DirectX) and GLSL (OpenGL) languages.
 
- * [source](./source) are the Volatile Dove Engine source files
+ * [source](./source) are the Volatile Dove Engine "source" files
 
  * [Doxyfile](./Doxyfile) is the Doxygen file, which requires 
   [Doxygen](http://www.stack.nl/~dimitri/doxygen/),
   This will automatically generates the documentation in the directory "html".
   It is currently set up to browse the "include" directory only.
 
- * [LICENSE.txt](./LICENSE.txt) describes the engine license. Read it before use!
+### Example projects
+
+See [Application.md](./Application.md) for description of how each example project is organized.
+
+ * [Application_EmptyProject](./Application_EmptyProject) is a small example tutorial program.
+
+ * [Application_AnUnconventionalWeapon](./Application_AnUnconventionalWeapon) contains the stuff 
+   required to make and run the game "Big Bertha vs alien robots!". 
+
+ * [Application_LD34_TwoButtons_Growing](./Application_LD34_TwoButtons_Growing) contains the stuff 
+   required to make and run the game "The Mad Circle For The Glorious Dice Tower". 
