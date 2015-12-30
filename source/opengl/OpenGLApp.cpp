@@ -16,6 +16,7 @@
 #include "../../include/KeyboardManager.h"
 #include "../AppSetup.h"
 #include "../EngineError.h"
+#include "../Steam.h"
 
 #include "OpenGLApp.h"
 #include "OpenGL.h"
@@ -56,6 +57,10 @@ OpenGLApp::OpenGLApp(AbstractMainClass* abstractMainClass, const char* argv0)
 	strncpy(argvCustom[0], argv0str.c_str(), argv0str.size()+1);
 	argvCustom[1] = NULL;
 	int argcCustom = 1;
+
+#ifdef USES_STEAM_INTEGRATION
+	Steam::init();
+#endif
 
 	glutInit(&argcCustom,argvCustom);
 
@@ -115,6 +120,10 @@ void OpenGLApp::run()
 				Utils::sleepMs(int(1000/(float)MAX_FPS - (float)Engine::instance().m_frameDuration));
 				Engine::instance().m_frameDuration = (int64_t)(1000.f/(float)MAX_FPS);//10;
 			}
+		
+#ifdef USES_STEAM_INTEGRATION
+			Steam::runStep();
+#endif
 		}
 	}
 	catch (EngineError e)
@@ -142,6 +151,9 @@ OpenGLApp::~OpenGLApp()
 	m_mainClass->deinit();
 	Engine::instance().deinitLowLevel();
 	delete m_mainClass;
+#ifdef USES_STEAM_INTEGRATION
+	Steam::deinit();
+#endif
 }
 
 //--------------------------------------------------------------------------------------------
