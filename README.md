@@ -24,7 +24,7 @@ See [LICENSE.txt](./LICENSE.txt) to know the engine license. Read it before use!
 
 ### Example projects
 
-See [Application.md](./Application.md) for description of how each example project is organized.
+See [APPLICATIONS.md](./APPLICATIONS.md) for description of how each example project is organized.
 
  * [Application_EmptyProject](./Application_EmptyProject) is a small example tutorial program.
 
