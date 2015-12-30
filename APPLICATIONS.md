@@ -1,4 +1,4 @@
-## Conventions for each example project.
+## Conventions for each example project
 
 Each example project "Application_XXXXXX" may contain the following directories, which correspond to different targets/environments:
 
