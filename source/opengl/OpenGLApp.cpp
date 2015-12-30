@@ -28,7 +28,7 @@
 
 namespace
 {
-	const int MAX_FPS = 60;
+	//static const int MAX_FPS = 60;
 }
 
 //---------------------------------------------------------------------
@@ -51,6 +51,15 @@ void OpenGLApp::onResizeWindow(int w, int h)
 
 OpenGLApp::OpenGLApp(AbstractMainClass* abstractMainClass, const char* argv0)
 {
+#ifdef USES_STEAM_INTEGRATION
+	Steam::init();
+#endif
+
+	m_mainClass = abstractMainClass;
+
+	//---------------
+	// init window and graphic system
+
 	std::string argv0str = argv0;
 	char* argvCustom[2];
 	argvCustom[0] = new char[argv0str.size()+1];
@@ -58,42 +67,64 @@ OpenGLApp::OpenGLApp(AbstractMainClass* abstractMainClass, const char* argv0)
 	argvCustom[1] = NULL;
 	int argcCustom = 1;
 
-#ifdef USES_STEAM_INTEGRATION
-	Steam::init();
-#endif
-
 	glutInit(&argcCustom,argvCustom);
+}
 
-	m_mainClass = abstractMainClass;
-	Assert(!Engine::instance().isInit());
-	Engine::instance().initLowLevel();
+//---------------------------------------------------------------------
 
-	AppSetup::instance().onResizeWindow(Int2(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT)));
-	m_openGLAppControls.initControls(abstractMainClass);
+void OpenGLApp::manageEvents()
+{
+	// events are automatically dispatched by glut
+
+	// resize window if required
+	Int2 newSizeWindow = AppSetup::instance().getWindowRealSize();
+	if (newSizeWindow != AppSetup::instance().getWindowCurrentRealSize())
+	{
+		this->onResizeWindow(newSizeWindow.width(), newSizeWindow.height());
+	}
+}
+
+//---------------------------------------------------------------------
+
+void OpenGLApp::BeginDraw()
+{
+	AppSetup::instance().manageRender();
+}
+
+void OpenGLApp::EndDraw()
+{
 }
 
 //---------------------------------------------------------------------
 
 void OpenGLApp::run()
-{
+{	
+	// ------------- init Engine objects
+	Assert(!Engine::instance().isInit());
+	Engine::instance().initLowLevel();
+
+	AppSetup::instance().onResizeWindow(Int2(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT)));
+	m_openGLAppControls.initControls(m_mainClass);
+
+	m_frameDurationCounter.init();
+
 	try
 	{
+		// ------------- call main class init()
 		m_mainClass->init();
+
 		AppSetup::instance().manageRender();
 
-		while (Engine::instance().isRunning() && !m_openGLAppControls.hasPressedAltF4())
+		while (Engine::instance().isRunning() && !m_openGLAppControls.hasPressedAltF4()) // ------------ MAIN LOOP
 		{
-			int64_t msNow = Utils::getMillisecond();
+			// ------------ manage events
 
-			// resize window if required
-			Int2 newSizeWindow = AppSetup::instance().getWindowRealSize();
-			if (newSizeWindow != AppSetup::instance().getWindowCurrentRealSize())
-			{
-				this->onResizeWindow(newSizeWindow.width(), newSizeWindow.height());
-			}
+			this->manageEvents();
 
-			// process
+			// ------------- call main class update()
+
 			bool needProcessAgain = m_mainClass->update();
+			Engine::instance().getSoundMgr().manage();
 			if (!needProcessAgain)
 			{
 				AppSetup::instance().manageRender();
@@ -103,24 +134,20 @@ void OpenGLApp::run()
 				while (!m_openGLAppControls.hasEventHappenedSinceReset())
 				{
 					Utils::sleepMs(20);
-					Int2 newSizeWindow = AppSetup::instance().getWindowRealSize();
-					if (newSizeWindow != AppSetup::instance().getWindowCurrentRealSize())
-						this->onResizeWindow(newSizeWindow.width(), newSizeWindow.height());
+					this->manageEvents();
 					AppSetup::instance().manageRender();
 				}
 			}
 			else
 			{
-				AppSetup::instance().manageRender();
+				// ------------ call main class render
+				this->BeginDraw();
 				m_mainClass->render();
+				this->EndDraw();
 			}
-			Engine::instance().m_frameDuration = Utils::getMillisecond() - msNow;
-			if (1.f/(Engine::instance().m_frameDuration/1000.f) > MAX_FPS) //wait when > MAX_FPS
-			{
-				Utils::sleepMs(int(1000/(float)MAX_FPS - (float)Engine::instance().m_frameDuration));
-				Engine::instance().m_frameDuration = (int64_t)(1000.f/(float)MAX_FPS);//10;
-			}
-		
+
+			Engine::instance().m_frameDuration = m_frameDurationCounter.retrieve();
+			
 #ifdef USES_STEAM_INTEGRATION
 			Steam::runStep();
 #endif
@@ -131,15 +158,13 @@ void OpenGLApp::run()
 		outputln("Caught EngineError");
 		m_isCrashedState = true;
 
-		//MSG msg = { 0 };
-
 		while (true)
 		{
-			int64_t msNow = Utils::getMillisecond();
-			AppSetup::instance().manageRender();
+			this->BeginDraw();
 			Engine::instance().clearScreen(CoreUtils::colorBlack);
 			Engine::instance().getScene2DMgr().drawText(NULL, e.getFullText().c_str(), Int2(20, 40), 18, CoreUtils::colorWhite);
-			Engine::instance().m_frameDuration = Utils::getMillisecond() - msNow;
+			this->EndDraw();
+			Engine::instance().m_frameDuration = m_frameDurationCounter.retrieve();
 		}
 	}
 }

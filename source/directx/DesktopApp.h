@@ -2,6 +2,7 @@
 #ifdef USES_WINDOWS8_DESKTOP
 
 #include "../../include/AbstractMainClass.h"
+#include "../FrameDurationCounter.h"
 
 #include "DirectXBase.h"
 #include "DesktopWindow.h"
@@ -13,7 +14,7 @@ ref class DesktopApp sealed: public DirectXBase
 public:
 	virtual void Run();
 internal:
-	DesktopApp(HINSTANCE hInstance, int nCmdShow, AbstractMainClass* abstractMainClass);
+	DesktopApp(AbstractMainClass* abstractMainClass);
 	void onMessage(UINT message, WPARAM wParam, LPARAM lParam);
 private:
 	~DesktopApp();
@@ -23,12 +24,14 @@ private:
 		void onMessage(UINT message, WPARAM wParam, LPARAM lParam) { father->onMessage(message, wParam, lParam); }
 		DesktopApp^ father;
 	};
+	void manageEvents();
 
 	AbstractMainClass* m_mainClass;
 	DesktopAppHandlerHelp desktopAppHandlerHelp;
 	bool m_isCrashedState;
 
 	DesktopAppControls m_desktopAppControls;
+	FrameDurationCounter m_frameDurationCounter;
 };
 
 #endif //USES_WINDOWS8_DESKTOP

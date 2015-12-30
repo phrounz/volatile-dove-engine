@@ -107,6 +107,17 @@ void WinStoreApp::Load(Platform::String^ entryPoint)
 {
 }
 
+//---------------------------------------------------------------------
+
+void WinStoreApp::manageEvents()
+{
+	CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
+	//CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(
+	//	needProcessAgain ? CoreProcessEventsOption::ProcessAllIfPresent : CoreProcessEventsOption::ProcessOneAndAllPending);
+}
+
+//---------------------------------------------------------------------
+
 void WinStoreApp::Run()
 {
 	// register handler for edge gesture completion events
@@ -114,31 +125,34 @@ void WinStoreApp::Run()
 		ref new TypedEventHandler<Windows::UI::Input::EdgeGesture^,
 		Windows::UI::Input::EdgeGestureEventArgs^>(this, &WinStoreApp::OnEdgeGestureCompleted);
 
+	// ------------- init Engine objects
 	Assert(!Engine::instance().isInit());
 	Engine::instance().initLowLevel();
 
 	try
 	{
+		// ------------- call main class init()
 		m_mainClass->init();
-		DirectXBase::startComputingFrameDuration();
 
-		while (!m_windowClosed)
+		m_frameDurationCounter.init();
+
+		while (!m_windowClosed) // ------------ MAIN LOOP
 		{	
-			//------------ update
+			// ------------ manage events
+
+			this->manageEvents();
+
+			// ------------- call main class update()
 
 			bool needProcessAgain = m_mainClass->update();
-
-			CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(
-				needProcessAgain ? CoreProcessEventsOption::ProcessAllIfPresent : CoreProcessEventsOption::ProcessOneAndAllPending);
-
 			Engine::instance().getSoundMgr().manage();
 
-			//------------ render
+			// ------------ call main class render()
 
 			this->BeginDraw();
 			m_mainClass->render();
 			this->EndDraw();
-			Engine::instance().m_frameDuration = DirectXBase::computeFrameDuration();
+			Engine::instance().m_frameDuration = m_frameDurationCounter.retrieve();
 		}
 	}
 	catch (EngineError e)
@@ -149,13 +163,13 @@ void WinStoreApp::Run()
 			if (isDrawing()) EndDraw();
 			m_winStoreAppControls.setCrashedState();
 
-			CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
+			this->manageEvents();
 			
 			this->BeginDraw();
 			Engine::instance().clearScreen(CoreUtils::colorBlack);
 			Engine::instance().getScene2DMgr().drawText(NULL, e.getFullText().c_str(), Int2(20, 40), 18, CoreUtils::colorWhite);
 			this->EndDraw();
-			Engine::instance().m_frameDuration = DirectXBase::computeFrameDuration();
+			Engine::instance().m_frameDuration = m_frameDurationCounter.retrieve();
 		}
 	}
 	

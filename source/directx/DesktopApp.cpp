@@ -22,7 +22,7 @@
 
 //---------------------------------------------------------------------
 
-DesktopApp::DesktopApp(HINSTANCE hInstance, int nCmdShow, AbstractMainClass* abstractMainClass) :m_isCrashedState(false)
+DesktopApp::DesktopApp(AbstractMainClass* abstractMainClass) :m_isCrashedState(false)
 {
 #ifdef USES_STEAM_INTEGRATION
 	Steam::init();
@@ -30,7 +30,13 @@ DesktopApp::DesktopApp(HINSTANCE hInstance, int nCmdShow, AbstractMainClass* abs
 
 	m_mainClass = abstractMainClass;
 
+	//---------------
+	// init window and graphic system
+
 	desktopAppHandlerHelp.father = this;
+
+	HINSTANCE hInstance = GetModuleHandle(NULL);
+	int nCmdShow = SW_SHOW;
 
 	DesktopWindow* window = new DesktopWindow(hInstance, nCmdShow, &desktopAppHandlerHelp, 
 		AppSetup::instance().isWindowFullscreen(), 
@@ -76,44 +82,52 @@ void DesktopApp::onMessage(UINT message, WPARAM wParam, LPARAM lParam)
 
 //---------------------------------------------------------------------
 
+void DesktopApp::manageEvents()
+{
+	MSG msg = { 0 };
+	while (PeekMessage(&msg, reinterpret_cast<const DesktopWindow*>(getWindow())->getHwnd(), 0, 0, PM_REMOVE))
+	{
+		//if (!GetMessage(&msg, NULL, 0, 0))return msg.wParam;
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+		//if (WM_QUIT != msg.message) break;
+		//continue;
+	}
+}
+
+//---------------------------------------------------------------------
+
 void DesktopApp::Run()
 {
+	// ------------- init Engine objects
 	Assert(!Engine::instance().isInit());
 	Engine::instance().initLowLevel();
 
 	try
 	{
+		// ------------- call main class init()
 		m_mainClass->init();
-		DirectXBase::startComputingFrameDuration();
+		m_frameDurationCounter.init();
 
-		MSG msg = { 0 };
-
-		while (true)
+		while (Engine::instance().isRunning() && !reinterpret_cast<const DesktopWindow*>(getWindow())->mustBeDestroyed()) // ------------ MAIN LOOP
 		{
-			// ------------ update
+			// ------------ manage events
 
-			if (PeekMessage(&msg, reinterpret_cast<const DesktopWindow*>(getWindow())->getHwnd(), 0, 0, PM_REMOVE))
-			{
-				//if (!GetMessage(&msg, NULL, 0, 0))return msg.wParam;
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-				//if (WM_QUIT != msg.message) break;
-				continue;
-			}
+			this->manageEvents();
+
+			// ------------- call main class update()
 
 			bool needProcessAgain = m_mainClass->update();
 			Engine::instance().getSoundMgr().manage();
 
 			if (reinterpret_cast<const DesktopWindow*>(getWindow())->mustBeDestroyed() || !Engine::instance().isRunning()) break;
 
-			// ------------ render
+			// ------------ call main class render()
 
 			this->BeginDraw();
 			m_mainClass->render();
 			this->EndDraw();
-			Engine::instance().m_frameDuration = DirectXBase::computeFrameDuration();
-
-			if (reinterpret_cast<const DesktopWindow*>(getWindow())->mustBeDestroyed() || !Engine::instance().isRunning()) break;
+			Engine::instance().m_frameDuration = m_frameDurationCounter.retrieve();
 		}
 
 		m_mainClass->deinit();
@@ -125,22 +139,15 @@ void DesktopApp::Run()
 		if (this->isDrawing()) this->EndDraw();
 		m_isCrashedState = true;
 
-		MSG msg = { 0 };
-
 		while (true)
 		{
-			if (PeekMessage(&msg, reinterpret_cast<const DesktopWindow*>(getWindow())->getHwnd(), 0, 0, PM_REMOVE))
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-				continue;
-			}
+			this->manageEvents();
 
 			this->BeginDraw();
 			Engine::instance().clearScreen(CoreUtils::colorBlack);
 			Engine::instance().getScene2DMgr().drawText(NULL, e.getFullText().c_str(), Int2(20, 40), 18, CoreUtils::colorWhite);
 			this->EndDraw();
-			Engine::instance().m_frameDuration = DirectXBase::computeFrameDuration();
+			Engine::instance().m_frameDuration = m_frameDurationCounter.retrieve();
 
 #ifdef USES_STEAM_INTEGRATION
 			Steam::runStep();

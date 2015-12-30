@@ -24,9 +24,6 @@ public:
 	void OnResuming(Platform::Object^ sender, Platform::Object^ args);
 	void Clear(Windows::UI::Color color);
 
-	void startComputingFrameDuration();
-	int64_t computeFrameDuration();
-
 	virtual ~DirectXBase();
 
 internal:
@@ -50,7 +47,6 @@ private:
 	virtual void Present() sealed;
 
 	bool m_isSuspended;
-	int64_t m_msNow;
 
 //private protected:
 private:

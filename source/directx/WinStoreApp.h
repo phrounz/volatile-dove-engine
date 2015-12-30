@@ -5,8 +5,9 @@
 
 #include <string>
 
-#include "../../include/Engine.h"
 #include "../../include/AbstractMainClass.h"
+#include "../FrameDurationCounter.h"
+
 #include "WinStoreAppControls.h"
 #include "DirectXBase.h"
 
@@ -56,6 +57,8 @@ private:
 	void OnEdgeSettingsButton(Windows::UI::Popups::IUICommand^ command);
 
 	WinStoreAppControls m_winStoreAppControls;
+	void manageEvents();
+	FrameDurationCounter m_frameDurationCounter;
 };
 
 #endif

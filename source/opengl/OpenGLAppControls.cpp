@@ -19,6 +19,9 @@
 
 #include "OpenGLAppControls.h"
 
+//---------------------------------------------------------------------
+// static values
+
 namespace
 {
 	AbstractMainClass* s_mainClass = NULL;

@@ -105,10 +105,6 @@ int main(Platform::Array<Platform::String^>^ args)
 	//TCHAR exepath[MAX_PATH + 1];
 	//if (0 == GetModuleFileName(0, exepath, MAX_PATH + 1)) return 1;
 
-	HINSTANCE hInstance = GetModuleHandle(NULL);
-	int nCmdShow = SW_SHOW;
-	bool enableMSAA = false;
-
 	std::vector<std::string> arguments;
 	for (unsigned int i = 0; i < args->Length; i++)
 	{
@@ -116,7 +112,7 @@ int main(Platform::Array<Platform::String^>^ args)
 	}
 
 	AbstractMainClass* mainClass = createAbstractMainClass(arguments);
-	DesktopApp^ directXApp = ref new DesktopApp(hInstance, nCmdShow, mainClass);
+	DesktopApp^ directXApp = ref new DesktopApp(mainClass);
 	directXApp->Run();
 	delete mainClass;
 	return 0;

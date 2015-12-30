@@ -25,11 +25,6 @@ void DirectXBase::Initialize(AbstractWindow* abstractWindow, IUnknown* imageSour
 	CreateWindowSizeDependentResources();
 }
 
-void DirectXBase::startComputingFrameDuration()
-{
-	m_msNow = Utils::getMillisecond();
-}
-
 void DirectXBase::getWindowSize(int* width, int* height)	{ DXMain::instance()->getWindowSize(width, height); }
 void DirectXBase::CreateDeviceIndependentResources()		{ DXMain::instance()->CreateDeviceIndependentResources(); }
 void DirectXBase::CreateDeviceResources()					{ DXMain::instance()->CreateDeviceResources(); }
@@ -55,14 +50,6 @@ void DirectXBase::OnSuspending(Object ^sender, Windows::ApplicationModel::Suspen
 void DirectXBase::OnResuming(Platform::Object^ sender, Platform::Object^ args)						{ m_isSuspended = false; }
 
 const AbstractWindow* DirectXBase::getWindow() const		{ return DXMain::instance()->getWindow(); }
-
-int64_t DirectXBase::computeFrameDuration()
-{
-	int64_t now = Utils::getMillisecond();
-	int64_t diff = now - m_msNow;
-	m_msNow = now;
-	return diff;
-}
 
 bool DirectXBase::isDrawing() const { return DXMain::instance()->isDrawing(); }
 

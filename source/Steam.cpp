@@ -2,8 +2,17 @@
 
 #ifdef USES_STEAM_INTEGRATION
 
+#ifdef VERSION_X64
+#pragma comment(lib,"steam_api64.lib")
+#else
 #pragma comment(lib,"steam_api.lib")
+#endif
+
+#ifdef VERSION_X64
+#pragma comment(lib,"sdkencryptedappticket64.lib")
+#else
 #pragma comment(lib,"sdkencryptedappticket.lib")
+#endif
 
 #include "steam/steam_api.h"
 #include "steam/isteamuserstats.h"
