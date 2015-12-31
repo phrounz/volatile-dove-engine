@@ -16,7 +16,6 @@
 #include "../../include/KeyboardManager.h"
 #include "../AppSetup.h"
 #include "../EngineError.h"
-#include "../Steam.h"
 
 #include "OpenGLApp.h"
 #include "OpenGL.h"
@@ -51,10 +50,6 @@ void OpenGLApp::onResizeWindow(int w, int h)
 
 OpenGLApp::OpenGLApp(AbstractMainClass* abstractMainClass, const char* argv0)
 {
-#ifdef USES_STEAM_INTEGRATION
-	Steam::init();
-#endif
-
 	m_mainClass = abstractMainClass;
 
 	//---------------
@@ -124,7 +119,6 @@ void OpenGLApp::run()
 			// ------------- call main class update()
 
 			bool needProcessAgain = m_mainClass->update();
-			Engine::instance().getSoundMgr().manage();
 			if (!needProcessAgain)
 			{
 				AppSetup::instance().manageRender();
@@ -147,10 +141,7 @@ void OpenGLApp::run()
 			}
 
 			Engine::instance().m_frameDuration = m_frameDurationCounter.retrieve();
-			
-#ifdef USES_STEAM_INTEGRATION
-			Steam::runStep();
-#endif
+			Engine::instance().updateInternals();
 		}
 	}
 	catch (EngineError e)
@@ -176,9 +167,6 @@ OpenGLApp::~OpenGLApp()
 	m_mainClass->deinit();
 	Engine::instance().deinitLowLevel();
 	delete m_mainClass;
-#ifdef USES_STEAM_INTEGRATION
-	Steam::deinit();
-#endif
 }
 
 //--------------------------------------------------------------------------------------------

@@ -59,6 +59,8 @@ namespace
 
 	const float FLOAT_RAND_MAX = (float)RAND_MAX;
 	const double DOUBLE_RAND_MAX = (double)RAND_MAX;
+
+	const bool THROW_ERROR = false;
 }
 
 namespace Utils
@@ -93,7 +95,7 @@ void die()
 			std::string str = "ERROR (call stack infos missing)";
 		#endif
 		outputln(str.c_str());
-		throw EngineError(str);
+		if (THROW_ERROR) throw EngineError(str);
 		std::cerr << "The program was aborted, Utils::die() was called." << std::endl;
 		MessageBox(NULL, s_errorMessageEndUser.c_str(), L"Fatal error - please provide this information to the developers", MB_OK | MB_ICONEXCLAMATION | MB_SETFOREGROUND);
 
@@ -113,7 +115,7 @@ void dieErrorMessageToUser(const std::string& message)
 	Utils::print("ERROR: ");
 	Utils::print(message.c_str());
 	Utils::print("\n");
-	throw EngineError(message);
+	if (THROW_ERROR) throw EngineError(message);
 #if !defined(USES_LINUX) && !defined(USES_WINDOWS8_METRO)
 	#ifdef ENABLE_CALLSTACK
 		MyStackWalker sw;

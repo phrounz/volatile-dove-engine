@@ -15,7 +15,7 @@
 
 #include "../AppSetup.h"
 #include "../EngineError.h"
-#include "../Steam.h"
+
 #include "DesktopWindow.h"
 
 #include "DesktopApp.h"
@@ -24,10 +24,6 @@
 
 DesktopApp::DesktopApp(AbstractMainClass* abstractMainClass) :m_isCrashedState(false)
 {
-#ifdef USES_STEAM_INTEGRATION
-	Steam::init();
-#endif
-
 	m_mainClass = abstractMainClass;
 
 	//---------------
@@ -62,7 +58,6 @@ void DesktopApp::onMessage(UINT message, WPARAM wParam, LPARAM lParam)
 		//	m_mainClass->onWindowResize();
 		//	UpdateForWindowSizeChange();
 		//	break;
-
 	}
 	else if (message == WM_SYSCOMMAND)
 	{
@@ -118,9 +113,10 @@ void DesktopApp::Run()
 			// ------------- call main class update()
 
 			bool needProcessAgain = m_mainClass->update();
-			Engine::instance().getSoundMgr().manage();
 
 			if (reinterpret_cast<const DesktopWindow*>(getWindow())->mustBeDestroyed() || !Engine::instance().isRunning()) break;
+
+			Engine::instance().updateInternals();
 
 			// ------------ call main class render()
 
@@ -142,16 +138,13 @@ void DesktopApp::Run()
 		while (true)
 		{
 			this->manageEvents();
+			Engine::instance().updateInternals();
 
 			this->BeginDraw();
 			Engine::instance().clearScreen(CoreUtils::colorBlack);
 			Engine::instance().getScene2DMgr().drawText(NULL, e.getFullText().c_str(), Int2(20, 40), 18, CoreUtils::colorWhite);
 			this->EndDraw();
 			Engine::instance().m_frameDuration = m_frameDurationCounter.retrieve();
-
-#ifdef USES_STEAM_INTEGRATION
-			Steam::runStep();
-#endif
 		}
 	}
 
@@ -176,9 +169,6 @@ void DesktopApp::Run()
 
 DesktopApp::~DesktopApp()
 {
-#ifdef USES_STEAM_INTEGRATION
-	Steam::deinit();
-#endif
 	//s_directXMainObjects->uninitializeWindow();
 }
 

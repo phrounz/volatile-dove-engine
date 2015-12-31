@@ -83,11 +83,20 @@ public:
 
 	void resetSoundSystem();													///< Unload and reload the sound manager
 
+	void unlockSteamAchievement(std::string str);
+	void clearSteamAchievement(std::string str);
+
+	struct SteamAchievementInfo
+	{
+		SteamAchievementInfo(std::string pId, std::string pName, std::string pDescription) : id(pId), name(pName), description(pDescription) {}
+		std::string id, name, description;
+	};
+
 private:
 	void initLowLevel();
 
 	//! constructor
-	Engine(const char* argv0, const AppSetupInfos& initInfos);
+	Engine(const char* argv0, const AppSetupInfos& initInfos, const std::vector<SteamAchievementInfo>& steamAchievementInfos);
 	//! destructor
 	virtual ~Engine();
 
@@ -95,6 +104,8 @@ private:
 	void deinitLowLevel();
 
 	static Engine* m_instance;
+
+	void updateInternals();
 
 	void onPointerPressedInternals(int button, int x, int y);
 	void onPointerReleasedInternals(int button, int x, int y);

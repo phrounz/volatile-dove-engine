@@ -145,7 +145,7 @@ void WinStoreApp::Run()
 			// ------------- call main class update()
 
 			bool needProcessAgain = m_mainClass->update();
-			Engine::instance().getSoundMgr().manage();
+			Engine::instance().updateInternals();
 
 			// ------------ call main class render()
 

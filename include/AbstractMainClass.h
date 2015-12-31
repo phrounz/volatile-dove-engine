@@ -11,9 +11,9 @@
 class AbstractMainClass
 {
 public:
-	AbstractMainClass(const char* argv0, const AppSetupInfos& initInfos)
+	AbstractMainClass(const char* argv0, const AppSetupInfos& initInfos, const std::vector<Engine::SteamAchievementInfo> steamAchievementInfos = std::vector<Engine::SteamAchievementInfo>())
 	{
-		new Engine(argv0, initInfos);
+		new Engine(argv0, initInfos, steamAchievementInfos);
 	}
 	//! events
 	virtual void onPointerPressed(int button, int x, int y) {}

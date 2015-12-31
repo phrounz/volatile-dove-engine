@@ -7,6 +7,7 @@
 
 #include "../include/Engine.h"
 #include "../include/FileUtil.h"
+#include "Steam.h"
 
 #include "AppSetup.h"
 
@@ -20,10 +21,17 @@ Engine* Engine::m_instance = NULL;
 
 //---------------------------------------------------------------------
 
-Engine::Engine(const char* argv0, const AppSetupInfos& appSetupInfos)
+Engine::Engine(const char* argv0, const AppSetupInfos& appSetupInfos, const std::vector<SteamAchievementInfo>& steamAchievementInfos)
 :
 m_frameDuration(0), m_argv0(argv0), m_isInit(false), m_isAppRunning(true), m_appSetup(new AppSetup(appSetupInfos))
 {
+#ifdef USES_STEAM_INTEGRATION
+	std::vector<Steam::AchievementInfo> achievementInfos;
+	for (int i = 0; i < steamAchievementInfos.size(); ++i)
+		achievementInfos.push_back(Steam::AchievementInfo(steamAchievementInfos[i].id, steamAchievementInfos[i].name, steamAchievementInfos[i].description));
+	Steam::init(achievementInfos);
+#endif
+
 #ifndef USES_WINDOWS8_METRO
 	FileUtil::setAppDataFolderBasename(m_appSetup->getAppSetupInfos().appDataFolderBasename.c_str());
 #endif
@@ -35,6 +43,10 @@ m_frameDuration(0), m_argv0(argv0), m_isInit(false), m_isAppRunning(true), m_app
 Engine::~Engine()
 {
 	delete m_appSetup;
+#ifdef USES_STEAM_INTEGRATION
+	Steam::deinit();
+#endif
+
 }
 
 //---------------------------------------------------------------------
@@ -59,6 +71,35 @@ void Engine::initLowLevel()
 	outputln("Init Engine done.");
 
 	this->onWindowResizeInternals();
+}
+
+//---------------------------------------------------------------------
+
+void Engine::updateInternals()
+{
+	Engine::instance().getSoundMgr().manage();
+
+#ifdef USES_STEAM_INTEGRATION
+	Steam::runStep();
+#endif
+}
+
+//---------------------------------------------------------------------
+
+void Engine::unlockSteamAchievement(std::string str)
+{
+#ifdef USES_STEAM_INTEGRATION
+	Steam::unlockAchievement(str);
+#endif
+}
+
+//---------------------------------------------------------------------
+
+void Engine::clearSteamAchievement(std::string str)
+{
+#ifdef USES_STEAM_INTEGRATION
+	Steam::clearAchievement(str);
+#endif
 }
 
 //---------------------------------------------------------------------

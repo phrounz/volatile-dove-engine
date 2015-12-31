@@ -3,8 +3,15 @@
 
 namespace Steam
 {
-	void init(); ///< init
-	void runStep();
+	struct AchievementInfo
+	{
+		AchievementInfo(std::string pId, std::string pName, std::string pDescription) : id(pId), name(pName), description(pDescription) {}
+		std::string id, name, description;
+	};
+	void init(const std::vector<AchievementInfo>& achievementInfos); ///< init
+	void runStep();///< manage SteamWorks stuff
+	void unlockAchievement(std::string str);//< unlock the achievement with id str
+	void clearAchievement(std::string str);///< de-unlock the achievement with id str (mostly for development purpose)
 	void deinit(); ///< deinit
 }
 
