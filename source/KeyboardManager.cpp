@@ -147,10 +147,10 @@ Key KeyboardManager::convertFromGlut(int key)
 Key KeyboardManager::convertFromStrToKey(const std::string& chars)
 {
 	Key asciiCode = 0;
-	if (chars.size() > 1 && chars.substr(0,1) == "F")
+	if (chars.size() > 1 && chars.substr(0,1) == "F") // "F1" to "F12" keys
 	{
 		std::string rest = chars.substr(1);
-		asciiCode = atoi(rest.c_str());
+		asciiCode = KEY_F1 - 1 + atoi(rest.c_str());
 	}
 	else if (chars.size() > 1 && chars.substr(0,6) == "ASCII:")
 	{

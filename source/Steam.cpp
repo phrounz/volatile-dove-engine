@@ -336,7 +336,7 @@ namespace Steam
 		SteamAPI_RunCallbacks();
 	}
 
-	void unlockAchievement(std::string str)
+	void unlockAchievement(const std::string& str)
 	{
 		//clearAchievement(str);// ENABLE FOR DEBUG
 		if (g_SteamAchievements)
@@ -345,7 +345,7 @@ namespace Steam
 		}
 	}
 
-	void clearAchievement(std::string str)
+	void clearAchievement(const std::string& str)
 	{
 		if (g_SteamAchievements)
 		{
