@@ -22,7 +22,7 @@
 
 //---------------------------------------------------------------------
 
-DesktopApp::DesktopApp(AbstractMainClass* abstractMainClass) :m_isCrashedState(false)
+DesktopApp::DesktopApp(AbstractMainClass* abstractMainClass) :m_isCrashedState(false), m_suspended(false)
 {
 	m_mainClass = abstractMainClass;
 
@@ -65,6 +65,14 @@ void DesktopApp::onMessage(UINT message, WPARAM wParam, LPARAM lParam)
 		{
 		case SC_CLOSE:
 			//m_mainClass->onSuspending();
+			break;
+		case SC_MINIMIZE:
+			m_suspended = true;
+			Utils::print("Window is minimized => suspending the app\n");
+			break;
+		case SC_RESTORE:
+			m_suspended = false;
+			Utils::print("Window is restored => unsuspending the app\n");
 			break;
 		}
 	}
@@ -110,19 +118,23 @@ void DesktopApp::Run()
 
 			this->manageEvents();
 
-			// ------------- call main class update()
+			if (!m_suspended)
+			{
+				// ------------- call main class update()
 
-			bool needProcessAgain = m_mainClass->update();
+				bool needProcessAgain = m_mainClass->update();
 
-			if (reinterpret_cast<const DesktopWindow*>(getWindow())->mustBeDestroyed() || !Engine::instance().isRunning()) break;
+				if (reinterpret_cast<const DesktopWindow*>(getWindow())->mustBeDestroyed() || !Engine::instance().isRunning()) break;
 
-			Engine::instance().updateInternals();
+				Engine::instance().updateInternals();
 
-			// ------------ call main class render()
+				// ------------ call main class render()
 
-			this->BeginDraw();
-			m_mainClass->render();
-			this->EndDraw();
+				this->BeginDraw();
+				m_mainClass->render();
+				this->EndDraw();
+			}
+
 			Engine::instance().m_frameDuration = m_frameDurationCounter.retrieve();
 		}
 

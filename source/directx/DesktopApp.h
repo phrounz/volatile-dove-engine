@@ -32,6 +32,7 @@ private:
 
 	DesktopAppControls m_desktopAppControls;
 	FrameDurationCounter m_frameDurationCounter;
+	bool m_suspended;
 };
 
 #endif //USES_WINDOWS8_DESKTOP
