@@ -1,1 +1,0 @@
-Requires perl. On Windows please install http://strawberryperl.com/

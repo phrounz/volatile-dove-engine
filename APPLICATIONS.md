@@ -40,3 +40,9 @@ Each example project "Application_XXXXXX" may contain the following directories,
    * Visual Studio Code for Linux (http://code.visualstudio.com)
    * Atom (http://atom.io)
    * Kate (part of KDE environment)
+
+### App_JS_Emscripten (Highly Experimental)
+ * Requires perl.
+   * On Windows please install: http://strawberryperl.com/ and run compile.bat
+   * On Linux, run perl compile.pl
+   
