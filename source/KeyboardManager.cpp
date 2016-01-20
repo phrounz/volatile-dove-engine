@@ -13,7 +13,9 @@ Done by Francois Braud
 	#include <GL/gl.h>
 	#include <GL/glu.h>
 	#include <GL/glut.h>
-	#include <GL/freeglut_ext.h>
+	#ifndef USES_JS_EMSCRIPTEN
+		#include <GL/freeglut_ext.h>
+	#endif
 #endif
 
 #include "../include/Utils.h"

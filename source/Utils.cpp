@@ -32,10 +32,21 @@
 #include "EngineError.h"
 
 #ifdef USES_LINUX
-  #include <execinfo.h>
-	#include <sys/time.h>
-	#include <unistd.h>
-	const int MAX_PATH = FILENAME_MAX;
+
+#include <sys/time.h>
+#include <unistd.h>
+const int MAX_PATH = FILENAME_MAX;
+
+#ifdef USES_JS_EMSCRIPTEN
+	
+	void printTrace()
+	{
+		printf("(Call stack not available)\n");
+	}
+
+#else
+
+	#include <execinfo.h>
 	
 	void printTrace()
 	{
@@ -50,6 +61,8 @@
 	}
 
 #endif
+
+#endif //USES_LINUX
 
 namespace
 {

@@ -66,11 +66,13 @@ void VBO::checkAndInit()
 	isExtensionSupport = GLExtension::isExtensionSupported( "GL_ARB_vertex_buffer_object");
 	if (isExtensionSupport)
 	{
+#ifndef USES_JS_EMSCRIPTEN
 		glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) wglGetProcAddress("glGenBuffersARB");
 		glBindBufferARB = (PFNGLBINDBUFFERARBPROC) wglGetProcAddress("glBindBufferARB");
 		glBufferDataARB = (PFNGLBUFFERDATAARBPROC) wglGetProcAddress("glBufferDataARB");
 		glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) wglGetProcAddress("glDeleteBuffersARB");
 		glFogCoordPointer = (PFNGLFOGCOORDPOINTERPROC) wglGetProcAddress("glFogCoordPointer");
+#endif
 	}
 	else
 	{

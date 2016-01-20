@@ -1,7 +1,18 @@
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
-#ifdef USES_LINUX
+#if defined(USES_LINUX) && defined(USES_JS_EMSCRIPTEN)
+
+namespace ResolutionChanger
+{
+	bool changeResolution(int width, int height)
+	{
+		// no way to change the resolution
+		return false;
+	}
+}
+
+#elif defined(USES_LINUX) && !defined(USES_JS_EMSCRIPTEN)
 
 #include <stdio.h>
 #include <stdlib.h>

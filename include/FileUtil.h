@@ -54,7 +54,7 @@ namespace FileUtil
 	inline std::string dirname(std::string path)
 	{
 		size_t pos = path.rfind("/");
-		Assert(pos >= 0);
+		//Assert(pos >= 0);
 		std::string dirname = path.substr(0, pos);
 		return dirname;
 	}

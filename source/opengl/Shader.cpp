@@ -25,7 +25,9 @@
 	#include <GL/gl.h>
 	#include <GL/glu.h>
 	#include <GL/glut.h>
-	#include <GL/freeglut_ext.h>
+	#ifndef USES_JS_EMSCRIPTEN
+		#include <GL/freeglut_ext.h>
+	#endif
 #else
 	#error
 #endif

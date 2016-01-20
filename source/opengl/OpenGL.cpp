@@ -9,7 +9,9 @@
 	#include <GL/gl.h>
 	#include <GL/glu.h>
 	#include <GL/glut.h>
-	#include <GL/freeglut_ext.h>
+	#ifndef USES_JS_EMSCRIPTEN
+		#include <GL/freeglut_ext.h>
+	#endif
 #else
 	#error
 #endif
@@ -155,8 +157,12 @@ void OpenGL::manageOpenGL(const Int2& windowSize)
 	glutSwapBuffers();
 	//tmpTime = Utils::getMicrosecondTime() - tmpTime;
 
+#ifdef USES_JS_EMSCRIPTEN
+	glutMainLoop();
+#else
 	glutMainLoopEvent();
-	
+#endif
+
 	//clockTime = Utils::getMicrosecondTime();
 
    // periodFrame = clockTime - timeLastFrame;

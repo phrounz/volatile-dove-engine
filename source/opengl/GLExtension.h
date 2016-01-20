@@ -9,15 +9,19 @@
 	#include <GL/glext.h>
 #endif
 #include <GL/glut.h>
-#include <GL/freeglut_ext.h>
+#ifndef USES_JS_EMSCRIPTEN
+	#include <GL/freeglut_ext.h>
+#endif
 
 #ifndef WIN32
     #include <GL/glu.h>
     #include <GL/glext.h>
-    #include <GL/glx.h>
-    #include <GL/glxext.h>
-    //replace glXGetProcAddress by glXGetProcAddressARB if not working
-    #define wglGetProcAddress(x) (void*)glXGetProcAddress((const GLubyte*)x)
+	#ifndef USES_JS_EMSCRIPTEN
+		#include <GL/glx.h>
+		#include <GL/glxext.h>
+		//replace glXGetProcAddress by glXGetProcAddressARB if not working
+		#define wglGetProcAddress(x) (void*)glXGetProcAddress((const GLubyte*)x)
+	#endif
 #endif
 
 #ifdef WIN32

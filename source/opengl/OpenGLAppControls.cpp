@@ -4,7 +4,9 @@
 	#include <WinGDI.h>
 #endif
 #include <GL/glut.h>
-#include <GL/freeglut_ext.h>
+#ifndef USES_JS_EMSCRIPTEN
+	#include <GL/freeglut_ext.h>
+#endif
 
 #if !defined(GLUT_WHEEL_UP)
 #  define GLUT_WHEEL_UP   3

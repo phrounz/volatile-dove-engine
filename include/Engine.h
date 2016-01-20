@@ -4,7 +4,9 @@
 #include <vector>
 #include <utility>
 
-#define USES_SOUND
+#ifndef USES_JS_EMSCRIPTEN
+	#define USES_SOUND
+#endif
 
 #include "CoreUtils.h"
 #include "Scene2D.h"

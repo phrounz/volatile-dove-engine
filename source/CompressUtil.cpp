@@ -1,5 +1,5 @@
 
-#if !defined(USES_WINDOWS8_METRO) && !defined(_WIN64) && !defined (__x86_64__) && !defined(__ppc64__)
+#if !defined(USES_WINDOWS8_METRO) && !defined(USES_JS_EMSCRIPTEN) && !defined(_WIN64) && !defined (__x86_64__) && !defined(__ppc64__)
 	#define COMPILE_COMPRESS
 #endif
 

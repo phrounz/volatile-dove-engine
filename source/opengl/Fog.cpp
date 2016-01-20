@@ -3,12 +3,18 @@
 
 #include "Fog.h"
 
+/*#ifdef USES_JS_EMSCRIPTEN
+	#define glFogCoordfEXT glFogCoordf
+#else*/
+
 #define GL_FOG_COORDINATE_SOURCE_EXT	0x8450
 #define GL_FOG_COORDINATE_EXT		0x8451
 
 //typedef void (APIENTRY * PFNGLFOGCOORDFEXTPROC) (GLfloat coord);
 
 PFNGLFOGCOORDFEXTPROC glFogCoordfEXT = NULL;
+
+//#endif
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
@@ -21,6 +27,7 @@ void Fog::init()
 {
 	if (m_useVolumetricFog)
 	{
+#ifndef USES_JS_EMSCRIPTEN
 		if (GLExtension::isExtensionSupported("GL_EXT_fog_coord"))
 		{	
 			glFogCoordfEXT = (PFNGLFOGCOORDFEXTPROC) wglGetProcAddress("glFogCoordfEXT");
@@ -30,6 +37,7 @@ void Fog::init()
 			Utils::print("WARNING: extension GL_EXT_fog_coord missing\n");
 			Assert(false);
 		}
+#endif
 		glFogi(GL_FOG_COORDINATE_SOURCE_EXT, GL_FOG_COORDINATE_EXT);//GL_FRAGMENT_DEPTH_EXT);//
 
 		glEnable(GL_FOG);

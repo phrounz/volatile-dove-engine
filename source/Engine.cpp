@@ -77,8 +77,9 @@ void Engine::initLowLevel()
 
 void Engine::updateInternals()
 {
+#ifdef USES_SOUND
 	Engine::instance().getSoundMgr().manage();
-
+#endif
 #ifdef USES_STEAM_INTEGRATION
 	Steam::runStep();
 #endif
@@ -106,8 +107,10 @@ void Engine::clearSteamAchievement(std::string str)
 
 void Engine::resetSoundSystem()
 {
+#ifdef USES_SOUND
 	delete m_soundManager;
 	m_soundManager = new SoundManager(m_argv0.c_str());
+#endif
 }
 
 //---------------------------------------------------------------------
