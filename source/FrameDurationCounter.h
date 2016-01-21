@@ -23,7 +23,9 @@ public:
 	/// get the last frame duration, prepare for the next
 	inline int64_t retrieve()
 	{
-#if defined(USES_LINUX) || defined(USES_WINDOWS_OPENGL)
+#if defined(USES_JS_EMSCRIPTEN)
+		return this->getNoLimit();
+#elif defined(USES_LINUX) || defined(USES_WINDOWS_OPENGL)
 		return this->getAndSleepToMaxFPS();
 #else
 		return this->getNoLimit();

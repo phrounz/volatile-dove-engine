@@ -1,20 +1,7 @@
 #ifndef opengl_inc_h_INCLUDED
 #define opengl_inc_h_INCLUDED
 
-#if defined(USES_WINDOWS_OPENGL)
-	#include <windows.h>
-	#include <WinGDI.h>
-	#include <gl/GL.h>
-	#include <gl/GLU.h>
-	#include <GL/glut.h>
-	#include <GL/freeglut_ext.h>
-	#include <GL/glext.h>
-#elif defined (USES_LINUX) && !defined(USES_JS_EMSCRIPTEN)
-	#include <GL/gl.h>
-	#include <GL/glu.h>
-	#include <GL/glut.h>
-	#include <GL/freeglut_ext.h>
-#elif defined (USES_LINUX) && defined(USES_JS_EMSCRIPTEN)
+#if defined(USES_JS_EMSCRIPTEN) //__EMSCRIPTEN__
 	#include <emscripten.h>
 	#define GL_GLEXT_PROTOTYPES
 
@@ -31,9 +18,23 @@
 	//#include <EGL/egl.h>
 	//#include <EGL/eglext.h>
 
-	//#ifdef __EMSCRIPTEN__
-	//#include <emscripten.h>
-	//#endif
+#elif defined(USES_WINDOWS_OPENGL)
+
+	#include <windows.h>
+	#include <WinGDI.h>
+	#include <gl/GL.h>
+	#include <gl/GLU.h>
+	#include <GL/glut.h>
+	#include <GL/freeglut_ext.h>
+	#include <GL/glext.h>
+
+#elif defined (USES_LINUX)
+
+	#include <GL/gl.h>
+	#include <GL/glu.h>
+	#include <GL/glut.h>
+	#include <GL/freeglut_ext.h>
+
 #else
 	#error
 #endif

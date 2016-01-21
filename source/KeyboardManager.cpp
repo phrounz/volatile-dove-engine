@@ -2,7 +2,9 @@
 Done by Francois Braud
 ******************************************************************/
 
-#include "opengl/opengl_inc.h"
+#if !defined(USES_WINDOWS8_DESKTOP) && !defined(USES_WINDOWS8_METRO)
+	#include "opengl/opengl_inc.h"
+#endif
 
 #include "../include/Utils.h"
 #include "../include/Engine.h"
@@ -54,7 +56,7 @@ void KeyboardManager::initKeysAsNotPressed()
 
 //---------------------------------------------------------------------
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 
 bool KeyboardManager::getModifier(int key, bool waitForNoRepeat) const
 {

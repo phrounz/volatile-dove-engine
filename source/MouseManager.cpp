@@ -1,5 +1,7 @@
 
-#include "opengl/opengl_inc.h"
+#if !defined(USES_WINDOWS8_DESKTOP) && !defined(USES_WINDOWS8_METRO)
+	#include "opengl/opengl_inc.h"
+#endif
 
 #include "../include/Engine.h"
 
