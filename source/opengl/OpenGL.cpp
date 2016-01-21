@@ -1,25 +1,12 @@
 
-#if defined(USES_WINDOWS_OPENGL)
-	#include <windows.h>
-	#include <gl/GL.h>
-	#include <gl/GLU.h>
-	#include <GL/glut.h>
-	#include <GL/freeglut_ext.h>
-#elif defined (USES_LINUX)
-	#include <GL/gl.h>
-	#include <GL/glu.h>
-	#include <GL/glut.h>
-	#ifndef USES_JS_EMSCRIPTEN
-		#include <GL/freeglut_ext.h>
-	#endif
-#else
-	#error
-#endif
+#include "opengl_inc.h"
 
 #include "../../include/CoreUtils.h"
 #include "../../include/Utils.h"
 #include "../../include/Engine.h"
-#include "VBO.h"
+#ifdef USES_SCENE3D
+	#include "VBO.h"
+#endif
 
 #include "OpenGL.h"
 
@@ -48,6 +35,15 @@ OpenGL::OpenGL(const char *windowTitle, const Int2& windowSize, bool isFullScree
 
 void OpenGL::init2(const char* windowTitle, const Int2& windowSize)
 {
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	bool isOk = (SDL_Init(SDL_INIT_VIDEO) == 0);
+	Assert(isOk);
+
+	//m_SDLWindow = (void*)SDL_CreateWindow(" - ", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,  windowSize.width(),windowSize.height(), SDL_WINDOW_OPENGL );
+	//Assert(m_SDLWindow != NULL);
+	m_SDLSurface = (void*)SDL_SetVideoMode( windowSize.width(),windowSize.height(), 24/*32*/, SDL_OPENGL );
+	Assert(m_SDLSurface != NULL);
+#else
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_MULTISAMPLE);
 	//glutInitDisplayString("rgba double depth>=32 samples>=4");
 	//glutMainClassModeString( "800x600" );
@@ -56,6 +52,7 @@ void OpenGL::init2(const char* windowTitle, const Int2& windowSize)
 	glutInitWindowSize(windowSize.width(),windowSize.height());
     
 	glutCreateWindow(windowTitle);
+#endif
 
     //glutReshapeFunc(OpenGL_onResizeWindow);//DOES NOT WORK
 
@@ -65,7 +62,9 @@ void OpenGL::init2(const char* windowTitle, const Int2& windowSize)
 	glDisable(GL_FOG);
 
 	glEnable(GL_ALPHA_TEST);
+#ifndef USES_JS_EMSCRIPTEN
 	glAlphaFunc(GL_GREATER, 0.1f);
+#endif
 	
 	//glEnable(GL_POINT_SMOOTH);
     //glEnable(GL_LINE_SMOOTH);
@@ -106,7 +105,9 @@ void OpenGL::init2(const char* windowTitle, const Int2& windowSize)
 #endif
 
     //glutReshapeWindow(windowWidth,windowHeight);
+#ifdef USES_SCENE3D
 	VBO::checkAndInit();
+#endif
 }
 
 //---------------------------------------------------------------------
@@ -119,20 +120,28 @@ void OpenGL::set2DMode()
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
+#ifdef USES_JS_EMSCRIPTEN
+	//glOrtho(0.0, (double)m_realWindowSize.x() / (double)m_ppp.x(), (double)m_realWindowSize.y() / (double)m_ppp.y(), 0.0, 0.0, 1.0 );
+#else
 	glPolygonMode(GL_BACK, GL_FILL);
 	glPolygonMode(GL_FRONT, GL_POINT);
-	
+
 	glMatrixMode(GL_PROJECTION);
+
 	glLoadIdentity();
+
 	gluOrtho2D(0.0,(double)m_realWindowSize.x() / (double)m_ppp.x(), (double)m_realWindowSize.y() / (double)m_ppp.y(),0.0);
     glMatrixMode(GL_MODELVIEW);
+
     glLoadIdentity();
+#endif
 }
 
 //---------------------------------------------------------------------
 
 void OpenGL::set3DMode(float fov, float minViewDistance, float maxViewDistance)
 {
+#ifdef USES_SCENE3D
 	float windowAspectRatio = (float)m_realWindowSize.width() / (float)m_realWindowSize.height();
 
 	glMatrixMode(GL_PROJECTION);
@@ -140,12 +149,17 @@ void OpenGL::set3DMode(float fov, float minViewDistance, float maxViewDistance)
 	gluPerspective(fov, windowAspectRatio,minViewDistance, maxViewDistance);
 	glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+#endif
 }
 
 //---------------------------------------------------------------------
 
 void OpenGL::manageOpenGL(const Int2& windowSize)
 {
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	//SDL_UpdateWindowSurface((SDL_Window*)m_SDLWindow);
+	SDL_Flip((SDL_Surface*)m_SDLSurface);
+#else
 	//events
 	//long long int periodFrame2 = Utils::getMicrosecondTime() - clockTime;
 
@@ -157,9 +171,6 @@ void OpenGL::manageOpenGL(const Int2& windowSize)
 	glutSwapBuffers();
 	//tmpTime = Utils::getMicrosecondTime() - tmpTime;
 
-#ifdef USES_JS_EMSCRIPTEN
-	glutMainLoop();
-#else
 	glutMainLoopEvent();
 #endif
 
@@ -169,9 +180,11 @@ void OpenGL::manageOpenGL(const Int2& windowSize)
     //if (periodFrame > 200000) periodFrame = 200000;//slow down MainClass when < 5 FPS
     //timeLastFrame = clockTime;
 
+#ifndef USES_JS_EMSCRIPTEN
     glColor3f(1.0,1.0,1.0);
     
     glRasterPos2d(0, windowSize.height());
+#endif
 	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 
 	//return (int)tmpTime;
@@ -247,6 +260,10 @@ static void setHackedWindowedMode(std::string windowTitle, int width, int height
 
 void OpenGL::setMode(bool fullscreen, int width, int height)
 {
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	#pragma message("TODO OpenGL::setMode SDL")
+#else
+
 	if (fullscreen)
 	{
 		if (width == -1 && height == -1)
@@ -285,13 +302,20 @@ void OpenGL::setMode(bool fullscreen, int width, int height)
 			#endif
 		}
 	}
+
+#endif
 }
 
 //---------------------------------------------------------------------
 
 Int2 OpenGL::getWindowRealSize() const
 {
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	//return Int2(SDL_GetWindowSurface((SDL_Window*)m_SDLWindow)->w, SDL_GetWindowSurface((SDL_Window*)m_SDLWindow)->h);
+	return Int2(((SDL_Surface*)m_SDLSurface)->w, ((SDL_Surface*)m_SDLSurface)->h);
+#else
 	return Int2(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+#endif
 }
 
 //---------------------------------------------------------------------

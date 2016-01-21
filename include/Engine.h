@@ -4,8 +4,11 @@
 #include <vector>
 #include <utility>
 
-#ifndef USES_JS_EMSCRIPTEN
+#ifdef USES_JS_EMSCRIPTEN
+	#define USES_SDL_INSTEAD_OF_GLUT
+#else
 	#define USES_SOUND
+	#define USES_SCENE3D
 #endif
 
 #include "CoreUtils.h"
@@ -14,9 +17,11 @@
 #include "MouseManager.h"
 #include "JoystickManager.h"
 #ifdef USES_SOUND
-#include "SoundManager.h"
+	#include "SoundManager.h"
 #endif
-#include "Scene3D.h"
+#ifdef USES_SCENE3D
+	#include "Scene3D.h"
+#endif
 #include "AppSetupInfos.h"
 
 class OpenGL;
@@ -52,6 +57,7 @@ class Engine
 	friend void OpenGLApp_onKeyUp(unsigned char key, int x, int y);
 	friend void OpenGLApp_onKeyUp(int key, int x, int y);
 	//friend void OpenGLApp_onResizeWindow(int width,int height);
+	friend void oneIter(void* openGLAppInstance);
 #endif
 	friend class AbstractMainClass;
 public:
@@ -71,7 +77,9 @@ public:
 	Color getDefaultForegroundColor();
 
 	inline Scene2D& getScene2DMgr() { return *m_scene2D; }						///< get 2d display-related singleton
+#ifdef USES_SCENE3D
 	inline Scene3D& getScene3DMgr() { return *m_scene3D; }						///< get 3d display-related singleton
+#endif
 	inline KeyboardManager& getKeyboardMgr() { return *m_keyboardManager; }		///< get keyboard-related singleton
 	inline JoystickManager& getJoystickMgr() { return *m_joystickManager; }		///< get joystick-related singleton
 	inline MouseManager& getMouseMgr() { return *m_mouseManager; }				///< get mouse-related singleton
@@ -123,7 +131,9 @@ private:
 	SoundManager* m_soundManager;
 #endif
 	Scene2D* m_scene2D;
+#ifdef USES_SCENE3D
 	Scene3D* m_scene3D;
+#endif
 
 	int64_t m_frameDuration;
 	std::string m_argv0;

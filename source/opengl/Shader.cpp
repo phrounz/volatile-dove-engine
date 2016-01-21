@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 
+
 #define GL_GLEXT_PROTOTYPES
 #include <cstdlib>
 #ifdef _MSC_VER
@@ -15,22 +16,7 @@
 	#include <GL/glext.h>
 #endif
 
-#if defined(USES_WINDOWS_OPENGL)
-	#include <windows.h>
-	#include <gl/GL.h>
-	#include <gl/GLU.h>
-	#include <GL/glut.h>
-	#include <GL/freeglut_ext.h>
-#elif defined (USES_LINUX)
-	#include <GL/gl.h>
-	#include <GL/glu.h>
-	#include <GL/glut.h>
-	#ifndef USES_JS_EMSCRIPTEN
-		#include <GL/freeglut_ext.h>
-	#endif
-#else
-	#error
-#endif
+#include "opengl_inc.h"
 
 #include "../../include/FileUtil.h"
 

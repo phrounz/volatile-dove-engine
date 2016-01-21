@@ -5,6 +5,7 @@
 #include "../../include/Utils.h"
 
 #include "../../include/Engine.h"
+
 #include "VBO.h"
 
 namespace
@@ -76,7 +77,7 @@ void VBO::checkAndInit()
 	}
 	else
 	{
-		std::cout << "!!! ERROR !!! vertex buffer objects are not supported, nothing will be displayed." << std::endl;
+		std::cout << "!!! ERROR !!! vertex buffer objects are not supported, nothing 3D will be displayed." << std::endl;
 	}
 }
 

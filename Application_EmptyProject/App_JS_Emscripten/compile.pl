@@ -5,6 +5,8 @@ use warnings;
 use Data::Dumper;
 
 use constant ENABLE_SOUND => 0;
+use constant ENABLE_3D => 0;
+use constant ENABLE_LEGACY_MODE => 0;
 
 #----------------------------------
 # uncompress third-party libraries if required
@@ -29,7 +31,26 @@ my @l_files = (
 unless (ENABLE_SOUND)
 {
 	my %h_files = map { $_ => 1 } @l_files;
-	foreach my $key (keys %h_files) { delete $h_files{$key} if ($key =~ /Sound/); }
+	foreach my $key (keys %h_files) { 
+		if ($key =~ /Sound/)
+		{
+			print "Removed from compilation: $key\n";
+			delete $h_files{$key};
+		}
+	}
+	@l_files = keys %h_files;
+}
+
+unless (ENABLE_3D)
+{
+	my %h_files = map { $_ => 1 } @l_files;
+	foreach my $key (keys %h_files) {
+		if ($key =~ m/\/(Obj3D|Scene3DPrivate|Scene3D|VBO)\.cpp$/)
+		{
+			print "Removed from compilation: $key\n";
+			delete $h_files{$key};
+		}
+	}
 	@l_files = keys %h_files;
 }
 
@@ -49,9 +70,13 @@ if (ENABLE_SOUND)
 }
 my $WARNINGS = "-Wno-tautological-constant-out-of-range-compare -Wno-dangling-else";
 my $DEFINES = "-DUSES_LINUX -DUSES_JS_EMSCRIPTEN";
-my $LIBS = " -lm -lGL -lGLU -lGLEW -lglut  -s DEMANGLE_SUPPORT=1 ";#-lGLESv2 -lEGL -lm -lX11
+my $LIBS = "   -s GL_UNSAFE_OPTS=0  ".(ENABLE_LEGACY_MODE?'-s LEGACY_GL_EMULATION=1 ':'');
+my $DATA_LINK = " --preload-file data_files/default_font.png\@default_font.png";
+# "-lGLESv2 -lEGL -lm -lX11"; -lGLEW -lm -lGL -lGLU -lglut
+# -s DEMANGLE_SUPPORT=1 --bind -lglfw 
+# -s ERROR_ON_UNDEFINED_SYMBOLS=1
 
 #----------------------------------
 # run the compilation command
 
-system("python $EMS_BIN $files $INCS $DEFINES $WARNINGS $LIBS -o output.html");# -s ERROR_ON_UNDEFINED_SYMBOLS=1
+system("python $EMS_BIN $files $INCS $DEFINES $WARNINGS $LIBS -o output.html $DATA_LINK");

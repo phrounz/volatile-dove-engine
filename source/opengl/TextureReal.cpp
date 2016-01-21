@@ -1,19 +1,5 @@
 
-#if defined(USES_WINDOWS_OPENGL)
-	#include <windows.h>
-	#include <gl/GL.h>
-	#include <gl/GLU.h>
-	#include <GL/glut.h>
-	#include <GL/freeglut_ext.h>
-	#include <GL/glext.h>
-#elif defined (USES_LINUX)
-	#include <GL/gl.h>
-	#include <GL/glu.h>
-	#include <GL/glut.h>
-	#ifndef USES_JS_EMSCRIPTEN
-		#include <GL/freeglut_ext.h>
-	#endif
-#endif
+#include "opengl_inc.h"
 
 #include "../TextureReal.h"
 
@@ -101,6 +87,10 @@ void TextureReal::createTexture(int width, int height, const unsigned char* data
 	}
 	Assert(data != NULL);
 
+#ifdef USES_JS_EMSCRIPTEN
+	useMipmap = false;
+#endif
+
     //const bool linearRendering = true;
     GLuint idTexture = 0;
 
@@ -128,12 +118,17 @@ void TextureReal::createTexture(int width, int height, const unsigned char* data
 	//set tabTexture data for the new texture
 	if (useMipmap)
 	{
+#ifdef USES_JS_EMSCRIPTEN
+		AssertRelease(false);
+#else
 		int mipmapres = gluBuild2DMipmaps(GL_TEXTURE_2D,isAlpha?GL_RGBA:GL_RGB, width,height,isAlpha?GL_RGBA:GL_RGB,GL_UNSIGNED_BYTE,data);
+
 		if (mipmapres != 0)
 		{
 			std::string err = (const char*)(gluErrorString(mipmapres));
 			AssertMessage(false, std::string("gluBuild2DMipmaps:") + err.c_str());
 		}
+#endif
 	}
 	else
 	{
@@ -148,7 +143,9 @@ void TextureReal::createTexture(int width, int height, const unsigned char* data
 
 void TextureReal::setAsCurrentTexture() const
 {
+#ifdef USES_SCENE3D
 	Engine::instance().getScene3DMgr().useUserDefinedTextureIdIfAvailable(FileUtil::basename(m_textureFile));
+#endif
 
 	const GLuint tmpgluint = (GLuint)textureImpl->m_textureId;
 	glBindTexture(GL_TEXTURE_2D, (GLuint)tmpgluint );

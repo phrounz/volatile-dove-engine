@@ -65,7 +65,9 @@ void Engine::initLowLevel()
 #ifdef USES_SOUND
 	m_soundManager = new SoundManager(m_argv0.c_str());
 #endif 
+#ifdef USES_SCENE3D
 	m_scene3D = new Scene3D;
+#endif
 	m_isInit = true;
 	Utils::unindentLog();
 	outputln("Init Engine done.");
@@ -117,7 +119,9 @@ void Engine::resetSoundSystem()
 
 void Engine::deinitLowLevel()
 {
+#ifdef USES_SCENE3D
 	delete m_scene3D;
+#endif
 
 #ifdef USES_SOUND
 	delete m_soundManager;
@@ -134,7 +138,7 @@ void Engine::deinitLowLevel()
 void Engine::clearScreen(const Color& color)
 {
 	this->getScene2DMgr().clearScreen(color);
-#if defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
+#if (defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)) && defined(USES_SCENE3D)
 	this->getScene3DMgr().clearScene(color);
 #endif
 }
@@ -201,7 +205,7 @@ void Engine::onKeyReleasedInternals(int virtualKey)
 
 void Engine::onWindowResizeInternals()
 {
-#if defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
+#if (defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)) && defined(USES_SCENE3D)
 	m_scene3D->createWindowSizeDependentResources();
 #endif
 }

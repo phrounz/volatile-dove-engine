@@ -1,12 +1,5 @@
 
-#ifdef _MSC_VER
-	#include <Windows.h>
-	#include <WinGDI.h>
-#endif
-#include <GL/glut.h>
-#ifndef USES_JS_EMSCRIPTEN
-	#include <GL/freeglut_ext.h>
-#endif
+#include "opengl_inc.h"
 
 #if !defined(GLUT_WHEEL_UP)
 #  define GLUT_WHEEL_UP   3
@@ -36,6 +29,8 @@ namespace
 
 void OpenGLApp_onPointerPressedOrReleased(int button, int state,int x, int y)
 {
+#ifndef USES_SDL_INSTEAD_OF_GLUT
+
 	Int2 pos = AppSetup::instance().convertRealPositionToVirtualPosition(Int2(x,y));
 	if (button==GLUT_WHEEL_UP)
 	{
@@ -55,6 +50,8 @@ void OpenGLApp_onPointerPressedOrReleased(int button, int state,int x, int y)
 		Engine::instance().onPointerReleasedInternals(button, x, y);
 		s_mainClass->onPointerReleased(button, pos.x(), pos.y());
 	}
+#endif
+
 	s_eventHappened = true;
 }
 
@@ -138,7 +135,9 @@ void OpenGLAppControls::initControls(AbstractMainClass* mainClass)
 {	
 	this->resetEventHappenedToken(false);
 	s_mainClass = mainClass;
-
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	#pragma message("TODO OpenGLAppControls::initControls SDL")
+#else
 	glutMouseFunc(OpenGLApp_onPointerPressedOrReleased);
 	glutMotionFunc(OpenGLApp_onPointerMovingActive);
     glutPassiveMotionFunc(OpenGLApp_onPointerMovingPassive);
@@ -147,6 +146,7 @@ void OpenGLAppControls::initControls(AbstractMainClass* mainClass)
 	glutKeyboardUpFunc(OpenGLApp_onKeyUp);
     glutSpecialFunc(OpenGLApp_onKeyDownSpecial);
     glutSpecialUpFunc(OpenGLApp_onKeyUpSpecial);
+#endif
 }
 
 //---------------------------------------------------------------------

@@ -10,6 +10,7 @@ class Engine;
 
 class OpenGLApp
 {
+	friend void oneIter(void* openGLAppInstance);
 public:
 	OpenGLApp(AbstractMainClass* abstractMainClass, const char* argv0);
 	void run();

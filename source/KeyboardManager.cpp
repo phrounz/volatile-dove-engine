@@ -2,21 +2,7 @@
 Done by Francois Braud
 ******************************************************************/
 
-#if defined(USES_WINDOWS_OPENGL)
-	#include <windows.h>
-	#include <WinGDI.h>
-	#include <gl/GL.h>
-	#include <gl/GLU.h>
-	#include <GL/glut.h>
-	#include <GL/freeglut_ext.h>
-#elif defined (USES_LINUX)
-	#include <GL/gl.h>
-	#include <GL/glu.h>
-	#include <GL/glut.h>
-	#ifndef USES_JS_EMSCRIPTEN
-		#include <GL/freeglut_ext.h>
-	#endif
-#endif
+#include "opengl/opengl_inc.h"
 
 #include "../include/Utils.h"
 #include "../include/Engine.h"
@@ -72,11 +58,15 @@ void KeyboardManager::initKeysAsNotPressed()
 
 bool KeyboardManager::getModifier(int key, bool waitForNoRepeat) const
 {
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	#pragma message("TODO KeyboardManager::getModifier SDL")
+#else
 	int modifiers = glutGetModifiers();
 	if (key == KEY_SHIFT) return ((modifiers & GLUT_ACTIVE_SHIFT) != 0);
 	else if (key == KEY_CONTROL) return ((modifiers & GLUT_ACTIVE_CTRL) != 0);
 	else if (key == KEY_ALT) return ((modifiers & GLUT_ACTIVE_ALT) != 0);
 	else Utils::die();
+#endif
 	return false;
 }
 
@@ -122,6 +112,9 @@ int KeyboardManager::convertFromWin8(int virtualKey)
 Key KeyboardManager::convertFromGlut(int key)
 {
 	switch (key) {
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	#pragma message("TODO KeyboardManager::getModifier SDL")
+#else
 		case GLUT_KEY_LEFT:		return KeyboardManager::KEY_LEFT;
         case GLUT_KEY_RIGHT:	return KeyboardManager::KEY_RIGHT;
         case GLUT_KEY_UP:		return KeyboardManager::KEY_UP;
@@ -140,6 +133,7 @@ Key KeyboardManager::convertFromGlut(int key)
 		case GLUT_KEY_F10:		return KeyboardManager::KEY_F10;
 		case GLUT_KEY_F11:		return KeyboardManager::KEY_F11;
 		case GLUT_KEY_F12:		return KeyboardManager::KEY_F12;
+#endif
     }
 	return -1;
 }

@@ -1,25 +1,12 @@
 
-#if defined(USES_WINDOWS_OPENGL)
-	#include <windows.h>
-	#include <gl/GL.h>
-	#include <gl/GLU.h>
-	#include <GL/glut.h>
-	#include <GL/freeglut_ext.h>
-#elif defined (USES_LINUX)
-	#include <GL/gl.h>
-	#include <GL/glu.h>
-	#include <GL/glut.h>
-	#ifndef USES_JS_EMSCRIPTEN
-		#include <GL/freeglut_ext.h>
-	#endif
-#endif
+#include "opengl/opengl_inc.h"
 
 #include "../include/Engine.h"
 
 #include "../include/MouseManager.h"
 
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if (defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)) && !defined(USES_SDL_INSTEAD_OF_GLUT)
 
 	const MouseManager::ButtonType MouseManager::MOUSE_LEFT_BUTTON	= GLUT_LEFT_BUTTON;
 	const MouseManager::ButtonType MouseManager::MOUSE_MIDDLE_BUTTON = GLUT_MIDDLE_BUTTON;

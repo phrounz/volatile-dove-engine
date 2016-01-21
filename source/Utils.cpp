@@ -21,8 +21,13 @@
 #include <cstdio>
 #include <cstring>
 #include <cmath>
+#ifdef USES_JS_EMSCRIPTEN
+	#include <cassert>
+#endif
 #ifdef USES_LINUX
 	#include <errno.h>
+	#include <sys/time.h>
+	#include <unistd.h>
 #else
 	#include <direct.h>
 #endif
@@ -33,8 +38,6 @@
 
 #ifdef USES_LINUX
 
-#include <sys/time.h>
-#include <unistd.h>
 const int MAX_PATH = FILENAME_MAX;
 
 #ifdef USES_JS_EMSCRIPTEN
@@ -42,6 +45,7 @@ const int MAX_PATH = FILENAME_MAX;
 	void printTrace()
 	{
 		printf("(Call stack not available)\n");
+		assert(false);
 	}
 
 #else
