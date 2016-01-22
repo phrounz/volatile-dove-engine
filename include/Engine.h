@@ -4,12 +4,7 @@
 #include <vector>
 #include <utility>
 
-#ifdef USES_JS_EMSCRIPTEN
-	#define USES_SDL_INSTEAD_OF_GLUT
-#else
-	#define USES_SOUND
-	#define USES_SCENE3D
-#endif
+#include "global_defines.h"
 
 #include "CoreUtils.h"
 #include "Scene2D.h"

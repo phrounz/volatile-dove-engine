@@ -3,7 +3,7 @@
 
 #include "../include/AppSetupInfos.h"
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 class OpenGL;
 #endif
 
@@ -43,7 +43,7 @@ private:
 	AppSetupInfos m_inf;
 	bool m_isUsingVirtualSize;
 	static AppSetup* s_instance;
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	OpenGL* m_openGL;
 #endif
 

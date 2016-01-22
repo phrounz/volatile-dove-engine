@@ -28,6 +28,8 @@ private:
 	bool m_modeFullscreenGlut;
 	Int2 m_virtualPos;
 	Int2 m_realWindowSize;
-	void* m_SDLWindow;
-	void* m_SDLSurface;
+
+	void* m_sdlWindow;
+	void* m_sdlSurface;
+	void* m_sdlRenderer;
 };

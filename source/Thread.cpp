@@ -81,7 +81,7 @@ namespace Threading
 	}
 }
 
-#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	
 #include <pthread.h>
 #include <semaphore.h>

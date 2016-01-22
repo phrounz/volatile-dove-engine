@@ -402,7 +402,7 @@ unsigned LodePNG_loadFile(unsigned char** out, size_t* outsize, const char* file
   *out = 0;
   *outsize = 0;
 
-#ifdef USES_LINUX
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
   int resOpen = 0;
   file = fopen(filename, "rb");
 #else
@@ -429,7 +429,7 @@ unsigned LodePNG_loadFile(unsigned char** out, size_t* outsize, const char* file
 unsigned LodePNG_saveFile(const unsigned char* buffer, size_t buffersize, const char* filename)
 {
   FILE* file;
-#ifdef USES_LINUX
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
   int res_fopen = 0;
   file = fopen(filename, "wb" );
 #else

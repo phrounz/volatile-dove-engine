@@ -3,6 +3,8 @@
 
 #include "OpenGLDraw.h"
 
+#ifndef USES_SDL_INSTEAD_OF_GLUT
+
 namespace OpenGLDraw
 {
 
@@ -14,12 +16,6 @@ namespace OpenGLDraw
 
 void drawLine(const Int2& pos1, const Int2& pos2, const Color& color, float thickness)
 {
-#ifdef USES_JS_EMSCRIPTEN
-	#pragma message("TODO OpenGLDraw::drawLine")
-	/*SDL_SetRenderDrawColor(renderer, color.r(), color.g(), color.b(), color.a());
-	SDL_RenderDrawLine(renderer, pos1.x(), pos1.y(), pos2.x(), pos2.y());
-	SDL_RenderPresent(renderer);*/
-#else
 	glLineWidth(thickness);
 	glColor4f(color.r()/256.f, color.g()/256.f, color.b()/256.f, color.a()/256.f);
 	glDisable(GL_TEXTURE_2D);
@@ -31,7 +27,6 @@ void drawLine(const Int2& pos1, const Int2& pos2, const Color& color, float thic
     glVertex2i(pos2.x(), pos2.y());
     glEnd();
 	glColor4f(1.f, 1.f, 1.f, 1.f);
-#endif
 }
 
 //---------------------------------------------------------------------
@@ -39,9 +34,6 @@ void drawLine(const Int2& pos1, const Int2& pos2, const Color& color, float thic
 
 void drawRectangle(const Int2& pos1, const Int2& pos2, const Color& color, float borderSize, bool isFilled)
 {
-#ifdef USES_JS_EMSCRIPTEN
-	#pragma message("TODO OpenGLDraw::drawRectangle")
-#else
 	glLineWidth(borderSize);
 	glColor4f(color.r()/256.f, color.g()/256.f, color.b()/256.f, color.a()/256.f);
 	//glColor4f(color.r()/255.f, color.g()/255.f, color.b()/255.f, color.a()/255.f);
@@ -56,17 +48,12 @@ void drawRectangle(const Int2& pos1, const Int2& pos2, const Color& color, float
     glVertex2i(pos1.x(), pos2.y());
     glEnd();
 	glColor4f(1.f, 1.f, 1.f, 1.f);
-#endif
 }
 
 //---------------------------------------------------------------------
 
 void drawTexture(int pixelPosX, int pixelPosY, int width,int height)
 {
-#ifdef USES_JS_EMSCRIPTEN
-	//SDL_BlitSurface(sprite, NULL, screen, position)
-	#pragma message("TODO OpenGLDraw::drawTexture")
-#else
 	glEnable(GL_TEXTURE_2D);
     //glBindTexture(GL_TEXTURE_2D, (GLuint)textureId );
 
@@ -87,7 +74,6 @@ void drawTexture(int pixelPosX, int pixelPosY, int width,int height)
 	glVertex2i(pixelPosX+width, pixelPosY);
 
 	glEnd();
-#endif
 }
 
 //---------------------------------------------------------------------
@@ -98,10 +84,6 @@ void drawTexture(int pixelPosX, int pixelPosY, int width,int height)
 
 void drawFragmentOfTexture(int pixelPosX,int pixelPosY,float x1,float y1,float x2,float y2,int width,int height)
 {
-#ifdef USES_JS_EMSCRIPTEN
-	//SDL_BlitSurface(sprite, NULL, screen, position)
-	#pragma message("TODO OpenGLDraw::drawTexture")
-#else
     glEnable(GL_TEXTURE_2D);
     //glBindTexture(GL_TEXTURE_2D, (GLuint)id );
 
@@ -127,7 +109,6 @@ void drawFragmentOfTexture(int pixelPosX,int pixelPosY,float x1,float y1,float x
 	glVertex2i(pixelPosX+width, pixelPosY);
 
 	glEnd();
-#endif
 }
 
 //---------------------------------------------------------------------
@@ -142,15 +123,10 @@ void drawTextureRotated(
 	float angleDegree,int rotationCenterX,int rotationCenterY,
 	bool mirrorAxisX,bool mirrorAxisY)
 {
-#ifdef USES_JS_EMSCRIPTEN
-	//SDL_BlitSurface(sprite, NULL, screen, position)
-	#pragma message("TODO OpenGLDraw::drawTextureRotated")
-#else
 	BoundingBoxes::AdvancedBox advancedBox;
     advancedBox.calculate(Int2(pixelPosX, pixelPosY), Int2(width, height), Int2(rotationCenterX, rotationCenterY), angleDegree);
 
     drawTextureRotated(advancedBox, mirrorAxisX, mirrorAxisY);
-#endif
 }
 
 //---------------------------------------------------------------------
@@ -164,10 +140,6 @@ void drawTextureRotated(
 	const BoundingBoxes::AdvancedBox& boundingBox,
 	bool mirrorAxisX,bool mirrorAxisY)
 {
-#ifdef USES_JS_EMSCRIPTEN
-	//SDL_BlitSurface(sprite, NULL, screen, position)
-	#pragma message("TODO OpenGLDraw::drawTextureRotated")
-#else
     //if (!mirrorAxisX && !mirrorAxisY && angleDegree==0.0f)
     //    return drawTexture(id,pixelPosX-rotationCenterX,pixelPosY-rotationCenterY,width,height);
 
@@ -190,29 +162,24 @@ void drawTextureRotated(
 	glVertex2i(boundingBox.data[3].x(), boundingBox.data[3].y());
 
 	glEnd();
-#endif
 }
 
 //---------------------------------------------------------------------
 
 void setColor(const Color& color)
 {
-#ifndef USES_JS_EMSCRIPTEN
 	//float col[4];
 	//glGetFloatv(GL_CURRENT_COLOR, col);
 	//previousColor = Color(col[0] * 256.f, col[1] * 256.f, col[2] * 256.f, col[3] * 256.f);
 
 	glColor4ub(color.r(), color.g(), color.b(), color.a());
-#endif
 }
 
 //---------------------------------------------------------------------
 
 void resetColor()
 {
-#ifndef USES_JS_EMSCRIPTEN
 	glColor4ub(CoreUtils::colorWhite.r(), CoreUtils::colorWhite.g(), CoreUtils::colorWhite.b(), CoreUtils::colorWhite.a());
-#endif
 }
 
 //---------------------------------------------------------------------
@@ -226,3 +193,6 @@ void clearScreen(const Color& color)
 //---------------------------------------------------------------------
 
 } //namespace OpenGLDraw
+
+#endif //USES_SDL_INSTEAD_OF_GLUT
+

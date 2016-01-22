@@ -24,7 +24,7 @@
 #ifdef USES_JS_EMSCRIPTEN
 	#include <cassert>
 #endif
-#ifdef USES_LINUX
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	#include <errno.h>
 	#include <sys/time.h>
 	#include <unistd.h>
@@ -36,7 +36,7 @@
 #include "../include/FileUtil.h"
 #include "EngineError.h"
 
-#ifdef USES_LINUX
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 
 const int MAX_PATH = FILENAME_MAX;
 
@@ -93,7 +93,7 @@ void die()
 {
 	//Utils::print("#### Program cannot continue.\n");
 	//MessageBox(NULL,s_pwd,s_pwd,0);
-#ifdef USES_LINUX
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	printTrace();
 #else
 	#ifdef USES_WINDOWS8_METRO
@@ -133,7 +133,7 @@ void dieErrorMessageToUser(const std::string& message)
 	Utils::print(message.c_str());
 	Utils::print("\n");
 	if (THROW_ERROR) throw EngineError(message);
-#if !defined(USES_LINUX) && !defined(USES_WINDOWS8_METRO)
+#if !defined(USES_LINUX) && !defined(USES_JS_EMSCRIPTEN) && !defined(USES_WINDOWS8_METRO)
 	#ifdef ENABLE_CALLSTACK
 		MyStackWalker sw;
 		sw.ShowCallstack();
@@ -184,7 +184,7 @@ void print(const char* text)
 
 	std::cout << finalText << std::flush;
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	#ifdef USES_WINDOWS_OPENGL
 		OutputDebugStringW(Utils::convertStringToWString(finalText).c_str());
 	#endif
@@ -238,7 +238,7 @@ void print(int number)
 const wchar_t* getDirectoryFromFilePathStatic(const wchar_t* filename)
 {
 	// Store the directory path without the filename
-	#if defined (USES_LINUX)
+	#if defined (USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		wcsncpy(s_staticPath, filename, wcslen(filename));
 	#else
 		wchar_t* lastBSlash = wcsrchr(s_staticPath, L'\\');
@@ -270,7 +270,7 @@ std::string dirname(std::string path)
 
 HANDLE checkFileHandle(HANDLE handle, const char* filenamefordebug = NULL)
 {
-#if defined(USES_WINDOWS_OPENGL) || defined (USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined (USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 
 	if (handle == NULL)
 	{
@@ -310,7 +310,7 @@ HANDLE checkFileHandle(HANDLE handle, const char* filenamefordebug = NULL)
 
 HANDLE openFile(const std::string& filepath)
 {
-#if defined (USES_LINUX)
+#if defined (USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	return fopen(filepath.c_str(), "rb");
 #elif defined(USES_WINDOWS_OPENGL)
 	FILE* fh = NULL;
@@ -340,7 +340,7 @@ HANDLE openFileAndCheck(const std::string& filepath)
 
 bool readFile(HANDLE fileHandle, void* buffer, unsigned long int nbBytes, unsigned long int* outNbBytesRead)
 {
-#if defined(USES_WINDOWS_OPENGL) || defined (USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined (USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	size_t bytesRead = fread(buffer, 1, nbBytes, fileHandle);
 	if (ferror(fileHandle) != 0) return false;
 	if (outNbBytesRead != NULL)
@@ -358,7 +358,7 @@ bool readFile(HANDLE fileHandle, void* buffer, unsigned long int nbBytes, unsign
 
 bool closeFile(HANDLE fileHandle)
 {
-#if defined(USES_WINDOWS_OPENGL) || defined (USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined (USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	return fclose(fileHandle) == 0;
 #elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
 	BOOL res = CloseHandle(fileHandle);
@@ -372,7 +372,7 @@ bool closeFile(HANDLE fileHandle)
 
 unsigned long int getFileSize(HANDLE fileHandle)
 {
-#if defined(USES_WINDOWS_OPENGL) || defined (USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined (USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	long current = ftell(fileHandle);
 	fseek(fileHandle, 0, SEEK_END);
 	long size = ftell(fileHandle);
@@ -397,7 +397,7 @@ unsigned long int getFileSize(HANDLE fileHandle)
 }
 
 //-------------------------------------------------------------------------
-#ifndef USES_LINUX
+#if !defined(USES_LINUX) && !defined(USES_JS_EMSCRIPTEN)
 
 void checkHResult(HRESULT hresult)
 {
@@ -438,7 +438,7 @@ void checkHResult(HRESULT hresult)
 wchar_t* getCurrentDirectoryStatic()
 {
 			//s_pwd = L"foobar";
-#if defined(USES_LINUX)
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	std::wstring wstr = Utils::convertStringToWString(getCurrentDirectory());
 	strcpy((char*)s_pwd, (const char*)wstr.c_str());
 #elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS_OPENGL)
@@ -451,7 +451,7 @@ wchar_t* getCurrentDirectoryStatic()
 	
 std::string getCurrentDirectory()
 {
-#ifdef USES_LINUX
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	char pwdtmp[MAX_PATH];
 	return std::string(getcwd(pwdtmp, MAX_PATH));
 #else
@@ -463,7 +463,7 @@ std::string getCurrentDirectory()
 
 std::wstring getCurrentDirectoryUnicode()
 {
-#ifdef USES_LINUX
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	char pwdtmp[MAX_PATH];
 	return Utils::convertStringToWString(std::string(getcwd(pwdtmp, MAX_PATH)));
 #else
@@ -475,7 +475,7 @@ std::wstring getCurrentDirectoryUnicode()
 	
 /*void setCurrentDirectory(const std::string& newdir)
 {
-	#ifdef USES_LINUX
+	#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		if (chdir(newdir.c_str()) != 0) die();
 	#else
 		if(!SetCurrentDirectoryW(Utils::convertStringToWString(Utils::replaceSlashesByBackslashes(newdir)).c_str())) die();
@@ -508,7 +508,7 @@ void assertion(int line, const char* filename, bool condition)
 
 void initRandomSeed()
 {
-#ifdef USES_LINUX
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	srand(time(NULL));
 #else
 	SYSTEMTIME time;
@@ -559,7 +559,7 @@ std::string convertWStringToString(std::wstring str)
 		c[0] = '\0';
 		c[1] = '\0';
 		size_t res_str;
-#if defined(USES_LINUX)
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		int res = 0;
 		res_str = wcstombs(c, &str[i], 1);
 #else
@@ -631,7 +631,7 @@ long long int getSecond()
 
 long long int getMicrosecondTime()
 {
-#ifndef USES_LINUX
+#if !defined(USES_LINUX) && !defined(USES_JS_EMSCRIPTEN)
     LARGE_INTEGER ticksPerSecond;
     LARGE_INTEGER tick;
     QueryPerformanceFrequency(&ticksPerSecond);
@@ -657,7 +657,7 @@ long long int getMicrosecondTime()
 
 void sleepMs(unsigned int miliseconds)
 {
-#if defined(USES_LINUX)
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
   usleep (miliseconds * 1000);
 #elif defined(USES_WINDOWS_OPENGL)
   Sleep (miliseconds);

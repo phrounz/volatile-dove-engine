@@ -2,7 +2,7 @@
 #include "../include/Utils.h"
 #include "../include/JoystickManager.h"
 
-#ifndef USES_LINUX
+#if !defined(USES_LINUX) && !defined(USES_JS_EMSCRIPTEN)
 
 // no MFC
 #define WIN32_LEAN_AND_MEAN

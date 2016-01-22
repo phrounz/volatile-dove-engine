@@ -51,7 +51,7 @@ OpenGLApp::OpenGLApp(AbstractMainClass* abstractMainClass, const char* argv0)
 	strncpy(argvCustom[0], argv0str.c_str(), argv0str.size()+1);
 	argvCustom[1] = NULL;
 	int argcCustom = 1;
-#ifndef __EMSCRIPTEN__
+#ifndef USES_SDL_INSTEAD_OF_GLUT
 	glutInit(&argcCustom,argvCustom);
 #endif
 }

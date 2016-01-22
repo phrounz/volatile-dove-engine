@@ -19,7 +19,7 @@ public:
 
 	TextureReal(const char* textureFile, const Float4* colorFactorOrNull, bool clampToEdge, bool useMipmap);
 	
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	TextureReal(int width, int height, const unsigned char* data, bool isAlpha, bool containsTransparency, bool clampToEdge, bool useMipmap);
 #endif
 
@@ -30,7 +30,7 @@ public:
 	~TextureReal();
 private:
 	void createTexture(const Image& image, const Float4* colorFactorOrNull, bool clampToEdge, bool useMipmap);
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	void createTexture(int width, int height, const unsigned char* data, bool isAlpha, bool containsTransparency, bool clampToEdge, bool useMipmap);
 #endif
 	TextureImpl* textureImpl;

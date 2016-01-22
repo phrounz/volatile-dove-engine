@@ -1,8 +1,11 @@
 
 //-------------------------------------------------------------------------
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#include "../include/global_defines.h"
+
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	#include "opengl/OpenGLDraw.h"
+	#include "opengl/SDLDraw.h"
 	#include "TextureReal.h"
 #elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
 	#include "directx/DXMain.h"
@@ -17,7 +20,7 @@
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 
 namespace
 {
@@ -119,21 +122,21 @@ void Bitmap::initFromImage(const Image& image, bool useMipmap)
 	D2D1_SIZE_U sizeBitmap;
 	sizeBitmap.width = image.size().width();
 	sizeBitmap.height = image.size().height();
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	m_bitmap = new ID2D1Bitmap(sizeBitmap, useMipmap);
 #else
 	m_bitmap = DXMain::instance()->createBitmap(sizeBitmap);
 #endif
 
 	// copy from buffer
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	m_bitmap->copyFromImage(&image);
 #elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
 	this->copyFromBuffer(Int2(0,0), image.size(), image.getDataPixels());
 #endif
 
 	// image buffer is no more required
-	#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+	#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		m_bitmap->freeBuffer();
 	#endif
 }
@@ -184,7 +187,7 @@ unsigned char* convertToPremultiplied(const Int2& size, const unsigned char* src
 void Bitmap::copyFromBuffer(const Int2& posInBitmap, const Int2& size, const unsigned char* src)
 {
 	// copy from buffer
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	m_bitmap->CopyFromMemory(src);
 #elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
 	D2D1_RECT_U rect;
@@ -200,7 +203,7 @@ void Bitmap::copyFromBuffer(const Int2& posInBitmap, const Int2& size, const uns
 #endif
 
 	// image buffer is no more required
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	m_bitmap->freeBuffer();
 #endif
 }
@@ -216,11 +219,15 @@ Int2 Bitmap::size() const
 
 void Bitmap::draw(const Int2& pos, float opacity, const Float2& scale) const
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	#pragma message("TODO Bitmap::draw SDL")
+#else
 	if (opacity != 1.f) OpenGLDraw::setColor(Color(255,255,255,(u8)(255*opacity)));
 	m_bitmap->setAsCurrentTexture();
 	OpenGLDraw::drawTexture(pos.x(), pos.y(), (int)(this->size().width()*scale.x()), (int)(this->size().height()*scale.y()));
 	if (opacity != 1.f) OpenGLDraw::resetColor();
+#endif
 #elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
 
 	DXMain::instance()->drawBitmap(m_bitmap, CoreUtils::fromInt2ToFloat2(pos), scale, opacity, 0, 0, 0.f, Int2(0, 0), false, false);
@@ -232,11 +239,16 @@ void Bitmap::draw(const Int2& pos, float opacity, const Float2& scale) const
 
 void Bitmap::drawFragment(const Int2& pos, float x1,float y1,float x2,float y2, int width,int height, float opacity) const
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
+#if defined(USES_SDL_INSTEAD_OF_GLUT)
+	#pragma message("TODO Bitmap::drawFragmentOfTexture SDL")
+	SDLDraw::drawFragmentOfTexture();
+#else
 	if (opacity != 1.f) OpenGLDraw::setColor(Color(255,255,255,(u8)(255*opacity)));
 	m_bitmap->setAsCurrentTexture();
 	OpenGLDraw::drawFragmentOfTexture(pos.x(),pos.y(),x1,y1,x2,y2,width,height);
 	if (opacity != 1.f) OpenGLDraw::resetColor();
+#endif
 #elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
 
 	D2D1_RECT_F rectSource;
@@ -256,11 +268,16 @@ void Bitmap::drawFragment(const Int2& pos, float x1,float y1,float x2,float y2, 
 
 void Bitmap::drawRotated(const Int2& pixelPos, const Int2& size, float angleDegree, const Int2& rotationCenterPos, bool mirrorAxisX, bool mirrorAxisY, float opacity) const
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
+#if defined(USES_SDL_INSTEAD_OF_GLUT)
+	#pragma message("TODO Bitmap::drawRotated SDL")
+	SDLDraw::drawFragmentOfTexture();
+#else
 	if (opacity != 1.f) OpenGLDraw::setColor(Color(255,255,255,(u8)(255*opacity)));
 	m_bitmap->setAsCurrentTexture();
 	OpenGLDraw::drawTextureRotated(pixelPos.x(), pixelPos.y(), size.x(), size.y(), angleDegree, rotationCenterPos.x(), rotationCenterPos.y(), mirrorAxisX, mirrorAxisY);
 	if (opacity != 1.f) OpenGLDraw::resetColor();
+#endif
 #else
 	//Assert(!mirrorAxisX && !mirrorAxisY);
 	Float2 scale((float)size.x() / (float)this->size().x() * (mirrorAxisX ? -1.f : 1.f), (float)size.y() / (float)this->size().y() * (mirrorAxisY ? -1.f : 1.f));
@@ -272,10 +289,16 @@ void Bitmap::drawRotated(const Int2& pixelPos, const Int2& size, float angleDegr
 
 void Bitmap::drawRotated(const BoundingBoxes::AdvancedBox& boundingBox, bool mirrorAxisX, bool mirrorAxisY, float opacity) const
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
+#if defined(USES_SDL_INSTEAD_OF_GLUT)
+	#pragma message("TODO Bitmap::drawRotated SDL")
+	SDLDraw::drawFragmentOfTexture();
+#else
+
 	if (opacity != 1.f) OpenGLDraw::setColor(Color(255,255,255,(u8)(255*opacity)));
 	m_bitmap->setAsCurrentTexture();
 	if (opacity != 1.f) OpenGLDraw::resetColor();
+#endif
 #else
 	#pragma message("TODO Bitmap::drawRotated")
 #endif
@@ -295,7 +318,7 @@ Bitmap::~Bitmap()
 	}
 	Utils::indentLog();
 
-	#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+	#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		delete m_bitmap;
 	#else
 		m_bitmap->Release();

@@ -1,5 +1,5 @@
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	#include "opengl/OpenGL.h"
 	#include "opengl/Shader.h"
 #else
@@ -34,7 +34,7 @@ void AppSetup::init()
 	}
 #endif
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	m_openGL = new OpenGL(m_inf.windowTitle.c_str(), m_inf.windowSize, m_inf.isFullscreen, m_inf.automaticFitToWindowSize);
 #else
 	this->onResizeWindow(this->getWindowRealSize());
@@ -81,7 +81,7 @@ void AppSetup::onResizeWindow(const Int2& newSize)
 	else
 	{
 		this->setPixelPerPointLowLevel(Float2(1.f,1.f), Int2(0,0));
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		m_openGL->setRealWindowSize(newSize);
 		m_openGL->set2DMode();
 #else
@@ -96,7 +96,7 @@ void AppSetup::onResizeWindow(const Int2& newSize)
 
 void AppSetup::deinit()
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	delete m_openGL;
 #endif
 
@@ -116,7 +116,7 @@ void AppSetup::setPixelPerPoint(const Float2& ppp, const Int2& topLeftCornerInWi
 
 void AppSetup::setPixelPerPointLowLevel(const Float2& ppp, const Int2& topLeftCornerInWindow)
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	m_openGL->setPixelPerPoint(m_inf.windowSize, ppp, topLeftCornerInWindow);
 #else
 	DXMain::instance()->setPixelPerPoint(ppp, topLeftCornerInWindow);
@@ -141,7 +141,7 @@ Int2 AppSetup::getWindowCurrentRealSize() const
 
 Int2 AppSetup::getWindowRealSize() const
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	return m_openGL->getWindowRealSize();
 #else
 	Int2 output;
@@ -155,7 +155,7 @@ Int2 AppSetup::getWindowRealSize() const
 void AppSetup::set2DMode()
 {
 	m_is3DModeInsteadOf2DMode = false;
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	Shader::instance().stopUsing();
 	m_openGL->set2DMode();
 #else
@@ -168,7 +168,7 @@ void AppSetup::set2DMode()
 void AppSetup::set3DMode(float fov, float minViewDistance, float maxViewDistance)
 {
 	m_is3DModeInsteadOf2DMode = true;
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	m_openGL->set3DMode(fov, minViewDistance, maxViewDistance);
 #else
 	DXMain::instance()->set3DMode();
@@ -216,7 +216,7 @@ void AppSetup::manageRender()
 		this->setPixelPerPointLowLevel(ppp, virtualPos);
 	}
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	m_openGL->manageOpenGL(m_inf.windowSize);
 #else
 
@@ -287,7 +287,7 @@ Int2 AppSetup::convertVirtualPositionToRealPosition(const Int2& pos) const
 
 Float2 AppSetup::getPixelPerPoint() const
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		return m_openGL->getPixelPerPoint();
 #else
 	return DXMain::instance()->getPPP();
@@ -306,7 +306,7 @@ Int2 AppSetup::getSizeOrtho2DWindow() const
 
 Int2 AppSetup::getVirtualTopLeftCornerInWindow() const
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	return m_openGL->getTopLeftCornerInWindow();
 #else
 	return DXMain::instance()->getTopLeftCornerInWindow();

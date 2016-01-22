@@ -1,6 +1,7 @@
 #ifndef Scene2D_h_INCLUDED
 #define Scene2D_h_INCLUDED
 
+#include "global_defines.h"
 #include "CoreUtils.h"
 
 class OpenGL;

@@ -11,9 +11,9 @@
 #define GL_FOG_COORDINATE_EXT		0x8451
 
 //typedef void (APIENTRY * PFNGLFOGCOORDFEXTPROC) (GLfloat coord);
-
+#ifndef USES_JS_EMSCRIPTEN
 PFNGLFOGCOORDFEXTPROC glFogCoordfEXT = NULL;
-
+#endif
 //#endif
 
 //---------------------------------------------------------------------

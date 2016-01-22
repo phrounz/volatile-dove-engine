@@ -10,6 +10,10 @@
 
 #include "OpenGL.h"
 
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	#include "SDLDraw.h"
+#endif
+
 //---------------------------------------------------------------------
 /*
 Int2 convertPositionInWindowToVirtualPosition(const Int2& parWindowRealPosition)
@@ -39,10 +43,15 @@ void OpenGL::init2(const char* windowTitle, const Int2& windowSize)
 	bool isOk = (SDL_Init(SDL_INIT_VIDEO) == 0);
 	Assert(isOk);
 
-	//m_SDLWindow = (void*)SDL_CreateWindow(" - ", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,  windowSize.width(),windowSize.height(), SDL_WINDOW_OPENGL );
-	//Assert(m_SDLWindow != NULL);
-	m_SDLSurface = (void*)SDL_SetVideoMode( windowSize.width(),windowSize.height(), 24/*32*/, SDL_OPENGL );
-	Assert(m_SDLSurface != NULL);
+	//m_sdlSurface = (void*)SDL_SetVideoMode( 256, 256, 32, SDL_SWSURFACE);// windowSize.width(),windowSize.height(), 24, SDL_OPENGL
+	//Assert(m_sdlSurface != NULL);
+	//SDLDraw::setupSDLScreen(m_sdlSurface);
+	m_sdlWindow = (void*)SDL_CreateWindow(" - ", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,  windowSize.width(),windowSize.height(), SDL_WINDOW_OPENGL );
+	Assert(m_sdlWindow != NULL);
+	m_sdlRenderer = (void*)SDL_CreateRenderer((SDL_Window*)m_sdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	Assert(m_sdlRenderer != NULL);
+	SDLDraw::setupSDLRenderer(m_sdlRenderer);
+
 #else
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_MULTISAMPLE);
 	//glutInitDisplayString("rgba double depth>=32 samples>=4");
@@ -157,8 +166,8 @@ void OpenGL::set3DMode(float fov, float minViewDistance, float maxViewDistance)
 void OpenGL::manageOpenGL(const Int2& windowSize)
 {
 #ifdef USES_SDL_INSTEAD_OF_GLUT
-	//SDL_UpdateWindowSurface((SDL_Window*)m_SDLWindow);
-	SDL_Flip((SDL_Surface*)m_SDLSurface);
+	//SDL_UpdateWindowSurface((SDL_Window*)m_sdlWindow);
+	SDL_Flip((SDL_Surface*)m_sdlSurface);
 #else
 	//events
 	//long long int periodFrame2 = Utils::getMicrosecondTime() - clockTime;
@@ -171,7 +180,11 @@ void OpenGL::manageOpenGL(const Int2& windowSize)
 	glutSwapBuffers();
 	//tmpTime = Utils::getMicrosecondTime() - tmpTime;
 
+#ifdef USES_JS_EMSCRIPTEN
+	glutMainLoop();
+#else
 	glutMainLoopEvent();
+#endif
 #endif
 
 	//clockTime = Utils::getMicrosecondTime();
@@ -311,8 +324,8 @@ void OpenGL::setMode(bool fullscreen, int width, int height)
 Int2 OpenGL::getWindowRealSize() const
 {
 #ifdef USES_SDL_INSTEAD_OF_GLUT
-	//return Int2(SDL_GetWindowSurface((SDL_Window*)m_SDLWindow)->w, SDL_GetWindowSurface((SDL_Window*)m_SDLWindow)->h);
-	return Int2(((SDL_Surface*)m_SDLSurface)->w, ((SDL_Surface*)m_SDLSurface)->h);
+	//return Int2(SDL_GetWindowSurface((SDL_Window*)m_sdlWindow)->w, SDL_GetWindowSurface((SDL_Window*)m_sdlWindow)->h);
+	return Int2(((SDL_Surface*)m_sdlSurface)->w, ((SDL_Surface*)m_sdlSurface)->h);
 #else
 	return Int2(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 #endif

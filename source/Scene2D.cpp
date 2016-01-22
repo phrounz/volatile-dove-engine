@@ -4,6 +4,7 @@
 	#include "directx/TextElement.h"
 #else
 	#include "opengl/OpenGLDraw.h"
+	#include "opengl/SDLDraw.h"
 #endif
 #include "Font.h"
 
@@ -39,8 +40,12 @@ void Scene2D::set2DMode()
 void Scene2D::drawRoundedRectangle(
 	const Int2& posLeftTop, const Int2& posRightBottom, const Color& color, float round, float borderSize, bool fill)
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	SDLDraw::drawRectangle(posLeftTop, posRightBottom, color);
+#else
 	OpenGLDraw::drawRectangle(posLeftTop, posRightBottom, color, borderSize, fill);
+#endif
 #else
 	DXMain::instance()->drawRoundedRectangle(posLeftTop, posRightBottom, color, round, borderSize, fill);
 #endif
@@ -51,7 +56,7 @@ void Scene2D::drawRoundedRectangle(
 Int2 Scene2D::drawText(
 	const char* fontNameOrNullForDefault, const char* text, const Int2& position, float fontSize, const Color& color, bool isCenterScreenX, bool isCenterScreenY, bool smooth, int automaticLineReturn)
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USE_FONT_INSTEAD_OF_TEXTELEMENT)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USE_FONT_INSTEAD_OF_TEXTELEMENT) || defined(USES_JS_EMSCRIPTEN)
 	Int2 pos = position;
 	const Font* font = Font::getDefaultFont();
 	int widthText = font->getWidth(text, -1, fontSize / 32.f);
@@ -83,7 +88,7 @@ Int2 Scene2D::drawText(
 
 Int2 Scene2D::getSizeText(const char* fontNameOrNullForDefault, const char* text, float fontSize, int nbCharsToRead) const
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USE_FONT_INSTEAD_OF_TEXTELEMENT)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USE_FONT_INSTEAD_OF_TEXTELEMENT) || defined(USES_JS_EMSCRIPTEN)
 	const Font* font = Font::getDefaultFont();
 	return Int2(font->getWidth(text, nbCharsToRead, fontSize / 32.f), font->getHeight(text, fontSize / 32.f));
 #else
@@ -104,8 +109,12 @@ bool Scene2D::isDrawableCharacter(char c) const
 
 void Scene2D::drawLine(const Int2& pos1, const Int2& pos2, const Color& color, float thickness)
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	SDLDraw::drawLine(pos1, pos2, color);
+#else
 	OpenGLDraw::drawLine(pos1, pos2, color, thickness);
+#endif
 #else
 	DXMain::instance()->drawLine(pos1, pos2, color, thickness);
 #endif
@@ -115,8 +124,11 @@ void Scene2D::drawLine(const Int2& pos1, const Int2& pos2, const Color& color, f
 
 void Scene2D::clearScreen(const Color& color)
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+#else
 	OpenGLDraw::clearScreen(color);
+#endif
 #else
 	DXMain::instance()->Clear(color);
 #endif
@@ -154,7 +166,7 @@ Int2 Scene2D::convertVirtualPositionToRealPosition(const Int2& pos) const
 
 void Scene2D::showSettingsCharm()
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_WINDOWS8_DESKTOP)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_WINDOWS8_DESKTOP) || defined(USES_JS_EMSCRIPTEN)
 	#pragma message("TODO Scene2D::showSettingsCharm")
 #else
 	Windows::UI::ApplicationSettings::SettingsPane::Show();
@@ -165,7 +177,7 @@ void Scene2D::showSettingsCharm()
 
 const char* Scene2D::getDefaultFontName()
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USE_FONT_INSTEAD_OF_TEXTELEMENT)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USE_FONT_INSTEAD_OF_TEXTELEMENT) || defined(USES_JS_EMSCRIPTEN)
 	return NULL;
 #else
 	return FONT_NAME_DEFAULT;

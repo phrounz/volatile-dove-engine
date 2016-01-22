@@ -1,6 +1,10 @@
 #ifndef OpenGLDraw_h_INCLUDED
 #define OpenGLDraw_h_INCLUDED
 
+#include "../../include/global_defines.h"
+
+#ifndef USES_SDL_INSTEAD_OF_GLUT
+
 #include "../../include/CoreUtils.h"
 #include "../../include/BoundingBoxes.h"
 
@@ -30,5 +34,7 @@ namespace OpenGLDraw
 
 	void clearScreen(const Color& color);
 }
+
+#endif
 
 #endif //OpenGLDraw_h_INCLUDED

@@ -45,7 +45,7 @@ unless (ENABLE_3D)
 {
 	my %h_files = map { $_ => 1 } @l_files;
 	foreach my $key (keys %h_files) {
-		if ($key =~ m/\/(Obj3D|Scene3DPrivate|Scene3D|VBO)\.cpp$/)
+		if ($key =~ m/\/(Obj3D|Scene3DPrivate|Scene3D|VBO|Camera)\.cpp$/)
 		{
 			print "Removed from compilation: $key\n";
 			delete $h_files{$key};
@@ -69,8 +69,8 @@ if (ENABLE_SOUND)
 	$INCS.= " -Ithird-party/freealut-master/include -Ithird-party/Ogg-master/include -Ithird-party/Vorbis-master/include";
 }
 my $WARNINGS = "-Wno-tautological-constant-out-of-range-compare -Wno-dangling-else";
-my $DEFINES = "-DUSES_LINUX -DUSES_JS_EMSCRIPTEN";
-my $LIBS = "   -s GL_UNSAFE_OPTS=0  ".(ENABLE_LEGACY_MODE?'-s LEGACY_GL_EMULATION=1 ':'');
+my $DEFINES = "-DUSES_JS_EMSCRIPTEN";#-DUSES_LINUX 
+my $LIBS = " -s USE_SDL=2  -s GL_UNSAFE_OPTS=0  ".(ENABLE_LEGACY_MODE?'-s LEGACY_GL_EMULATION=1 ':'');
 my $DATA_LINK = " --preload-file data_files/default_font.png\@default_font.png";
 # "-lGLESv2 -lEGL -lm -lX11"; -lGLEW -lm -lGL -lGLU -lglut
 # -s DEMANGLE_SUPPORT=1 --bind -lglfw 

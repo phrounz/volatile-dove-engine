@@ -25,7 +25,7 @@
     #pragma pack(1)
     #define WIN32_LEAN_AND_MEAN
     #define socklen_t int
-#elif defined(USES_LINUX)
+#elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
     #include <unistd.h>
     #include <sys/types.h>
     #include <sys/wait.h>

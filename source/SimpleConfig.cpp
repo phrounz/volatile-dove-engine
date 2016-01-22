@@ -8,7 +8,7 @@ Done by Francois Braud
 #include <stdlib.h>
 #include <iostream>
 
-#if !defined(USES_WINDOWS8_METRO) && !defined(_WIN64) && !defined (__x86_64__) && !defined(__ppc64__) && !defined(USES_LINUX)
+#if !defined(USES_WINDOWS8_METRO) && !defined(_WIN64) && !defined (__x86_64__) && !defined(__ppc64__) && !defined(USES_LINUX) && !defined(USES_JS_EMSCRIPTEN)
 	#define COMPILE_SIMPLE_CONFIG
 #endif
 

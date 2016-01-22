@@ -6,6 +6,7 @@ Done by Francois Braud
 #ifndef Font_h_INCLUDED
 #define Font_h_INCLUDED
 
+#include "../include/global_defines.h"
 #include "../include/CoreUtils.h"
 #include "../include/Bitmap.h"
 #include "../include/Engine.h"

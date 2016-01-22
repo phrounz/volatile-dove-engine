@@ -1,6 +1,6 @@
 
 
-#ifdef USES_LINUX
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	#include <sys/stat.h>
 	#include <cstdlib>
 	#include <unistd.h>
@@ -34,7 +34,7 @@ namespace FileUtil
 			char c[2];
 			c[0] = '\0';
 			c[1] = '\0';
-#ifdef USES_LINUX
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 			wcstombs(c, &str[i], 1);
 #else
 			size_t res_str;
@@ -125,7 +125,7 @@ namespace FileUtil
 		unsigned char* dataCopy = new unsigned char[data->Length];
 		memcpy(dataCopy, data->Data, data->Length);
 		return dataCopy;
-#elif defined(USES_LINUX)
+#elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullpath = getFullPathUnicode(fileLocalization, filepath);
 		std::string fullpathstr = Utils::convertWStringToString(fullpath);
 		FILE* file = fopen(fullpathstr.c_str(), "rb");
@@ -171,7 +171,7 @@ namespace FileUtil
 		{
 			AssertRelease(false);
 		}
-#elif defined(USES_LINUX)
+#elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullpath = getFullPathUnicode(fileLocalization, filepath);
 		FILE* file = fopen(Utils::convertWStringToString(fullpath).c_str(), "wb");
 		Assert(file != NULL);
@@ -200,7 +200,7 @@ namespace FileUtil
 		str += s_appDataFolderBasename;
 		return str;
 	}
-#elif (defined USES_LINUX)
+#elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	void setAppDataFolderBasename(const wchar_t* name)
 	{
 		s_appDataFolderBasename = name;
@@ -228,7 +228,7 @@ namespace FileUtil
 #elif defined(USES_WINDOWS8_METRO)
 		BasicReaderWriter^ tester = ref new BasicReaderWriter(getStorageFolder(fileLocalization));
 		return tester->fileExists(getFilePath(filepath));
-#elif defined(USES_LINUX)
+#elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullfilepath = getFullPathUnicode(fileLocalization, filepath);
 		struct stat st;
 		return (stat(Utils::convertWStringToString(fullfilepath).c_str(), &st) == 0);
@@ -248,7 +248,7 @@ namespace FileUtil
 		Windows::Storage::StorageFolder^ folder = getStorageFolder(fileLocalization);
 		std::wstring fullpath = Utils::platformStringToWString(folder->Path) + L"\\" + Utils::convertStringToWString(filepath);
 		return CreateDirectoryW(fullpath.c_str(), NULL) ? true : false;
-#elif defined(USES_LINUX)
+#elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullfilepath = getFullPathUnicode(fileLocalization, filepath);
 		return ::mkdir(Utils::convertWStringToString(fullfilepath).c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0;
 #else
@@ -265,7 +265,7 @@ namespace FileUtil
 		Windows::Storage::StorageFolder^ folder = getStorageFolder(fileLocalization);
 		std::wstring fullpath = Utils::platformStringToWString(folder->Path) + L"\\" + Utils::convertStringToWString(filepath);
 		return RemoveDirectoryW(fullpath.c_str()) ? true : false;
-#elif defined(USES_LINUX)
+#elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullfilepath = getFullPathUnicode(fileLocalization, filepath);
 		return ::rmdir(Utils::convertWStringToString(fullfilepath).c_str()) == 0;
 #else
@@ -282,7 +282,7 @@ namespace FileUtil
 		Windows::Storage::StorageFolder^ folder = getStorageFolder(fileLocalization);
 		std::wstring fullpath = Utils::platformStringToWString(folder->Path) + L"\\" + Utils::convertStringToWString(filepath);
 		return DeleteFileW(fullpath.c_str()) ? true : false;
-#elif defined(USES_LINUX)
+#elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullfilepath = getFullPathUnicode(fileLocalization, filepath);
 		return unlink(Utils::convertWStringToString(fullfilepath).c_str()) == 0;
 #else
@@ -301,7 +301,7 @@ namespace FileUtil
 		/*Windows::Storage::StorageFolder^ folder = getStorageFolder(fileLocalization);
 		std::wstring fullpath = Utils::platformStringToWString(folder->Path) + L"\\" + Utils::convertStringToWString(filepath);
 		return SetCurrentDirectoryW(fullpath.c_str());*/
-#elif defined(USES_LINUX)
+#elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullfilepath = getFullPathUnicode(fileLocalization, filepath);
 		return chdir(Utils::convertWStringToString(fullfilepath).c_str()) == 0;
 #else
@@ -318,7 +318,7 @@ namespace FileUtil
 #elif defined(USES_WINDOWS8_METRO)
 		Assert(false);
 		return L"";
-#elif defined(USES_LINUX)
+#elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		Assert(false);
 		return L"";
 #else
@@ -358,7 +358,7 @@ namespace FileUtil
 		}
 #elif defined(USES_WINDOWS8_METRO)
 		str = getStorageFolder(fileLocalization)->Path->Data();
-#elif defined(USES_LINUX)
+#elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		if (fileLocalization == APPLICATION_FOLDER)
 		{
 			str += L".";
@@ -372,7 +372,7 @@ namespace FileUtil
 			Assert(false);// TODO
 		}
 #endif
-#ifdef USES_LINUX
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		str += L"/";
 #else
 		str += L"\\";

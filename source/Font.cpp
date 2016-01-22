@@ -73,8 +73,11 @@ Int2 Font::drawText(const Color& color, Int2 pos, const char *text, Float2 fontS
 
 	Bitmap* bitmap = smooth ? m_bitmapSmooth : m_bitmap;
 #if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+#else
 	const float opacity = 1.f;
 	OpenGLDraw::setColor(color);
+#endif
 #else
 	if (color.r() != 255 || color.g() != 255 || color.b() != 255)
 	{

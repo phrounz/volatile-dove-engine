@@ -1,7 +1,7 @@
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
-#if defined(USES_LINUX) && defined(USES_JS_EMSCRIPTEN)
+#if defined(USES_JS_EMSCRIPTEN)
 
 namespace ResolutionChanger
 {
@@ -12,7 +12,7 @@ namespace ResolutionChanger
 	}
 }
 
-#elif defined(USES_LINUX) && !defined(USES_JS_EMSCRIPTEN)
+#elif defined(USES_LINUX)
 
 #include <stdio.h>
 #include <stdlib.h>

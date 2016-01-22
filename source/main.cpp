@@ -3,7 +3,7 @@
 #include <string>
 
 //---------------------------------------------------------------------
-#if defined(USES_LINUX)
+#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 
 #include "opengl/OpenGLApp.h"
 

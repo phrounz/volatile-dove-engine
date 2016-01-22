@@ -1,5 +1,5 @@
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined (USES_JS_EMSCRIPTEN)
 	#include "opengl/OpenGL.h"
 #else
 	#include "directx/DXMain.h"
@@ -11,7 +11,7 @@
 
 #include "AppSetup.h"
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	void OpenGL_onResizeWindow(int w, int h);//declared in OpenGL.h
 #endif
 
@@ -155,7 +155,7 @@ Color Engine::getDefaultForegroundColor()
 
 void Engine::startRender()
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	//AppSetup::manage();
 	//this->openGL->manageOpenGL();
 	this->getScene2DMgr().set2DMode();

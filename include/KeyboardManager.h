@@ -55,7 +55,7 @@ static const Key KEY_NUMPAD_DIVIDE	= 274;
 	static int convertFromWinDesktopMessage(unsigned int wParam);
 	static int convertFromWin8(int virtualKey);
 
-#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 
 	static Key convertFromGlut(int key);
 

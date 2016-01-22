@@ -109,7 +109,7 @@ int KeyboardManager::convertFromWin8(int virtualKey)
 	return virtualKey;
 }
 
-#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 
 Key KeyboardManager::convertFromGlut(int key)
 {

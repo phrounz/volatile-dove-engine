@@ -39,7 +39,7 @@ namespace Utils
 	std::wstring convertStringToWString(std::string str);
 	std::string convertWStringToString(std::wstring str);
 
-	#ifndef USES_LINUX
+	#if !defined(USES_LINUX) && !defined(USES_JS_EMSCRIPTEN)
 		void checkHResult(HRESULT hresult);
 	#endif
 

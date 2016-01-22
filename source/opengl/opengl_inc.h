@@ -1,18 +1,22 @@
 #ifndef opengl_inc_h_INCLUDED
 #define opengl_inc_h_INCLUDED
 
+#include "../../include/global_defines.h"
+
 #if defined(USES_JS_EMSCRIPTEN) //__EMSCRIPTEN__
 	#include <emscripten.h>
 	#define GL_GLEXT_PROTOTYPES
 
-	#include "SDL/SDL.h"
-	#include "SDL/SDL_image.h"
-	#include "SDL/SDL_opengl.h"
-
-/*	#include <GL/gl.h>
-	#include <GL/glu.h>
-	#include <GL/glut.h>
-	#include <GL/freeglut_std.h>*/
+	#ifdef USES_SDL_INSTEAD_OF_GLUT
+		#include "SDL/SDL.h"
+		#include "SDL/SDL_image.h"
+		#include "SDL/SDL_opengl.h"
+	#else
+		#include <GL/gl.h>
+		#include <GL/glu.h>
+		#include <GL/glut.h>
+		#include <GL/freeglut_std.h>
+	#endif
 
 	//#include <stdio.h>
 	//#include <EGL/egl.h>
@@ -22,11 +26,23 @@
 
 	#include <windows.h>
 	#include <WinGDI.h>
-	#include <gl/GL.h>
-	#include <gl/GLU.h>
-	#include <GL/glut.h>
-	#include <GL/freeglut_ext.h>
-	#include <GL/glext.h>
+
+	#ifdef USES_SDL_INSTEAD_OF_GLUT
+		#include "SDL/SDL.h"
+		#include "SDL/SDL_image.h"
+		#include "SDL/SDL_opengl.h"
+		#include <gl/GL.h>
+		#include <gl/GLU.h>
+		#include <GL/glut.h>
+		#include <GL/freeglut_ext.h>
+		#include <GL/glext.h>
+	#else
+		#include <gl/GL.h>
+		#include <gl/GLU.h>
+		#include <GL/glut.h>
+		#include <GL/freeglut_ext.h>
+		#include <GL/glext.h>
+	#endif
 
 #elif defined (USES_LINUX)
 

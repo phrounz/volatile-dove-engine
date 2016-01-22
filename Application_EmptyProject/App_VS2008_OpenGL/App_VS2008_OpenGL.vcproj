@@ -241,6 +241,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\global_defines.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\GroupOfQuads.h"
 				>
 			</File>
@@ -574,6 +578,14 @@
 			</File>
 			<File
 				RelativePath="..\..\source\opengl\Scene3DPrivate.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\source\opengl\SDLDraw.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\source\opengl\SDLDraw.h"
 				>
 			</File>
 			<File

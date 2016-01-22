@@ -1,17 +1,7 @@
 
 #include <iostream>
 
-#ifdef _MSC_VER
-	#include <Windows.h>
-	#include <WinGDI.h>
-
-	#include <GL/glew.h>
-	#include <GL/glext.h>
-#endif
-#include <GL/glut.h>
-#ifndef USES_JS_EMSCRIPTEN
-	#include <GL/freeglut_ext.h>
-#endif
+#include "opengl_inc.h"
 
 #ifndef WIN32
     #include <GL/glu.h>
