@@ -28,9 +28,9 @@ Each example project "Application_XXXXXX" may contain the following directories,
    run the executable in ./WorkDir.
  * Or said otherwise, open the terminal and type the commands:
 ```
+   cd common/Linux/ && sudo sh install_dependancies.sh && cd ../..
    cd [your-download-or-git-directory-here]/volatile-dove-engine/
    cd Application_[...]/App_Linux/
-   sudo sh install.sh
    make
    cd ../WorkDir/
    ./app
