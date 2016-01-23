@@ -2,7 +2,7 @@
 #define global_defines_h_INCLUDED
 
 #ifdef USES_JS_EMSCRIPTEN
-	#define USES_SDL_INSTEAD_OF_GLUT
+	// note: see compile.pl for defines
 #else
 	#define USES_SOUND
 	#ifndef USES_SDL_INSTEAD_OF_GLUT

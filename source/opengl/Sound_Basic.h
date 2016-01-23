@@ -16,7 +16,7 @@ public:
 	void setVolume(unsigned char vol);
 private:
 	~Sound_Basic();
-#ifdef USES_JS_EMSCRIPTEN
+#ifdef USES_SDL_FOR_SOUND
 	Sound_Basic(unsigned wav_length, unsigned char* wav_buffer) :m_wav_length(wav_length), m_wav_buffer(wav_buffer),m_volume(255) {}
 	int m_wav_length; // length of the sample
 	unsigned char* m_wav_buffer; // buffer containing the audio file

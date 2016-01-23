@@ -169,8 +169,10 @@ int convertSDLKeycodeToKeyboardManagerKeycode(SDL_Keycode sym)
 		sym = SDLK_0;
 	else if(sym >= 30 && sym <= 38)
 		sym += - 30 + (int)SDLK_1;
-	else if(sym == 44)
-		sym = SDLK_SPACE;
+	else if(sym == 40)
+		sym = SDLK_RETURN;
+	else if(sym == 79)
+		sym = SDLK_RIGHT;
 #endif
 	int c = 0;
 	//outputln((int)sym << ";" << (int)SDLK_a);

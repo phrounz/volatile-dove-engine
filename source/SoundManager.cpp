@@ -1,7 +1,10 @@
 
-#ifdef USES_JS_EMSCRIPTEN
+#include "../include/global_defines.h"
+
+#ifdef USES_SDL_FOR_SOUND
 
 	#include "opengl/opengl_inc.h"
+	#include "SDL/SDL_audio.h"
 	#include "opengl/Sound_Basic.h"
 
 #elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
@@ -39,8 +42,8 @@
 std::map<std::string, Sound*> SoundManager::m_database;
 std::map<Sound*, int> SoundManager::m_counter;
 
-#ifdef USES_JS_EMSCRIPTEN
-SDL_AudioSpec s_wav_spec;
+#ifdef USES_SDL_FOR_SOUND
+SDL_AudioSpec s_wavSpec;
 #endif
 
 //------------------------------------------------------------------------------
@@ -69,30 +72,31 @@ Sound* SoundManager::loadSound(const char* filename, bool alternative)
 Sound* SoundManager::loadSound2(const char* filename, bool alternative)
 {
 	outputln(std::string("Loading sound:    ") + filename << " (shared)");
-	#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
-		unsigned int bufferID;
-		unsigned int sourceID;
-		SoundLoad::loadSound(filename, &bufferID, &sourceID);
-		return reinterpret_cast<Sound*>(new Sound_Basic(bufferID, sourceID));
-	#elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
-		if (alternative)
-		{
-			Sound_Stream* ss = new Sound_Stream(filename);
-			m_soundStreams.push_back(ss);
-			return reinterpret_cast<Sound*>(ss);
-		}
-		else
-		{
-			return reinterpret_cast<Sound*>(new Sound_Basic(new SoundFileReader(filename), m_soundPlayer));
-		}
-	#else
-		Uint32 wav_length;
-		Uint8 *wav_buffer;
-
-		if (SDL_LoadWAV(filename, &s_wav_spec, &wav_buffer, &wav_length) == NULL)
-			AssertMessage(false, "Could not open WAV sound file");
-		return reinterpret_cast<Sound*>(new Sound_Basic(wav_length, wav_buffer));
-	#endif
+#if defined(USES_SDL_FOR_SOUND)
+	uint32_t wavLength;
+	uint8_t* wavBuffer;
+	if (SDL_LoadWAV(filename, &s_wavSpec, &wavBuffer, &wavLength) == NULL)
+		AssertMessage(false, "Could not open WAV sound file");
+	return reinterpret_cast<Sound*>(new Sound_Basic(wavLength, wavBuffer));
+#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+	unsigned int bufferID;
+	unsigned int sourceID;
+	SoundLoad::loadSound(filename, &bufferID, &sourceID);
+	return reinterpret_cast<Sound*>(new Sound_Basic(bufferID, sourceID));
+#elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
+	if (alternative)
+	{
+		Sound_Stream* ss = new Sound_Stream(filename);
+		m_soundStreams.push_back(ss);
+		return reinterpret_cast<Sound*>(ss);
+	}
+	else
+	{
+		return reinterpret_cast<Sound*>(new Sound_Basic(new SoundFileReader(filename), m_soundPlayer));
+	}
+#else
+	#error
+#endif
 }
 
 //-------------------------------------------------------------------------
@@ -165,7 +169,12 @@ void SoundManager::removeSound2(Sound* sound)
 
 SoundManager::SoundManager(const char* argv0)
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_SDL_FOR_SOUND)
+
+	if ( SDL_OpenAudio(&s_wavSpec, NULL) < 0 )
+	  AssertMessage(false, "Could not open audio");
+
+#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
 
     // Initialize the OpenAL library
 	argvCustom[0] = new char[strlen(argv0)+1];
@@ -182,10 +191,7 @@ SoundManager::SoundManager(const char* argv0)
 	m_soundPlayer = new XAudio2SoundPlayer(SOUND_SAMPLE_RATE);
 
 #else
-
-	if ( SDL_OpenAudio(&s_wav_spec, NULL) < 0 )
-	  AssertMessage(false, "Could not open audio");
-
+	#error
 #endif
 }
 
@@ -193,7 +199,11 @@ SoundManager::SoundManager(const char* argv0)
 
 SoundManager::~SoundManager()
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#if defined(USES_SDL_FOR_SOUND)
+
+	SDL_CloseAudio();
+
+#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
 
 	// Clean up the OpenAL library
 	delete argvCustom[0];
@@ -205,9 +215,7 @@ SoundManager::~SoundManager()
 	delete m_soundPlayer;
 
 #else
-
-	SDL_CloseAudio();
-
+	#error
 #endif
 
 	Assert(m_soundStreams.size() == 0);// they should have been freed before

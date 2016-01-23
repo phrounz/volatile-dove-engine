@@ -4,10 +4,12 @@ use strict;
 use warnings;
 use Data::Dumper;
 
-use constant ENABLE_SOUND => 0;# not really supported yet
+use constant ENABLE_SOUND => 1;
 use constant ENABLE_3D => 0;# not supported yet
 use constant ENABLE_LEGACY_MODE => 0;
 my $THIRD_PARTY_LIBS_DIR = "../../dependancy_libraries/emscripten-third-party";
+
+print "--------------------------------------------\n";
 
 #----------------------------------
 # get files to compile (except the one from the engine)
@@ -98,10 +100,12 @@ if (ENABLE_SOUND)
 	$INCS.= " -I$THIRD_PARTY_LIBS_DIR/freealut-master/include -I$THIRD_PARTY_LIBS_DIR/Ogg-master/include -I$THIRD_PARTY_LIBS_DIR/Vorbis-master/include";
 }
 my $WARNINGS = "-Wno-tautological-constant-out-of-range-compare -Wno-dangling-else";
-my $DEFINES = "-DUSES_JS_EMSCRIPTEN";#-DUSES_LINUX 
-$DEFINES .= " -DUSES_SOUND" if ENABLE_SOUND;
+my $DEFINES = "-DUSES_JS_EMSCRIPTEN -DUSES_SDL_INSTEAD_OF_GLUT";#-DUSES_LINUX 
+$DEFINES .= " -DUSES_SOUND -DUSES_SDL_FOR_SOUND" if ENABLE_SOUND;
 $DEFINES .= " -DUSES_SCENE3D" if ENABLE_3D;
-my $LIBS = " -s USE_SDL=2  -s GL_UNSAFE_OPTS=0  ".(ENABLE_LEGACY_MODE?'-s LEGACY_GL_EMULATION=1  ':'');#-O2 -s ALLOW_MEMORY_GROWTH=1
+
+my $OPTS = " -O2 -s ALLOW_MEMORY_GROWTH=1 -s TOTAL_MEMORY=64000000 -s ASSERTIONS=1 ";
+my $LIBS = " -s USE_SDL=2  -s GL_UNSAFE_OPTS=0  ".(ENABLE_LEGACY_MODE?'-s LEGACY_GL_EMULATION=1  ':'');
 my $DATA_LINK = " --preload-file ../WorkDir/default_font.png\@default_font.png";
 $DATA_LINK .= " --preload-file ../WorkDir/data\@data" if (-d "../WorkDir/data");
 # "-lGLESv2 -lEGL -lm -lX11"; -lGLEW -lm -lGL -lGLU -lglut
@@ -111,4 +115,7 @@ $DATA_LINK .= " --preload-file ../WorkDir/data\@data" if (-d "../WorkDir/data");
 #----------------------------------
 # run the compilation command
 
-system("python $EMS_BIN $files $INCS $DEFINES $WARNINGS $LIBS -o output.html $DATA_LINK");
+my $cmd = "python $EMS_BIN $OPTS $files $INCS $DEFINES $WARNINGS $LIBS -o output.html $DATA_LINK";
+print "\n$cmd\n";
+print "--------------------------------------------\n\n";
+system($cmd);

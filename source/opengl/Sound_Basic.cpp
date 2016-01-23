@@ -1,5 +1,7 @@
 
-#ifdef USES_JS_EMSCRIPTEN
+#include "../../include/global_defines.h"
+
+#ifdef USES_SDL_FOR_SOUND
 	#include "opengl_inc.h"
 #elif defined(USES_WINDOWS_OPENGL)
 	#include <al.h>
@@ -18,7 +20,7 @@ bool Sound_Basic::isLoaded() const { return true;}
 //------------------------------------------------------------------------------
 void Sound_Basic::play(bool blockUntilEnd)
 {
-#ifdef USES_JS_EMSCRIPTEN
+#ifdef USES_SDL_FOR_SOUND
 	#pragma message("TODO Sound_Basic::isPlaying")
 	SDL_PauseAudio(0);
 #else
@@ -40,7 +42,7 @@ void Sound_Basic::play(bool blockUntilEnd)
 //------------------------------------------------------------------------------
 void Sound_Basic::stop()
 {
-#ifdef USES_JS_EMSCRIPTEN
+#ifdef USES_SDL_FOR_SOUND
 	#pragma message("TODO Sound_Basic::isPlaying")
 #else
     alSourceStop(sourceID);
@@ -49,8 +51,9 @@ void Sound_Basic::stop()
 //------------------------------------------------------------------------------
 bool Sound_Basic::isPlaying()
 {
-#ifdef USES_JS_EMSCRIPTEN
+#ifdef USES_SDL_FOR_SOUND
 	#pragma message("TODO Sound_Basic::isPlaying")
+	return false;
 #else
     ALint state;
     alGetSourcei(sourceID, AL_SOURCE_STATE, &state);
@@ -60,7 +63,7 @@ bool Sound_Basic::isPlaying()
 //------------------------------------------------------------------------------
 void Sound_Basic::setVolume(unsigned char vol)
 {
-#ifdef USES_JS_EMSCRIPTEN
+#ifdef USES_SDL_FOR_SOUND
 	#pragma message("TODO Sound_Basic::setVolume")
 #else
 	m_volume = vol;
@@ -76,7 +79,7 @@ unsigned char Sound_Basic::getVolume() const
 //------------------------------------------------------------------------------
 Sound_Basic::~Sound_Basic()
 {
-#ifdef USES_JS_EMSCRIPTEN
+#ifdef USES_SDL_FOR_SOUND
 	SDL_FreeWAV(m_wav_buffer);
 #else
 	// http://gamedev.stackexchange.com/questions/25671/how-should-i-unbind-and-delete-openal-buffers

@@ -115,7 +115,7 @@ Key KeyboardManager::convertFromGlut(int key)
 {
 	switch (key) {
 #ifdef USES_SDL_INSTEAD_OF_GLUT
-	#pragma message("TODO KeyboardManager::getModifier SDL")
+	#pragma message("TODO KeyboardManager::convertFromGlut SDL")
 #else
 		case GLUT_KEY_LEFT:		return KeyboardManager::KEY_LEFT;
         case GLUT_KEY_RIGHT:	return KeyboardManager::KEY_RIGHT;
