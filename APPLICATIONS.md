@@ -7,12 +7,6 @@ Each example project "Application_XXXXXX" may contain the following directories,
    compiling+running it (with F5).
  * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
 
-### App_VS2008_SDL
- * Should work just by opening the solution with **Visual Studio 2008 Express** and 
-   compiling+running it (with F5).
- * Add then the SDL.dll in "dependancy_libraries/lib/SDL2_Win32_Release" into "WorkDir"
- * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
-
 ### App_VS2013_DX_Desktop
  * Should work just by opening the solution with **Visual Studio 2013 Express for Desktop** 
    and compiling+running it (with F5).
@@ -46,6 +40,12 @@ Each example project "Application_XXXXXX" may contain the following directories,
    * Visual Studio Code for Linux (http://code.visualstudio.com)
    * Atom (http://atom.io)
    * Kate (part of KDE environment)
+
+### App_VS2008_SDL (Highly experimental)
+ * Should work just by opening the solution with **Visual Studio 2008 Express** and 
+   compiling+running it (with F5).
+ * Add then the SDL.dll in "dependancy_libraries/lib/SDL2_Win32_Release" into "WorkDir"
+ * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
 
 ### App_JS_Emscripten (Highly Experimental)
  * Requires perl.
