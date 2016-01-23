@@ -8,4 +8,8 @@
 	#define USES_SCENE3D
 #endif
 
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	#pragma comment(lib, "SDL2")
+#endif
+
 #endif //global_defines_h_INCLUDED

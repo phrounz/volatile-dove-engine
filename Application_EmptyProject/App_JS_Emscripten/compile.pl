@@ -45,7 +45,7 @@ unless (ENABLE_3D)
 {
 	my %h_files = map { $_ => 1 } @l_files;
 	foreach my $key (keys %h_files) {
-		if ($key =~ m/\/(Obj3D|Scene3DPrivate|Scene3D|VBO|Camera)\.cpp$/)
+		if ($key =~ m/\/(Obj3D|Scene3DPrivate|Scene3D|VBO|Camera|Material|VBOGroup|GroupOfQuads|GroupOfQuadsByTexture|Meshes3D)\.cpp$/)
 		{
 			print "Removed from compilation: $key\n";
 			delete $h_files{$key};

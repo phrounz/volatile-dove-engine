@@ -8,7 +8,7 @@
 #include "../EngineError.h"
 
 #include "OpenGLApp.h"
-#include "OpenGL.h"
+//#include "OpenGL.h"
 
 #include "../../include/Engine.h"
 
@@ -60,8 +60,11 @@ OpenGLApp::OpenGLApp(AbstractMainClass* abstractMainClass, const char* argv0)
 
 void OpenGLApp::manageEvents()
 {
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	m_openGLAppControls.manageSDLEvents();
+#else
 	// events are automatically dispatched by glut
-
+#endif
 	// resize window if required
 	Int2 newSizeWindow = AppSetup::instance().getWindowRealSize();
 	if (newSizeWindow != AppSetup::instance().getWindowCurrentRealSize())
@@ -106,7 +109,7 @@ void OpenGLApp::run()
 	Assert(!Engine::instance().isInit());
 	Engine::instance().initLowLevel();
 #ifndef __EMSCRIPTEN__
-	AppSetup::instance().onResizeWindow(Int2(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT)));
+	AppSetup::instance().onResizeWindow(AppSetup::instance().getWindowRealSize());
 #endif
 	m_openGLAppControls.initControls(m_mainClass);
 

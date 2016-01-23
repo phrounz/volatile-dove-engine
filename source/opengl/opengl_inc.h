@@ -29,7 +29,7 @@
 
 	#ifdef USES_SDL_INSTEAD_OF_GLUT
 		#include "SDL/SDL.h"
-		#include "SDL/SDL_image.h"
+		//#include "SDL/SDL_image.h"
 		#include "SDL/SDL_opengl.h"
 		#include <gl/GL.h>
 		#include <gl/GLU.h>
@@ -55,9 +55,11 @@
 	#error
 #endif
 
-#if !defined(GLUT_WHEEL_UP)
-#  define GLUT_WHEEL_UP   3
-#  define GLUT_WHEEL_DOWN 4
+#ifndef USES_SDL_INSTEAD_OF_GLUT
+	#if !defined(GLUT_WHEEL_UP)
+	#  define GLUT_WHEEL_UP   3
+	#  define GLUT_WHEEL_DOWN 4
+	#endif
 #endif
 
 #endif //opengl_inc_h_INCLUDED

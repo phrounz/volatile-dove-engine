@@ -18,7 +18,7 @@ public:
 	class MouseEvent
 	{
 	public:
-		enum MouseEventType { MOUSE_EVENT_PRESS, MOUSE_EVENT_RELEASE, MOUSE_EVENT_MOTION, MOUSE_EVENT_PASSIVE_MOTION };
+		enum MouseEventType { MOUSE_EVENT_PRESS, MOUSE_EVENT_RELEASE, MOUSE_EVENT_MOTION, MOUSE_EVENT_PASSIVE_MOTION, MOUSE_EVENT_WHEEL_UP, MOUSE_EVENT_WHEEL_DOWN };
 		MouseEvent(const Int2& parMousePosition, int parMouseButton, MouseEventType parEventType) :
 			mousePosition(parMousePosition),
 			mouseButton(parMouseButton),

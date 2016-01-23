@@ -3,11 +3,15 @@ une police de caracteres
 Done by Francois Braud
 ******************************************************************/
 	
+#include "../include/global_defines.h"
+
 #include "../include/Utils.h"
 #include "../include/Image.h"
 #include "../include/FileUtil.h"
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	#include "opengl/SDLDraw.h"
+#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
 	#include "opengl/OpenGLDraw.h"
 #endif
 
@@ -73,9 +77,9 @@ Int2 Font::drawText(const Color& color, Int2 pos, const char *text, Float2 fontS
 
 	Bitmap* bitmap = smooth ? m_bitmapSmooth : m_bitmap;
 #if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+	const float opacity = 1.f;
 #ifdef USES_SDL_INSTEAD_OF_GLUT
 #else
-	const float opacity = 1.f;
 	OpenGLDraw::setColor(color);
 #endif
 #else
@@ -138,7 +142,9 @@ Int2 Font::drawText(const Color& color, Int2 pos, const char *text, Float2 fontS
         }
     }
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	SDLDraw::resetColor();
+#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
 	OpenGLDraw::resetColor();
 #endif
     return pos;

@@ -33,44 +33,128 @@ struct D2D1_SIZE_U
 	unsigned int height;
 };
 
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+SDL_Surface* SDL_CreateRGBASurface(int width, int height)
+{
+	SDL_Surface* surface;
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		surface = SDL_CreateRGBSurface(0,width, height,32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+	#else
+		surface = SDL_CreateRGBSurface(0,width, height,32, 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+	#endif
+	//SDL_SetAlpha(surface, SDL_SRCALPHA, SDL_ALPHA_OPAQUE);
+	return surface;
+}
+#endif
+
 struct ID2D1Bitmap
 {
 	ID2D1Bitmap(const D2D1_SIZE_U& parSize, bool useMipmap)
-		: m_size(parSize), m_useMipmap(useMipmap), m_texture(NULL), m_textureReduced(NULL)
+		: m_size(parSize), m_useMipmap(useMipmap)
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+		, m_surface(NULL) //, m_textureReduced(NULL)
+#else
+		, m_texture(NULL) //, m_textureReduced(NULL)
+#endif
 	{
 		m_buffer = new unsigned char[m_size.width*m_size.height*4];
 	}
 	void CopyFromMemory(const unsigned char* imageBuffer)
 	{
-		Assert(m_buffer != NULL && m_texture == NULL);
+		Assert(m_buffer != NULL);
 		memcpy(m_buffer, imageBuffer, m_size.width*m_size.height*4);
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+		/*m_surface = SDL_CreateRGBASurface(m_size.width,m_size.height);
+		SDL_LockSurface(m_surface);
+		memcpy(m_surface->pixels, imageBuffer, m_surface->w * m_surface->h);
+		SDL_UnlockSurface(m_surface);*/
+
+		unsigned int rmask = 0, gmask = 0, bmask = 0, amask = 0;
+		if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
+		{
+			rmask = 0x000000ff;
+			gmask = 0x0000ff00;
+			bmask = 0x00ff0000;
+			amask = 0xff000000;
+		}
+		else
+		{
+			rmask = 0xff000000;
+			gmask = 0x00ff0000;
+			bmask = 0x0000ff00;
+			amask = 0x000000ff;
+		}
+		m_surface = SDL_CreateRGBSurfaceFrom((void*)imageBuffer, m_size.width,m_size.height, 32, m_size.width*4, rmask, gmask, bmask, amask);
+		m_texture = SDLDraw::createTextureFromSurface(m_surface);
+
+#else
+		Assert(m_texture == NULL);
 		m_texture = new TextureReal(m_size.width, m_size.height, m_buffer, true, true, false, m_useMipmap);
+#endif
 	}
 	void copyFromImage(const Image* image)
 	{
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+		/*m_surface = SDL_CreateRGBASurface(m_size.width,m_size.height);
+		SDL_LockSurface(m_surface);
+		memcpy(m_surface->pixels, image->getDataPixels(), m_surface->w * m_surface->h);
+		SDL_UnlockSurface(m_surface);*/
+
+
+		unsigned int rmask = 0, gmask = 0, bmask = 0, amask = 0;
+		if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
+		{
+			rmask = 0x000000ff;
+			gmask = 0x0000ff00;
+			bmask = 0x00ff0000;
+			amask = 0xff000000;
+		}
+		else
+		{
+			rmask = 0xff000000;
+			gmask = 0x00ff0000;
+			bmask = 0x0000ff00;
+			amask = 0x000000ff;
+		}
+		m_surface = SDL_CreateRGBSurfaceFrom((void*)image->getDataPixels(), m_size.width,m_size.height, 32, m_size.width*4, rmask, gmask, bmask, amask);
+		m_texture = SDLDraw::createTextureFromSurface(m_surface);
+
+#else
 		//Image* imageNew = new Image(*image, 1);
 		m_texture = new TextureReal(*image, NULL, true, m_useMipmap);
 		//delete imageNew;
+#endif
 	}
 	~ID2D1Bitmap()
 	{
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+		SDL_FreeSurface(m_surface);
+		//SDL_FreeTexture(m_texture);
+#else
 		delete m_texture;
+#endif
 		if (m_buffer != NULL) {delete m_buffer;m_buffer = NULL;}
 	}
 	void freeBuffer()
 	{
 		if (m_buffer != NULL) {delete m_buffer;m_buffer = NULL;}
 	}
-	void setAsCurrentTexture() const
-	{
-		m_texture->setAsCurrentTexture();
-	}
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	const SDL_Texture* getSDLSurface() const { return m_texture; }
+#else
+	void setAsCurrentTexture() const { m_texture->setAsCurrentTexture(); }
+#endif
 	const D2D1_SIZE_U& GetSize() {return m_size;}
 private:
 	unsigned char* m_buffer;
 	D2D1_SIZE_U m_size;
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	SDL_Surface* m_surface;
+	SDL_Texture* m_texture;
+#else
 	TextureReal* m_texture;
-	TextureReal* m_textureReduced;
+	//TextureReal* m_textureReduced;
+#endif
 	bool m_useMipmap;
 };
 
@@ -136,9 +220,9 @@ void Bitmap::initFromImage(const Image& image, bool useMipmap)
 #endif
 
 	// image buffer is no more required
-	#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
-		m_bitmap->freeBuffer();
-	#endif
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
+	m_bitmap->freeBuffer();
+#endif
 }
 
 //-------------------------------------------------------------------------
@@ -219,15 +303,13 @@ Int2 Bitmap::size() const
 
 void Bitmap::draw(const Int2& pos, float opacity, const Float2& scale) const
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 #ifdef USES_SDL_INSTEAD_OF_GLUT
-	#pragma message("TODO Bitmap::draw SDL")
-#else
+	SDLDraw::drawTexture(m_bitmap->getSDLSurface(), pos.x(), pos.y(), (int)(this->size().width()*scale.x()), (int)(this->size().height()*scale.y()));
+#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	if (opacity != 1.f) OpenGLDraw::setColor(Color(255,255,255,(u8)(255*opacity)));
 	m_bitmap->setAsCurrentTexture();
 	OpenGLDraw::drawTexture(pos.x(), pos.y(), (int)(this->size().width()*scale.x()), (int)(this->size().height()*scale.y()));
 	if (opacity != 1.f) OpenGLDraw::resetColor();
-#endif
 #elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
 
 	DXMain::instance()->drawBitmap(m_bitmap, CoreUtils::fromInt2ToFloat2(pos), scale, opacity, 0, 0, 0.f, Int2(0, 0), false, false);
@@ -239,16 +321,13 @@ void Bitmap::draw(const Int2& pos, float opacity, const Float2& scale) const
 
 void Bitmap::drawFragment(const Int2& pos, float x1,float y1,float x2,float y2, int width,int height, float opacity) const
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 #if defined(USES_SDL_INSTEAD_OF_GLUT)
-	#pragma message("TODO Bitmap::drawFragmentOfTexture SDL")
-	SDLDraw::drawFragmentOfTexture();
-#else
+	SDLDraw::drawFragmentOfTexture(m_bitmap->getSDLSurface(), pos.x(),pos.y(),x1,y1,x2,y2,width,height, opacity);
+#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	if (opacity != 1.f) OpenGLDraw::setColor(Color(255,255,255,(u8)(255*opacity)));
 	m_bitmap->setAsCurrentTexture();
 	OpenGLDraw::drawFragmentOfTexture(pos.x(),pos.y(),x1,y1,x2,y2,width,height);
 	if (opacity != 1.f) OpenGLDraw::resetColor();
-#endif
 #elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
 
 	D2D1_RECT_F rectSource;
@@ -268,16 +347,13 @@ void Bitmap::drawFragment(const Int2& pos, float x1,float y1,float x2,float y2, 
 
 void Bitmap::drawRotated(const Int2& pixelPos, const Int2& size, float angleDegree, const Int2& rotationCenterPos, bool mirrorAxisX, bool mirrorAxisY, float opacity) const
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 #if defined(USES_SDL_INSTEAD_OF_GLUT)
-	#pragma message("TODO Bitmap::drawRotated SDL")
-	SDLDraw::drawFragmentOfTexture();
-#else
+	SDLDraw::drawTextureRotated(m_bitmap->getSDLSurface(), pixelPos.x(), pixelPos.y(), size.x(), size.y(), angleDegree, rotationCenterPos.x(), rotationCenterPos.y(), mirrorAxisX, mirrorAxisY);
+#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	if (opacity != 1.f) OpenGLDraw::setColor(Color(255,255,255,(u8)(255*opacity)));
 	m_bitmap->setAsCurrentTexture();
 	OpenGLDraw::drawTextureRotated(pixelPos.x(), pixelPos.y(), size.x(), size.y(), angleDegree, rotationCenterPos.x(), rotationCenterPos.y(), mirrorAxisX, mirrorAxisY);
 	if (opacity != 1.f) OpenGLDraw::resetColor();
-#endif
 #else
 	//Assert(!mirrorAxisX && !mirrorAxisY);
 	Float2 scale((float)size.x() / (float)this->size().x() * (mirrorAxisX ? -1.f : 1.f), (float)size.y() / (float)this->size().y() * (mirrorAxisY ? -1.f : 1.f));
@@ -289,16 +365,12 @@ void Bitmap::drawRotated(const Int2& pixelPos, const Int2& size, float angleDegr
 
 void Bitmap::drawRotated(const BoundingBoxes::AdvancedBox& boundingBox, bool mirrorAxisX, bool mirrorAxisY, float opacity) const
 {
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 #if defined(USES_SDL_INSTEAD_OF_GLUT)
-	#pragma message("TODO Bitmap::drawRotated SDL")
-	SDLDraw::drawFragmentOfTexture();
-#else
-
+	#pragma message("TODO Bitmap::drawRotated")
+#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	if (opacity != 1.f) OpenGLDraw::setColor(Color(255,255,255,(u8)(255*opacity)));
 	m_bitmap->setAsCurrentTexture();
 	if (opacity != 1.f) OpenGLDraw::resetColor();
-#endif
 #else
 	#pragma message("TODO Bitmap::drawRotated")
 #endif

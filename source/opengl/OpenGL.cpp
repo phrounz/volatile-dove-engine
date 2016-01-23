@@ -39,18 +39,15 @@ OpenGL::OpenGL(const char *windowTitle, const Int2& windowSize, bool isFullScree
 
 void OpenGL::init2(const char* windowTitle, const Int2& windowSize)
 {
+	Assert(windowTitle != NULL);
 #ifdef USES_SDL_INSTEAD_OF_GLUT
 	bool isOk = (SDL_Init(SDL_INIT_VIDEO) == 0);
 	Assert(isOk);
-
-	//m_sdlSurface = (void*)SDL_SetVideoMode( 256, 256, 32, SDL_SWSURFACE);// windowSize.width(),windowSize.height(), 24, SDL_OPENGL
-	//Assert(m_sdlSurface != NULL);
-	//SDLDraw::setupSDLScreen(m_sdlSurface);
-	m_sdlWindow = (void*)SDL_CreateWindow(" - ", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,  windowSize.width(),windowSize.height(), SDL_WINDOW_OPENGL );
+	m_sdlWindow = (void*)SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,  windowSize.width(),windowSize.height(), SDL_WINDOW_OPENGL );
 	Assert(m_sdlWindow != NULL);
 	m_sdlRenderer = (void*)SDL_CreateRenderer((SDL_Window*)m_sdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	Assert(m_sdlRenderer != NULL);
-	SDLDraw::setupSDLRenderer(m_sdlRenderer);
+	SDLDraw::setupSDLInfos(m_sdlWindow, m_sdlRenderer);
 
 #else
     glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH | GLUT_DOUBLE | GLUT_MULTISAMPLE);
@@ -166,8 +163,7 @@ void OpenGL::set3DMode(float fov, float minViewDistance, float maxViewDistance)
 void OpenGL::manageOpenGL(const Int2& windowSize)
 {
 #ifdef USES_SDL_INSTEAD_OF_GLUT
-	//SDL_UpdateWindowSurface((SDL_Window*)m_sdlWindow);
-	SDL_Flip((SDL_Surface*)m_sdlSurface);
+	SDL_RenderPresent((SDL_Renderer*)m_sdlRenderer);
 #else
 	//events
 	//long long int periodFrame2 = Utils::getMicrosecondTime() - clockTime;
@@ -324,8 +320,7 @@ void OpenGL::setMode(bool fullscreen, int width, int height)
 Int2 OpenGL::getWindowRealSize() const
 {
 #ifdef USES_SDL_INSTEAD_OF_GLUT
-	//return Int2(SDL_GetWindowSurface((SDL_Window*)m_sdlWindow)->w, SDL_GetWindowSurface((SDL_Window*)m_sdlWindow)->h);
-	return Int2(((SDL_Surface*)m_sdlSurface)->w, ((SDL_Surface*)m_sdlSurface)->h);
+	return Int2(SDL_GetWindowSurface((SDL_Window*)m_sdlWindow)->w, SDL_GetWindowSurface((SDL_Window*)m_sdlWindow)->h);
 #else
 	return Int2(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 #endif

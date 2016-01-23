@@ -1,11 +1,6 @@
 
 #include "opengl_inc.h"
 
-#if !defined(GLUT_WHEEL_UP)
-#  define GLUT_WHEEL_UP   3
-#  define GLUT_WHEEL_DOWN 4
-#endif
-
 //---------
 
 #include "../../include/CoreUtils.h"
@@ -29,31 +24,44 @@ namespace
 
 void OpenGLApp_onPointerPressedOrReleased(int button, int state,int x, int y)
 {
-#ifndef USES_SDL_INSTEAD_OF_GLUT
-
 	Int2 pos = AppSetup::instance().convertRealPositionToVirtualPosition(Int2(x,y));
-	if (button==GLUT_WHEEL_UP)
+	if (button==MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_UP)
 	{
 		s_mainClass->onPointerWheelChanged(120, pos.x(), pos.y());
 	}
-	else if (button==GLUT_WHEEL_DOWN)
+	else if (button==MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_DOWN)
 	{
 		s_mainClass->onPointerWheelChanged(-120, pos.x(), pos.y());
 	}
-	else if (state==GLUT_DOWN)
+	else if (state==MouseManager::MouseEvent::MOUSE_EVENT_PRESS)
 	{
 		Engine::instance().onPointerPressedInternals(button, x, y);
 		s_mainClass->onPointerPressed(button, pos.x(), pos.y());
 	}
-	else if (state==GLUT_UP)
+	else if (state==MouseManager::MouseEvent::MOUSE_EVENT_RELEASE)
 	{
 		Engine::instance().onPointerReleasedInternals(button, x, y);
 		s_mainClass->onPointerReleased(button, pos.x(), pos.y());
 	}
-#endif
 
 	s_eventHappened = true;
 }
+
+#ifndef USES_SDL_INSTEAD_OF_GLUT
+
+void OpenGLApp_onPointerPressedOrReleasedTmp(int button, int state,int x, int y)
+{
+	switch(state)
+	{
+	case GLUT_WHEEL_UP:OpenGLApp_onPointerPressedOrReleased(button, MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_UP,x,y);break;
+	case GLUT_WHEEL_DOWN:OpenGLApp_onPointerPressedOrReleased(button, MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_DOWN,x,y);break;
+	case GLUT_DOWN:OpenGLApp_onPointerPressedOrReleased(button, MouseManager::MouseEvent::MOUSE_EVENT_PRESS,x,y);break;
+	case GLUT_UP:OpenGLApp_onPointerPressedOrReleased(button, MouseManager::MouseEvent::MOUSE_EVENT_RELEASE,x,y);break;
+	default:Assert(false);
+	}
+}
+
+#endif
 
 //---------------------------------------------------------------------
 //functions called when the mouse is moved
@@ -135,10 +143,8 @@ void OpenGLAppControls::initControls(AbstractMainClass* mainClass)
 {	
 	this->resetEventHappenedToken(false);
 	s_mainClass = mainClass;
-#ifdef USES_SDL_INSTEAD_OF_GLUT
-	#pragma message("TODO OpenGLAppControls::initControls SDL")
-#else
-	glutMouseFunc(OpenGLApp_onPointerPressedOrReleased);
+#ifndef USES_SDL_INSTEAD_OF_GLUT
+	glutMouseFunc(OpenGLApp_onPointerPressedOrReleasedTmp);
 	glutMotionFunc(OpenGLApp_onPointerMovingActive);
     glutPassiveMotionFunc(OpenGLApp_onPointerMovingPassive);
 
@@ -148,6 +154,60 @@ void OpenGLAppControls::initControls(AbstractMainClass* mainClass)
     glutSpecialUpFunc(OpenGLApp_onKeyUpSpecial);
 #endif
 }
+
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+void OpenGLAppControls::manageSDLEvents()
+{
+	SDL_Event sdlEvent;
+	while( SDL_PollEvent(&sdlEvent) )
+	{    
+		char ALPHA[] = "abcdefghijklmnopqrstuvwxyz";
+		SDL_Keycode sym;
+		int c;
+		int xMouse, yMouse;
+		SDL_GetMouseState(&xMouse, &yMouse);
+		MouseManager::ButtonType buttonType;
+		switch( sdlEvent.type )
+		{			
+			// SDL_QUIT event (window close)
+			case SDL_QUIT:
+				exit(0);
+				break;
+
+			// Keyboard event
+			// Pass the event data onto PrintKeyInfo()
+			case SDL_KEYDOWN:
+				sym = sdlEvent.key.keysym.sym;
+				if(sym >= SDLK_a && sym <= SDLK_z) c = (int)ALPHA[sym - SDLK_a];
+				OpenGLApp_onKeyDown(c, xMouse, yMouse);
+				break;
+
+			case SDL_KEYUP:
+				sym = sdlEvent.key.keysym.sym;
+				if(sym >= SDLK_a && sym <= SDLK_z) c = (int)ALPHA[sym - SDLK_a];
+				OpenGLApp_onKeyUp(c, xMouse, yMouse);
+				break;
+
+			case SDL_MOUSEBUTTONDOWN:case SDL_MOUSEBUTTONUP:
+				switch(sdlEvent.button.button)
+				{
+				case SDL_BUTTON_LEFT: buttonType = MouseManager::MOUSE_LEFT_BUTTON;
+				case SDL_BUTTON_MIDDLE: buttonType = MouseManager::MOUSE_MIDDLE_BUTTON;
+				case SDL_BUTTON_RIGHT: buttonType = MouseManager::MOUSE_RIGHT_BUTTON;
+				}
+				OpenGLApp_onPointerPressedOrReleased(
+					(int)buttonType, 
+					sdlEvent.button.state == SDL_PRESSED ? MouseManager::MouseEvent::MOUSE_EVENT_PRESS : MouseManager::MouseEvent::MOUSE_EVENT_RELEASE, 
+					sdlEvent.button.x, sdlEvent.button.y);
+				break;
+
+			default:
+				break;
+		}
+
+	}
+}
+#endif
 
 //---------------------------------------------------------------------
 

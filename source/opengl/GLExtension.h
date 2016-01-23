@@ -1,6 +1,8 @@
 
 #include <iostream>
 
+#include "../../include/Utils.h"
+
 #include "opengl_inc.h"
 
 #ifndef WIN32
@@ -41,6 +43,12 @@ namespace GLExtension
 
 		// Get Extensions String
 		pszExtensions = glGetString( GL_EXTENSIONS );
+		if (pszExtensions == NULL)
+		{
+			outputln("WARNING: isExtensionSupported: GL_EXTENSIONS is NULL");
+			Assert(false);
+			return false;
+		}
 
 		// Search The Extensions String For An Exact Copy
 		pszStart = pszExtensions;

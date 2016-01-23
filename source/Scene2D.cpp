@@ -42,7 +42,7 @@ void Scene2D::drawRoundedRectangle(
 {
 #if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 #ifdef USES_SDL_INSTEAD_OF_GLUT
-	SDLDraw::drawRectangle(posLeftTop, posRightBottom, color);
+	SDLDraw::drawRectangle(posLeftTop, posRightBottom, color, fill);
 #else
 	OpenGLDraw::drawRectangle(posLeftTop, posRightBottom, color, borderSize, fill);
 #endif

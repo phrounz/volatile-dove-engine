@@ -8,6 +8,9 @@ class OpenGLAppControls
 public:
 	OpenGLAppControls() {}
 	void initControls(AbstractMainClass* mainClass);
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	void manageSDLEvents();
+#endif
 	bool hasPressedAltF4();
 
 	void resetEventHappenedToken(bool newValue);

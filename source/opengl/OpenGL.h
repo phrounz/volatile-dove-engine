@@ -30,6 +30,5 @@ private:
 	Int2 m_realWindowSize;
 
 	void* m_sdlWindow;
-	void* m_sdlSurface;
 	void* m_sdlRenderer;
 };
