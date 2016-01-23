@@ -2,9 +2,15 @@
 
 Each example project "Application_XXXXXX" may contain the following directories, which correspond to different targets/environments:
 
-### App_VS2008GL
+### App_VS2008GL or App_VS2008_OpenGL
  * Should work just by opening the solution with **Visual Studio 2008 Express** and 
    compiling+running it (with F5).
+ * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
+
+### App_VS2008_SDL
+ * Should work just by opening the solution with **Visual Studio 2008 Express** and 
+   compiling+running it (with F5).
+ * Add then the SDL.dll in "dependancy_libraries/lib/SDL2_Win32_Release" into "WorkDir"
  * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
 
 ### App_VS2013_DX_Desktop
