@@ -43,12 +43,18 @@ Each example project "Application_XXXXXX" may contain the following directories,
 
 ### App_VS2008_SDL (Highly experimental)
  * Open the solution with **Visual Studio 2008 Express** and compile (with F5).
- * comment "#define USES_SCENE3D" in "include/global_defines.h"
  * Add then the SDL.dll in "dependancy_libraries/lib/SDL2_Win32_Release" into "WorkDir"
  * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
 
 ### App_JS_Emscripten (Highly Experimental)
  * Requires perl.
-   * On Windows please install: http://strawberryperl.com/ and run compile.bat
-   * On Linux, run perl compile.pl
+   * On Windows please:
+     * Install [Emscripten SDK 1.35.0](https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-1.35.0-full-64bit.exe)
+     * Install http://strawberryperl.com/
+	 * run compile.bat in Application_[...]/App_JS_Emscripten/
+   * On Linux:
+```
+	cd common/JS_Emscripten/ && get_emsdk.sh && cd ../..
+	cd Application_[...]/App_JS_Emscripten/ && sh compile.sh
+```
    

@@ -5,10 +5,12 @@
 	#define USES_SDL_INSTEAD_OF_GLUT
 #else
 	#define USES_SOUND
-	#define USES_SCENE3D
+	#ifndef USES_SDL_INSTEAD_OF_GLUT
+		#define USES_SCENE3D
+	#endif
 #endif
 
-#ifdef USES_SDL_INSTEAD_OF_GLUT
+#if defined(USES_SDL_INSTEAD_OF_GLUT) && !defined(USES_JS_EMSCRIPTEN)
 	#pragma comment(lib, "SDL2")
 #endif
 

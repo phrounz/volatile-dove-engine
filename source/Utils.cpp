@@ -22,6 +22,7 @@
 #include <cstring>
 #include <cmath>
 #ifdef USES_JS_EMSCRIPTEN
+	#include <emscripten.h>
 	#include <cassert>
 #endif
 #if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
@@ -148,6 +149,10 @@ void dieErrorMessageToUser(const std::string& message)
 	/*#ifndef USES_WINDOWS8_METRO
 		system("PAUSE");
 	#endif*/
+#ifdef USES_JS_EMSCRIPTEN
+	emscripten_force_exit(1);
+#endif
+
  	exit(1);
 }
 

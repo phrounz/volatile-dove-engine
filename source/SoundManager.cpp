@@ -1,5 +1,10 @@
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
+#ifdef USES_JS_EMSCRIPTEN
+
+	#include "opengl/opengl_inc.h"
+	#include "opengl/Sound_Basic.h"
+
+#elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
 
 	#ifdef _MSC_VER
 		#include <al.h>
@@ -33,6 +38,10 @@
 
 std::map<std::string, Sound*> SoundManager::m_database;
 std::map<Sound*, int> SoundManager::m_counter;
+
+#ifdef USES_JS_EMSCRIPTEN
+SDL_AudioSpec s_wav_spec;
+#endif
 
 //------------------------------------------------------------------------------
 
@@ -77,7 +86,12 @@ Sound* SoundManager::loadSound2(const char* filename, bool alternative)
 			return reinterpret_cast<Sound*>(new Sound_Basic(new SoundFileReader(filename), m_soundPlayer));
 		}
 	#else
-		#error
+		Uint32 wav_length;
+		Uint8 *wav_buffer;
+
+		if (SDL_LoadWAV(filename, &s_wav_spec, &wav_buffer, &wav_length) == NULL)
+			AssertMessage(false, "Could not open WAV sound file");
+		return reinterpret_cast<Sound*>(new Sound_Basic(wav_length, wav_buffer));
 	#endif
 }
 
@@ -169,7 +183,8 @@ SoundManager::SoundManager(const char* argv0)
 
 #else
 
-	#error
+	if ( SDL_OpenAudio(&s_wav_spec, NULL) < 0 )
+	  AssertMessage(false, "Could not open audio");
 
 #endif
 }
@@ -191,7 +206,7 @@ SoundManager::~SoundManager()
 
 #else
 
-	#error
+	SDL_CloseAudio();
 
 #endif
 

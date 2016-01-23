@@ -34,16 +34,29 @@ struct D2D1_SIZE_U
 };
 
 #ifdef USES_SDL_INSTEAD_OF_GLUT
-SDL_Surface* SDL_CreateRGBASurface(int width, int height)
+SDL_Surface* SDL_CreateRGBASurfaceFrom(void* buffer, int width, int height)
 {
-	SDL_Surface* surface;
-	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-		surface = SDL_CreateRGBSurface(0,width, height,32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
-	#else
-		surface = SDL_CreateRGBSurface(0,width, height,32, 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
-	#endif
-	//SDL_SetAlpha(surface, SDL_SRCALPHA, SDL_ALPHA_OPAQUE);
-	return surface;
+	/*m_surface = SDL_CreateRGBASurface(m_size.width,m_size.height);
+	SDL_LockSurface(m_surface);
+	memcpy(m_surface->pixels, imageBuffer, m_surface->w * m_surface->h);
+	SDL_UnlockSurface(m_surface);*/
+
+	unsigned int rmask = 0, gmask = 0, bmask = 0, amask = 0;
+	if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
+	{
+		rmask = 0x000000ff;
+		gmask = 0x0000ff00;
+		bmask = 0x00ff0000;
+		amask = 0xff000000;
+	}
+	else
+	{
+		rmask = 0xff000000;
+		gmask = 0x00ff0000;
+		bmask = 0x0000ff00;
+		amask = 0x000000ff;
+	}
+	return SDL_CreateRGBSurfaceFrom(buffer, width, height, 32, width*4, rmask, gmask, bmask, amask);
 }
 #endif
 
@@ -64,27 +77,7 @@ struct ID2D1Bitmap
 		Assert(m_buffer != NULL);
 		memcpy(m_buffer, imageBuffer, m_size.width*m_size.height*4);
 #ifdef USES_SDL_INSTEAD_OF_GLUT
-		/*m_surface = SDL_CreateRGBASurface(m_size.width,m_size.height);
-		SDL_LockSurface(m_surface);
-		memcpy(m_surface->pixels, imageBuffer, m_surface->w * m_surface->h);
-		SDL_UnlockSurface(m_surface);*/
-
-		unsigned int rmask = 0, gmask = 0, bmask = 0, amask = 0;
-		if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
-		{
-			rmask = 0x000000ff;
-			gmask = 0x0000ff00;
-			bmask = 0x00ff0000;
-			amask = 0xff000000;
-		}
-		else
-		{
-			rmask = 0xff000000;
-			gmask = 0x00ff0000;
-			bmask = 0x0000ff00;
-			amask = 0x000000ff;
-		}
-		m_surface = SDL_CreateRGBSurfaceFrom((void*)imageBuffer, m_size.width,m_size.height, 32, m_size.width*4, rmask, gmask, bmask, amask);
+		m_surface = SDL_CreateRGBASurfaceFrom((void*)imageBuffer, m_size.width, m_size.height);
 		m_texture = SDLDraw::createTextureFromSurface(m_surface);
 
 #else
@@ -95,28 +88,7 @@ struct ID2D1Bitmap
 	void copyFromImage(const Image* image)
 	{
 #ifdef USES_SDL_INSTEAD_OF_GLUT
-		/*m_surface = SDL_CreateRGBASurface(m_size.width,m_size.height);
-		SDL_LockSurface(m_surface);
-		memcpy(m_surface->pixels, image->getDataPixels(), m_surface->w * m_surface->h);
-		SDL_UnlockSurface(m_surface);*/
-
-
-		unsigned int rmask = 0, gmask = 0, bmask = 0, amask = 0;
-		if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
-		{
-			rmask = 0x000000ff;
-			gmask = 0x0000ff00;
-			bmask = 0x00ff0000;
-			amask = 0xff000000;
-		}
-		else
-		{
-			rmask = 0xff000000;
-			gmask = 0x00ff0000;
-			bmask = 0x0000ff00;
-			amask = 0x000000ff;
-		}
-		m_surface = SDL_CreateRGBSurfaceFrom((void*)image->getDataPixels(), m_size.width,m_size.height, 32, m_size.width*4, rmask, gmask, bmask, amask);
+		m_surface = SDL_CreateRGBASurfaceFrom((void*)image->getDataPixels(), m_size.width, m_size.height);
 		m_texture = SDLDraw::createTextureFromSurface(m_surface);
 
 #else

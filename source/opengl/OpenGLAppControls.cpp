@@ -156,39 +156,74 @@ void OpenGLAppControls::initControls(AbstractMainClass* mainClass)
 }
 
 #ifdef USES_SDL_INSTEAD_OF_GLUT
+
+int convertSDLKeycodeToKeyboardManagerKeycode(SDL_Keycode sym)
+{
+#ifdef __EMSCRIPTEN__
+	#pragma message("TODO workaround emscripten SDL_Event keycode wrong")
+	//sym = t SDL_SCANCODE_TO_KEYCODE(sdlEvent.key.keysym.scancode);
+	//sym = SDL_GetKeyFromScancode(sdlEvent.key.keysym.scancode);
+	if (sym >= 4 && sym <= 4 + (int)SDLK_z-(int)SDLK_a)
+		sym += - 4 + (int)SDLK_a;
+	else if(sym == 39)
+		sym = SDLK_0;
+	else if(sym >= 30 && sym <= 38)
+		sym += - 30 + (int)SDLK_1;
+	else if(sym == 44)
+		sym = SDLK_SPACE;
+#endif
+	int c = 0;
+	//outputln((int)sym << ";" << (int)SDLK_a);
+	if(sym >= SDLK_a && sym <= SDLK_z)
+		c = (int)(sym - SDLK_a + (int)'a');
+	else if(sym >= SDLK_0 && sym <= SDLK_9)
+		c = (int)(sym - SDLK_0 + (int)'0');
+	else if(sym >= SDLK_F1 && sym <= SDLK_F12)
+		c = (int)(sym - SDLK_F1 + (int)KeyboardManager::KEY_F1);
+	else
+	{
+		switch(sym)
+		{
+		case SDLK_AC_BACK:c = KeyboardManager::KEY_BACKSPACE;break;
+		case SDLK_AC_FORWARD:c = KeyboardManager::KEY_PAGEUP;break;
+		//case SDLK_AC_HOME:break;
+		case SDLK_DELETE:c = KeyboardManager::KEY_DEL;break;
+		case SDLK_DOWN:c = KeyboardManager::KEY_DOWN;break;
+		//case SDLK_END:c = KeyboardManager::KEY_END;break;
+		case SDLK_ESCAPE:c = KeyboardManager::KEY_ESCAPE;break;
+		case SDLK_RETURN:c = KeyboardManager::KEY_ENTER;break;
+		case SDLK_SPACE:c = (int)' ';break;
+		default: AssertMessage(false, "key not supported");break;
+#pragma message("TODO add support for all remaining keys")
+		}
+	}
+	return c;
+}
+
 void OpenGLAppControls::manageSDLEvents()
 {
 	SDL_Event sdlEvent;
 	while( SDL_PollEvent(&sdlEvent) )
 	{    
-		char ALPHA[] = "abcdefghijklmnopqrstuvwxyz";
-		SDL_Keycode sym;
-		int c;
 		int xMouse, yMouse;
 		SDL_GetMouseState(&xMouse, &yMouse);
 		MouseManager::ButtonType buttonType;
 		switch( sdlEvent.type )
 		{			
-			// SDL_QUIT event (window close)
-			case SDL_QUIT:
+			case SDL_QUIT:// (window close)
 				exit(0);
 				break;
 
-			// Keyboard event
-			// Pass the event data onto PrintKeyInfo()
 			case SDL_KEYDOWN:
-				sym = sdlEvent.key.keysym.sym;
-				if(sym >= SDLK_a && sym <= SDLK_z) c = (int)ALPHA[sym - SDLK_a];
-				OpenGLApp_onKeyDown(c, xMouse, yMouse);
+				OpenGLApp_onKeyDown(convertSDLKeycodeToKeyboardManagerKeycode(sdlEvent.key.keysym.sym), xMouse, yMouse);
 				break;
 
 			case SDL_KEYUP:
-				sym = sdlEvent.key.keysym.sym;
-				if(sym >= SDLK_a && sym <= SDLK_z) c = (int)ALPHA[sym - SDLK_a];
-				OpenGLApp_onKeyUp(c, xMouse, yMouse);
+				OpenGLApp_onKeyUp(convertSDLKeycodeToKeyboardManagerKeycode(sdlEvent.key.keysym.sym), xMouse, yMouse);
 				break;
 
-			case SDL_MOUSEBUTTONDOWN:case SDL_MOUSEBUTTONUP:
+			case SDL_MOUSEBUTTONDOWN:
+			case SDL_MOUSEBUTTONUP:
 				switch(sdlEvent.button.button)
 				{
 				case SDL_BUTTON_LEFT: buttonType = MouseManager::MOUSE_LEFT_BUTTON;
@@ -199,6 +234,13 @@ void OpenGLAppControls::manageSDLEvents()
 					(int)buttonType, 
 					sdlEvent.button.state == SDL_PRESSED ? MouseManager::MouseEvent::MOUSE_EVENT_PRESS : MouseManager::MouseEvent::MOUSE_EVENT_RELEASE, 
 					sdlEvent.button.x, sdlEvent.button.y);
+				break;
+
+			case SDL_MOUSEMOTION:
+				if (sdlEvent.motion.state == SDL_PRESSED)
+					OpenGLApp_onPointerMovingActive(sdlEvent.motion.x, sdlEvent.motion.y);
+				else
+					OpenGLApp_onPointerMovingPassive(sdlEvent.motion.x, sdlEvent.motion.y);
 				break;
 
 			default:

@@ -126,6 +126,7 @@ void Scene2D::clearScreen(const Color& color)
 {
 #if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 #ifdef USES_SDL_INSTEAD_OF_GLUT
+	SDLDraw::clearScreen(color);
 #else
 	OpenGLDraw::clearScreen(color);
 #endif

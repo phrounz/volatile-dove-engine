@@ -25,6 +25,12 @@ SDL_Texture* SDLDraw::createTextureFromSurface(const SDL_Surface* surface)
 	return SDL_CreateTextureFromSurface(s_sdlRenderer, (SDL_Surface*)surface);
 }
 
+void SDLDraw::clearScreen(const Color& color)
+{
+	SDL_SetRenderDrawColor(s_sdlRenderer, color.r(), color.g(), color.b(), color.a());
+	SDL_RenderClear(s_sdlRenderer);
+}
+
 void SDLDraw::drawRectangle(const Int2& pos1, const Int2& pos2, const Color& color, bool fill)
 {
 	SDL_SetRenderDrawColor(s_sdlRenderer, color.r(), color.g(), color.b(), color.a());
@@ -50,21 +56,22 @@ void SDLDraw::drawTexture(const SDL_Texture* texture, int pixelPosX, int pixelPo
 	destRect.y = pixelPosY;
 	destRect.w = width;
 	destRect.h = height;
-	//SDL_BlitSurface((SDL_Surface*)image, NULL, SDL_GetWindowSurface(s_sdlWindow), &destRect);
-	//drawLine(Int2(10,10), Int2(100,100), CoreUtils::colorWhite);
-	// cast removing constness below, hate this SDL crap
+	// beware, cast removing constness below, I hate this SDL crap
 	SDL_RenderCopy(s_sdlRenderer, (SDL_Texture*)texture, NULL, &destRect);
-
 }
 
 
 void SDLDraw::drawFragmentOfTexture(const SDL_Texture* texture, int pixelPosX,int pixelPosY,float x1,float y1,float x2,float y2, int width,int height, float opacity)
 {
+	int w, h;
+	// beware, cast removing constness below, I hate this SDL crap
+	SDL_QueryTexture((SDL_Texture*)texture, NULL, NULL, &w, &h);
+
 	SDL_Rect srcRect;
-	srcRect.x = x1;
-	srcRect.y = y2;
-	srcRect.w = width;
-	srcRect.h = height;
+	srcRect.x = x1 * w;
+	srcRect.y = y1 * h;
+	srcRect.w = x2 * w - srcRect.x;
+	srcRect.h = y2 * h - srcRect.y;
 
 	SDL_Rect destRect;
 	destRect.x = pixelPosX;
@@ -74,8 +81,8 @@ void SDLDraw::drawFragmentOfTexture(const SDL_Texture* texture, int pixelPosX,in
 
 	#pragma message("TODO SDLDraw::drawFragmentOfTexture srcRect")
 
-	// cast removing constness below, hate this SDL crap
-	//SDL_BlitSurface((SDL_Surface*)image, NULL, SDL_GetWindowSurface(s_sdlWindow), &destRect);
+	// beware, cast removing constness below, I hate this SDL crap
+	SDL_RenderCopy(s_sdlRenderer, (SDL_Texture*)texture, &srcRect, &destRect);
 }
 
 void SDLDraw::drawTextureRotated(const SDL_Texture* texture, 

@@ -1,4 +1,6 @@
 
+#if !defined(USES_JS_EMSCRIPTEN)
+
 #if defined(USES_WINDOWS_OPENGL)
 	#include <al.h>
 	#include <alut.h>
@@ -22,7 +24,6 @@
 
 namespace SoundLoad
 {
-
 //------------------------------------------------------------------------------
 // This function loads a .ogg file into a memory buffer and returns
 // the format and frequency.
@@ -169,3 +170,5 @@ void loadSound(const char* fileName, unsigned int* outBufferId, unsigned int* ou
 }
 
 } //namespace SoundLoad
+
+#endif //!defined(USES_JS_EMSCRIPTEN)

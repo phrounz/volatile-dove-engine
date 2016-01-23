@@ -17,6 +17,7 @@ namespace SDLDraw
 	void setupSDLInfos(void* sdlWindow, void* sdlRenderer);
 	SDL_Texture* createTextureFromSurface(const SDL_Surface* surface);
 
+	void clearScreen(const Color& color);
 	void drawRectangle(const Int2& pos1, const Int2& pos2, const Color& color, bool fill);
 	void drawLine(const Int2& pos1, const Int2& pos2, const Color& color);
 	void drawTexture(const SDL_Texture* texture, int pixelPosX, int pixelPosY, int width,int height);
