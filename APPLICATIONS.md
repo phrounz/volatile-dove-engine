@@ -42,8 +42,8 @@ Each example project "Application_XXXXXX" may contain the following directories,
    * Kate (part of KDE environment)
 
 ### App_VS2008_SDL (Highly experimental)
- * Should work just by opening the solution with **Visual Studio 2008 Express** and 
-   compiling+running it (with F5).
+ * Open the solution with **Visual Studio 2008 Express** and compile (with F5).
+ * comment "#define USES_SCENE3D" in "include/global_defines.h"
  * Add then the SDL.dll in "dependancy_libraries/lib/SDL2_Win32_Release" into "WorkDir"
  * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
 
