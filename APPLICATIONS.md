@@ -51,10 +51,12 @@ Each example project "Application_XXXXXX" may contain the following directories,
    * On Windows please:
      * Install [Emscripten SDK 1.35.0](https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-1.35.0-full-64bit.exe)
      * Install http://strawberryperl.com/
-	 * run compile.bat in Application_[...]/App_JS_Emscripten/
+	 * Run compile.bat in Application_[...]/App_JS_Emscripten/
+	 * Open output.html in your browser
    * On Linux:
 ```
 	cd common/JS_Emscripten/ && get_emsdk.sh && cd ../..
 	cd Application_[...]/App_JS_Emscripten/ && sh compile.sh
+	# Open output.html in your browser
 ```
    
