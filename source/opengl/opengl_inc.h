@@ -8,9 +8,11 @@
 	#define GL_GLEXT_PROTOTYPES
 
 	#ifdef USES_SDL_INSTEAD_OF_GLUT
-		#include "SDL/SDL.h"
-		#include "SDL/SDL_image.h"
-		#include "SDL/SDL_opengl.h"
+		#include <SDL/SDL.h>
+		#include <SDL/SDL_image.h>
+		#include <SDL/SDL_opengl.h>
+		#include <GL/gl.h>
+		#include <GL/glu.h>
 	#else
 		#include <GL/gl.h>
 		#include <GL/glu.h>
@@ -60,6 +62,11 @@
 	#  define GLUT_WHEEL_UP   3
 	#  define GLUT_WHEEL_DOWN 4
 	#endif
+#endif
+
+#ifdef USES_SDL_FOR_SOUND
+	#include "SDL/SDL_mixer.h"
+	#include "SDL/SDL_audio.h"
 #endif
 
 #endif //opengl_inc_h_INCLUDED

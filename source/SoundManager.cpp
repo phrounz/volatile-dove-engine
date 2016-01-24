@@ -4,7 +4,6 @@
 #ifdef USES_SDL_FOR_SOUND
 
 	#include "opengl/opengl_inc.h"
-	#include "SDL/SDL_audio.h"
 	#include "opengl/Sound_Basic.h"
 
 #elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
@@ -42,10 +41,6 @@
 std::map<std::string, Sound*> SoundManager::m_database;
 std::map<Sound*, int> SoundManager::m_counter;
 
-#ifdef USES_SDL_FOR_SOUND
-SDL_AudioSpec s_wavSpec;
-#endif
-
 //------------------------------------------------------------------------------
 
 Sound* SoundManager::loadSound(const char* filename, bool alternative)
@@ -73,11 +68,10 @@ Sound* SoundManager::loadSound2(const char* filename, bool alternative)
 {
 	outputln(std::string("Loading sound:    ") + filename << " (shared)");
 #if defined(USES_SDL_FOR_SOUND)
-	uint32_t wavLength;
-	uint8_t* wavBuffer;
-	if (SDL_LoadWAV(filename, &s_wavSpec, &wavBuffer, &wavLength) == NULL)
-		AssertMessage(false, "Could not open WAV sound file");
-	return reinterpret_cast<Sound*>(new Sound_Basic(wavLength, wavBuffer));
+	
+	Mix_Chunk* sound = Mix_LoadWAV( filename );
+	if (sound == NULL) AssertMessage(false, "Could not open WAV sound file");
+	return reinterpret_cast<Sound*>(new Sound_Basic(sound));
 #elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
 	unsigned int bufferID;
 	unsigned int sourceID;
@@ -171,8 +165,10 @@ SoundManager::SoundManager(const char* argv0)
 {
 #if defined(USES_SDL_FOR_SOUND)
 
-	if ( SDL_OpenAudio(&s_wavSpec, NULL) < 0 )
-	  AssertMessage(false, "Could not open audio");
+	 if (Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1)
+	 {
+		 Assert(false);
+	 }
 
 #elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
 
@@ -201,7 +197,13 @@ SoundManager::~SoundManager()
 {
 #if defined(USES_SDL_FOR_SOUND)
 
-	SDL_CloseAudio();
+	iterateMapConst(m_database, std::string, Sound*)
+	{
+		outputln(std::string("Unloading sound (shared): ") + (*it).first);
+		this->removeSound2((*it).second);
+		m_database.erase((*it).first);
+	}
+	Mix_CloseAudio();
 
 #elif defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
 

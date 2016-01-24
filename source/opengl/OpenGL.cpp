@@ -126,11 +126,13 @@ void OpenGL::set2DMode()
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
-#ifdef USES_JS_EMSCRIPTEN
+
 	//glOrtho(0.0, (double)m_realWindowSize.x() / (double)m_ppp.x(), (double)m_realWindowSize.y() / (double)m_ppp.y(), 0.0, 0.0, 1.0 );
-#else
+	//gluOrtho2D(0.0,(double)m_realWindowSize.x() / (double)m_ppp.x(), (double)m_realWindowSize.y() / (double)m_ppp.y(),0.0);
+#ifndef USES_JS_EMSCRIPTEN
 	glPolygonMode(GL_BACK, GL_FILL);
 	glPolygonMode(GL_FRONT, GL_POINT);
+#endif
 
 	glMatrixMode(GL_PROJECTION);
 
@@ -140,7 +142,6 @@ void OpenGL::set2DMode()
     glMatrixMode(GL_MODELVIEW);
 
     glLoadIdentity();
-#endif
 }
 
 //---------------------------------------------------------------------
@@ -343,6 +344,11 @@ void OpenGL::setPixelPerPoint(const Int2& windowRealSize, const Float2& ppp, con
 
 OpenGL::~OpenGL()
 {
+#ifdef USES_SDL_INSTEAD_OF_GLUT
+	SDL_DestroyRenderer((SDL_Renderer*)m_sdlRenderer);
+	SDL_DestroyWindow((SDL_Window*)m_sdlWindow);
+	SDL_Quit();
+#endif
 }
 
 //---------------------------------------------------------------------

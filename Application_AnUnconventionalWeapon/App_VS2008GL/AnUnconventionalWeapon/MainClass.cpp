@@ -21,9 +21,13 @@ namespace
 {
 	const int WINDOW_WIDTH = 1600;
 	const int WINDOW_HEIGHT = 768;
-
+#ifdef USES_JS_EMSCRIPTEN
+	const int INIT_REAL_WINDOW_WIDTH = 1600;
+	const int INIT_REAL_WINDOW_HEIGHT = 768;
+#else
 	const int INIT_REAL_WINDOW_WIDTH = 800;
 	const int INIT_REAL_WINDOW_HEIGHT = 384;
+#endif
 
 	const bool IS_FULLSCREEN = false;
 

@@ -21,7 +21,11 @@ bool Sound_Basic::isLoaded() const { return true;}
 void Sound_Basic::play(bool blockUntilEnd)
 {
 #ifdef USES_SDL_FOR_SOUND
-	#pragma message("TODO Sound_Basic::isPlaying")
+	m_lastChannel = Mix_PlayChannel(-1, m_mixChunk, 0);
+	if( m_lastChannel == -1)
+    {
+        Assert(false);
+    }
 	SDL_PauseAudio(0);
 #else
     // Finally, play the sound!!!
@@ -43,7 +47,7 @@ void Sound_Basic::play(bool blockUntilEnd)
 void Sound_Basic::stop()
 {
 #ifdef USES_SDL_FOR_SOUND
-	#pragma message("TODO Sound_Basic::isPlaying")
+	Mix_HaltChannel(m_lastChannel);
 #else
     alSourceStop(sourceID);
 #endif
@@ -52,8 +56,7 @@ void Sound_Basic::stop()
 bool Sound_Basic::isPlaying()
 {
 #ifdef USES_SDL_FOR_SOUND
-	#pragma message("TODO Sound_Basic::isPlaying")
-	return false;
+	return (Mix_Playing(m_lastChannel) == 1);
 #else
     ALint state;
     alGetSourcei(sourceID, AL_SOURCE_STATE, &state);
@@ -64,7 +67,8 @@ bool Sound_Basic::isPlaying()
 void Sound_Basic::setVolume(unsigned char vol)
 {
 #ifdef USES_SDL_FOR_SOUND
-	#pragma message("TODO Sound_Basic::setVolume")
+	m_volume = vol;
+	Mix_Volume(m_lastChannel, vol * MIX_MAX_VOLUME / 255);
 #else
 	m_volume = vol;
 	alSourcef(sourceID, AL_GAIN, vol / 256.f);
@@ -80,7 +84,9 @@ unsigned char Sound_Basic::getVolume() const
 Sound_Basic::~Sound_Basic()
 {
 #ifdef USES_SDL_FOR_SOUND
-	SDL_FreeWAV(m_wav_buffer);
+	if (this->isPlaying())
+		this->stop();
+	Mix_FreeChunk(m_mixChunk);
 #else
 	// http://gamedev.stackexchange.com/questions/25671/how-should-i-unbind-and-delete-openal-buffers
 	ALint sourceState;

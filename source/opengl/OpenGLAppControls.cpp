@@ -169,10 +169,19 @@ int convertSDLKeycodeToKeyboardManagerKeycode(SDL_Keycode sym)
 		sym = SDLK_0;
 	else if(sym >= 30 && sym <= 38)
 		sym += - 30 + (int)SDLK_1;
-	else if(sym == 40)
-		sym = SDLK_RETURN;
-	else if(sym == 79)
-		sym = SDLK_RIGHT;
+	else if(sym >= 58 && sym <= 69)
+		sym += - 58 + (int)SDLK_F1;
+	else if(sym == 40) sym = SDLK_RETURN;
+	else if(sym == 79) sym = SDLK_RIGHT;
+	else if(sym == 80) sym = SDLK_LEFT;
+	else if(sym == 82) sym = SDLK_UP;
+	else if(sym == 81) sym = SDLK_DOWN;
+	else if(sym == 73) sym = SDLK_INSERT;
+	else if(sym == 74) sym = SDLK_HOME;
+	else if(sym == 75) sym = SDLK_PAGEUP;
+	else if(sym == 76) sym = SDLK_DELETE;
+	else if(sym == 77) sym = SDLK_END;
+	else if(sym == 78) sym = SDLK_PAGEDOWN;
 #endif
 	int c = 0;
 	//outputln((int)sym << ";" << (int)SDLK_a);
@@ -189,13 +198,21 @@ int convertSDLKeycodeToKeyboardManagerKeycode(SDL_Keycode sym)
 		case SDLK_AC_BACK:c = KeyboardManager::KEY_BACKSPACE;break;
 		case SDLK_AC_FORWARD:c = KeyboardManager::KEY_PAGEUP;break;
 		//case SDLK_AC_HOME:break;
+		//case SDLK_INSERT:c = KeyboardManager::KEY_INSERT;break;
+		case SDLK_PAGEUP:c = KeyboardManager::KEY_PAGEUP;break;
 		case SDLK_DELETE:c = KeyboardManager::KEY_DEL;break;
-		case SDLK_DOWN:c = KeyboardManager::KEY_DOWN;break;
 		//case SDLK_END:c = KeyboardManager::KEY_END;break;
+		case SDLK_PAGEDOWN:c = KeyboardManager::KEY_PAGEDOWN;break;
 		case SDLK_ESCAPE:c = KeyboardManager::KEY_ESCAPE;break;
 		case SDLK_RETURN:c = KeyboardManager::KEY_ENTER;break;
 		case SDLK_SPACE:c = (int)' ';break;
-		default: AssertMessage(false, "key not supported");break;
+
+		case SDLK_LEFT:c = KeyboardManager::KEY_LEFT;break;
+		case SDLK_RIGHT:c = KeyboardManager::KEY_RIGHT;break;
+		case SDLK_UP:c = KeyboardManager::KEY_UP;break;
+		case SDLK_DOWN:c = KeyboardManager::KEY_DOWN;break;
+		default: outputln("key not supported: " << sym);break;
+		
 #pragma message("TODO add support for all remaining keys")
 		}
 	}

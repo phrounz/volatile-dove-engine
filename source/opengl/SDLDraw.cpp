@@ -79,8 +79,6 @@ void SDLDraw::drawFragmentOfTexture(const SDL_Texture* texture, int pixelPosX,in
 	destRect.w = width;
 	destRect.h = height;
 
-	#pragma message("TODO SDLDraw::drawFragmentOfTexture srcRect")
-
 	// beware, cast removing constness below, I hate this SDL crap
 	SDL_RenderCopy(s_sdlRenderer, (SDL_Texture*)texture, &srcRect, &destRect);
 }
@@ -88,7 +86,6 @@ void SDLDraw::drawFragmentOfTexture(const SDL_Texture* texture, int pixelPosX,in
 void SDLDraw::drawTextureRotated(const SDL_Texture* texture, 
 	int pixelPosX,int pixelPosY, int width,int height, float angleDegree,int rotationCenterX,int rotationCenterY, bool mirrorAxisX,bool mirrorAxisY)
 {
-	#pragma message("TODO SDLDraw::drawTextureRotated")
 	/*SDL_Rect srcRect;
 	srcRect.x = x1;
 	srcRect.y = y2;
@@ -101,8 +98,18 @@ void SDLDraw::drawTextureRotated(const SDL_Texture* texture,
 	destRect.w = width;
 	destRect.h = height;
 
+	#pragma message("TODO SDLDraw::drawTextureRotated")
+#ifdef USES_JS_EMSCRIPTEN
+	int flip = 0x00000000;
+#else
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
+	if (mirrorAxisX && mirrorAxisY) flip = (SDL_RendererFlip)(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL);
+	else if (mirrorAxisX) flip = SDL_FLIP_HORIZONTAL;
+	else if (mirrorAxisY) flip = SDL_FLIP_VERTICAL;
+#endif
 	// cast removing constness below, hate this SDL crap
-	//SDL_BlitSurface((SDL_Surface*)image, NULL, SDL_GetWindowSurface(s_sdlWindow), &destRect);
+	//SDL_RenderCopyEx(s_sdlRenderer, (SDL_Texture*)texture, NULL, &destRect, angleDegree, NULL, flip);
+	SDL_RenderCopy(s_sdlRenderer, (SDL_Texture*)texture, NULL, &destRect);
 }
 
 void SDLDraw::resetColor()
