@@ -83,7 +83,7 @@ void SDLDraw::drawFragmentOfTexture(const SDL_Texture* texture, int pixelPosX,in
 	SDL_RenderCopy(s_sdlRenderer, (SDL_Texture*)texture, &srcRect, &destRect);
 }
 
-void SDLDraw::drawTextureRotated(const SDL_Texture* texture, 
+void SDLDraw::drawTextureRotated(const SDL_Texture* texture,
 	int pixelPosX,int pixelPosY, int width,int height, float angleDegree,int rotationCenterX,int rotationCenterY, bool mirrorAxisX,bool mirrorAxisY)
 {
 	/*SDL_Rect srcRect;
