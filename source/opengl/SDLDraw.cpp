@@ -99,16 +99,12 @@ void SDLDraw::drawTextureRotated(const SDL_Texture* texture,
 	destRect.h = height;
 
 	#pragma message("TODO SDLDraw::drawTextureRotated")
-#ifdef USES_JS_EMSCRIPTEN
-	int flip = 0x00000000;
-#else
-	SDL_RendererFlip flip = SDL_FLIP_NONE;
+	/*SDL_RendererFlip flip = SDL_FLIP_NONE;
 	if (mirrorAxisX && mirrorAxisY) flip = (SDL_RendererFlip)(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL);
 	else if (mirrorAxisX) flip = SDL_FLIP_HORIZONTAL;
 	else if (mirrorAxisY) flip = SDL_FLIP_VERTICAL;
-#endif
 	// cast removing constness below, hate this SDL crap
-	//SDL_RenderCopyEx(s_sdlRenderer, (SDL_Texture*)texture, NULL, &destRect, angleDegree, NULL, flip);
+	SDL_RenderCopyEx(s_sdlRenderer, (SDL_Texture*)texture, NULL, &destRect, angleDegree, NULL, flip);*/
 	SDL_RenderCopy(s_sdlRenderer, (SDL_Texture*)texture, NULL, &destRect);
 }
 
