@@ -150,7 +150,7 @@ namespace FileUtil
 #if defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS_OPENGL)
 		FILE* file = NULL;
 		errno_t res = _wfopen_s(&file, getFullPathUnicode(fileLocalization, filepath).c_str(), L"wb");
-		Assert(res == 0);
+		AssertMessage(res == 0, (std::string("could not write file ") + filepath).c_str());
 		fwrite(buffer, size, 1, file);
 		fclose(file);
 #elif defined(USES_WINDOWS8_METRO)
@@ -173,8 +173,10 @@ namespace FileUtil
 		}
 #elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullpath = getFullPathUnicode(fileLocalization, filepath);
+		if (fileLocalization == FileUtil::APPLICATION_DATA_FOLDER && !fileExists(FileUtil::APPLICATION_DATA_FOLDER, "."))
+			FileUtil::mkdir(FileUtil::APPLICATION_DATA_FOLDER, "");
 		FILE* file = fopen(Utils::convertWStringToString(fullpath).c_str(), "wb");
-		Assert(file != NULL);
+		AssertMessage(file != NULL, (std::string("could not write file ") + Utils::convertWStringToString(fullpath)).c_str());
 		fwrite(buffer, size, 1, file);
 		fclose(file);
 #else

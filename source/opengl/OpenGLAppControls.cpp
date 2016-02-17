@@ -25,11 +25,11 @@ namespace
 void OpenGLApp_onPointerPressedOrReleased(int button, int state,int x, int y)
 {
 	Int2 pos = AppSetup::instance().convertRealPositionToVirtualPosition(Int2(x,y));
-	if (button==MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_UP)
+	if (state==MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_UP)
 	{
 		s_mainClass->onPointerWheelChanged(120, pos.x(), pos.y());
 	}
-	else if (button==MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_DOWN)
+	else if (state==MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_DOWN)
 	{
 		s_mainClass->onPointerWheelChanged(-120, pos.x(), pos.y());
 	}
@@ -51,13 +51,24 @@ void OpenGLApp_onPointerPressedOrReleased(int button, int state,int x, int y)
 
 void OpenGLApp_onPointerPressedOrReleasedTmp(int button, int state,int x, int y)
 {
-	switch(state)
+	if (button == GLUT_WHEEL_UP)
 	{
-	case GLUT_WHEEL_UP:OpenGLApp_onPointerPressedOrReleased(button, MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_UP,x,y);break;
-	case GLUT_WHEEL_DOWN:OpenGLApp_onPointerPressedOrReleased(button, MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_DOWN,x,y);break;
-	case GLUT_DOWN:OpenGLApp_onPointerPressedOrReleased(button, MouseManager::MouseEvent::MOUSE_EVENT_PRESS,x,y);break;
-	case GLUT_UP:OpenGLApp_onPointerPressedOrReleased(button, MouseManager::MouseEvent::MOUSE_EVENT_RELEASE,x,y);break;
-	default:Assert(false);
+		if (state == 0) OpenGLApp_onPointerPressedOrReleased(-1, MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_UP,x,y);
+	}
+	else if (button == GLUT_WHEEL_DOWN)
+	{
+		if (state == 0) OpenGLApp_onPointerPressedOrReleased(-1, MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_DOWN,x,y);
+	}
+	else
+	{
+		switch(state)
+		{
+		//case GLUT_WHEEL_UP:OpenGLApp_onPointerPressedOrReleased(-1, MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_UP,x,y);break;
+		//case GLUT_WHEEL_DOWN:OpenGLApp_onPointerPressedOrReleased(-1, MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_DOWN,x,y);break;
+		case GLUT_DOWN:OpenGLApp_onPointerPressedOrReleased(button, MouseManager::MouseEvent::MOUSE_EVENT_PRESS,x,y);break;
+		case GLUT_UP:OpenGLApp_onPointerPressedOrReleased(button, MouseManager::MouseEvent::MOUSE_EVENT_RELEASE,x,y);break;
+		default:Assert(false);
+		}
 	}
 }
 
@@ -140,18 +151,18 @@ void OpenGLApp_onKeyUpSpecial(int key, int x, int y)
 //--------------------------------------------------------------------------------------------
 
 void OpenGLAppControls::initControls(AbstractMainClass* mainClass)
-{	
+{
 	this->resetEventHappenedToken(false);
 	s_mainClass = mainClass;
 #ifndef USES_SDL_INSTEAD_OF_GLUT
 	glutMouseFunc(OpenGLApp_onPointerPressedOrReleasedTmp);
 	glutMotionFunc(OpenGLApp_onPointerMovingActive);
-    glutPassiveMotionFunc(OpenGLApp_onPointerMovingPassive);
+	glutPassiveMotionFunc(OpenGLApp_onPointerMovingPassive);
 
 	glutKeyboardFunc(OpenGLApp_onKeyDown);
 	glutKeyboardUpFunc(OpenGLApp_onKeyUp);
-    glutSpecialFunc(OpenGLApp_onKeyDownSpecial);
-    glutSpecialUpFunc(OpenGLApp_onKeyUpSpecial);
+  glutSpecialFunc(OpenGLApp_onKeyDownSpecial);
+  glutSpecialUpFunc(OpenGLApp_onKeyUpSpecial);
 #endif
 }
 
@@ -212,7 +223,7 @@ int convertSDLKeycodeToKeyboardManagerKeycode(SDL_Keycode sym)
 		case SDLK_UP:c = KeyboardManager::KEY_UP;break;
 		case SDLK_DOWN:c = KeyboardManager::KEY_DOWN;break;
 		default: outputln("key not supported: " << sym);break;
-		
+
 #pragma message("TODO add support for all remaining keys")
 		}
 	}
@@ -223,12 +234,12 @@ void OpenGLAppControls::manageSDLEvents()
 {
 	SDL_Event sdlEvent;
 	while( SDL_PollEvent(&sdlEvent) )
-	{    
+	{
 		int xMouse, yMouse;
 		SDL_GetMouseState(&xMouse, &yMouse);
 		MouseManager::ButtonType buttonType;
 		switch( sdlEvent.type )
-		{			
+		{
 			case SDL_QUIT:// (window close)
 				exit(0);
 				break;
@@ -250,8 +261,8 @@ void OpenGLAppControls::manageSDLEvents()
 				case SDL_BUTTON_RIGHT: buttonType = MouseManager::MOUSE_RIGHT_BUTTON;
 				}
 				OpenGLApp_onPointerPressedOrReleased(
-					(int)buttonType, 
-					sdlEvent.button.state == SDL_PRESSED ? MouseManager::MouseEvent::MOUSE_EVENT_PRESS : MouseManager::MouseEvent::MOUSE_EVENT_RELEASE, 
+					(int)buttonType,
+					sdlEvent.button.state == SDL_PRESSED ? MouseManager::MouseEvent::MOUSE_EVENT_PRESS : MouseManager::MouseEvent::MOUSE_EVENT_RELEASE,
 					sdlEvent.button.x, sdlEvent.button.y);
 				break;
 

@@ -35,10 +35,23 @@ struct float4
 {
 	float4() {}
 	float4(float px, float py, float pz, float pw) : x(px), y(py), z(pz), w(pw) {}
-	float x;
-	float y;
-	float z;
-	float w;
+	union
+	{
+		struct
+		{
+			float x;
+			float y;
+			float z;
+			float w;
+		};
+		struct
+		{
+			float r;
+			float g;
+			float b;
+			float a;
+		};
+	};
 };
 
 struct float4x4

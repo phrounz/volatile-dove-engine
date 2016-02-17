@@ -126,6 +126,17 @@ void JoystickManager::vibrate(PlayerId playerId, float vibrationLeft, float vibr
 
 //---------------------------------------------------------------------
 
+#else
+
+bool JoystickManager::isConnected(PlayerId playerId) const { return false; }
+bool JoystickManager::isPressed(PlayerId playerId, Button button) const { return false; }
+float JoystickManager::getIntensityStick(PlayerId playerId, Stick stick) const { return 0.f; }
+void JoystickManager::vibrate(PlayerId playerId, float vibrationLeft, float vibrationRight) {}
+
+#endif
+
+//---------------------------------------------------------------------
+
 JoystickManager::Button JoystickManager::convertStrToButton(const std::string& str)
 {
 	if      (str == "A") return BUTTON_A;
@@ -164,12 +175,3 @@ JoystickManager::Button JoystickManager::convertStrToButton(const std::string& s
 }
 
 //---------------------------------------------------------------------
-
-#else
-
-bool JoystickManager::isConnected(PlayerId playerId) const { return false; }
-bool JoystickManager::isPressed(PlayerId playerId, Button button) const { return false; }
-float JoystickManager::getIntensityStick(PlayerId playerId, Stick stick) const { return 0.f; }
-void JoystickManager::vibrate(PlayerId playerId, float vibrationLeft, float vibrationRight) {}
-
-#endif
