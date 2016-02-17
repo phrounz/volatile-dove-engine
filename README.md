@@ -16,6 +16,9 @@ See [LICENSE.txt](./LICENSE.txt) to know the engine license. Read it before use!
    you build, in HLSL (DirectX) and GLSL (OpenGL) languages.
 
  * [source](./source) are the Volatile Dove Engine "source" files
+ 
+ * [common](./common) contains files common to several projects (Application_... directories), 
+   for example compilation procedures for a given target platform common to several projects.
 
  * [Doxyfile](./Doxyfile) is the Doxygen file, which requires 
   [Doxygen](http://www.stack.nl/~dimitri/doxygen/),
