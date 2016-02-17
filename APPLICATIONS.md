@@ -24,12 +24,12 @@ Each example project "Application_XXXXXX" may contain the following directories,
 
 ### App_Linux (Experimental)
  * Should work on **Ubuntu 14.04 Desktop LTS 32 bits**.
- * Install the missing packages listed in install.sh, compile with "make", and
+ * Install the missing packages listed in common/Linux/install_dependancies.sh, compile with "make", and
    run the executable in ./WorkDir.
  * Or said otherwise, open the terminal and type the commands:
 ```
-   cd common/Linux/ && sudo sh install_dependancies.sh && cd ../..
    cd [your-download-or-git-directory-here]/volatile-dove-engine/
+   cd common/Linux/ && sudo sh install_dependancies.sh && cd ../..
    cd Application_[...]/App_Linux/
    make
    cd ../WorkDir/
@@ -48,15 +48,14 @@ Each example project "Application_XXXXXX" may contain the following directories,
 
 ### App_JS_Emscripten (Highly Experimental)
  * Requires perl.
-   * On Windows please:
-     * Install [Emscripten SDK 1.35.0](https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-1.35.0-full-64bit.exe)
-     * Install http://strawberryperl.com/
-	 * Run compile.bat in Application_[...]/App_JS_Emscripten/
-	 * Open output.html in your browser
-   * On Linux:
+ * On Windows please:
+   * Install [Emscripten SDK 1.35.0](https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-1.35.0-full-64bit.exe)
+   * Install http://strawberryperl.com/
+   * Run compile.bat in Application_[...]/App_JS_Emscripten/
+   * Open output.html in your browser
+ * On Linux:
 ```
 	cd common/JS_Emscripten/ && get_emsdk.sh && cd ../..
 	cd Application_[...]/App_JS_Emscripten/ && sh compile.sh
 	# Open output.html in your browser
 ```
-   
