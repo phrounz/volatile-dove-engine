@@ -63,8 +63,6 @@ void OpenGLApp_onPointerPressedOrReleasedTmp(int button, int state,int x, int y)
 	{
 		switch(state)
 		{
-		//case GLUT_WHEEL_UP:OpenGLApp_onPointerPressedOrReleased(-1, MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_UP,x,y);break;
-		//case GLUT_WHEEL_DOWN:OpenGLApp_onPointerPressedOrReleased(-1, MouseManager::MouseEvent::MOUSE_EVENT_WHEEL_DOWN,x,y);break;
 		case GLUT_DOWN:OpenGLApp_onPointerPressedOrReleased(button, MouseManager::MouseEvent::MOUSE_EVENT_PRESS,x,y);break;
 		case GLUT_UP:OpenGLApp_onPointerPressedOrReleased(button, MouseManager::MouseEvent::MOUSE_EVENT_RELEASE,x,y);break;
 		default:Assert(false);
