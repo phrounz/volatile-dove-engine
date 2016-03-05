@@ -121,7 +121,21 @@ namespace Meshes3D
 		if (isOk)
 		{
 			if (isReverseFace)
-			{
+			{				
+				/*// fix tetures coordinates (2016-03)
+				if (firstQuad.basicVertex[1].tex.x > secondQuad.basicVertex[0].tex.x)
+				{
+					float dis = firstQuad.basicVertex[1].tex.x - secondQuad.basicVertex[0].tex.x;
+					secondQuad.basicVertex[1].tex.x += dis;
+					secondQuad.basicVertex[2].tex.x += dis;
+				}
+				else if (firstQuad.basicVertex[1].tex.y > secondQuad.basicVertex[0].tex.y)
+				{
+					float dis = firstQuad.basicVertex[1].tex.y - secondQuad.basicVertex[0].tex.y;
+					secondQuad.basicVertex[1].tex.y += dis;
+					secondQuad.basicVertex[2].tex.y += dis;
+				}*/
+
 				// note: v1 and v4 are already good
 
 				// firstQuad_v1 <- firstQuad_v1 (already done)
@@ -133,6 +147,20 @@ namespace Meshes3D
 			}
 			else
 			{
+				/*// fix textures coordinates (2016-03)
+				if (firstQuad.basicVertex[2].tex.x > secondQuad.basicVertex[1].tex.x)
+				{
+					float dis = firstQuad.basicVertex[2].tex.x - secondQuad.basicVertex[1].tex.x;
+					secondQuad.basicVertex[3].tex.x += dis;
+					secondQuad.basicVertex[2].tex.x += dis;
+				}
+				else if (firstQuad.basicVertex[2].tex.y > secondQuad.basicVertex[1].tex.y)
+				{
+					float dis = firstQuad.basicVertex[2].tex.y - secondQuad.basicVertex[1].tex.y;
+					secondQuad.basicVertex[3].tex.y += dis;
+					secondQuad.basicVertex[2].tex.y += dis;
+				}*/
+
 				// note: v1 and v2 are already good
 
 				// firstQuad_v1 <- firstQuad_v1 (already done)
