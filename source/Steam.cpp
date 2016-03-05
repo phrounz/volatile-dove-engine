@@ -211,7 +211,11 @@ namespace Steam
 	{
 		// if you're running in the debugger, only warnings (nSeverity >= 1) will be sent
 		// if you add -debug_steamapi to the command-line, a lot of extra informational messages will also be sent
+#ifdef USES_LINUX
+		printf(pchDebugText);
+#else
 		::OutputDebugStringA(pchDebugText);
+#endif
 
 		if (nSeverity >= 1)
 		{

@@ -20,6 +20,9 @@ $RECYCLE.BIN/
 # [Added] Linux object files
 *.o
 
+# [Added]
+Application_LovingCubeEngine
+
 # =========================
 # Operating System Files
 # =========================
