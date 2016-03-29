@@ -2,6 +2,10 @@
 Done by Francois Braud
 ******************************************************************/
 
+#ifdef _MSC_VER
+	#include <Windows.h>
+#endif
+
 #if !defined(USES_WINDOWS8_DESKTOP) && !defined(USES_WINDOWS8_METRO)
 	#include "opengl/opengl_inc.h"
 #endif
@@ -189,5 +193,78 @@ std::string KeyboardManager::convertFromKeyToStr(Key key)
 	return keysstr.str();
 }
 
+
+//-------------------------------------------------------------------------
+#ifdef _MSC_VER
+
+namespace
+{
+	// https://ubikann.com/2009/07/12/change-keyboard-from-english-to-french-at-login-screen-on-windows-7/
+
+	std::pair<std::string, std::string> getKeyboardLayoutNameAndIso3166Name(const HKL& hkl)
+	{
+		wchar_t szBuf[512];
+		DWORD temp = (UINT)hkl & 0xffffffff;
+		// http://stackoverflow.com/questions/12364659/retrieving-language-name-for-keyboard-layout-from-win-xp-os-using-win-api
+		GetLocaleInfo(MAKELCID(temp,SORT_DEFAULT), LOCALE_SLANGUAGE , szBuf, 512);
+		std::pair<std::string, std::string> output;
+		output.first = Utils::convertWStringToString(std::wstring(szBuf));
+		GetLocaleInfo(MAKELCID(temp,SORT_DEFAULT), LOCALE_SISO3166CTRYNAME, szBuf, 512);
+		output.second = Utils::convertWStringToString(std::wstring(szBuf));
+		return output;
+	}
+}
+
+std::pair<std::string, std::string> KeyboardManager::getCurrentKeyboardLayoutNameAndIso3166Name()
+{
+	return getKeyboardLayoutNameAndIso3166Name(GetKeyboardLayout(0));
+}
+
+bool KeyboardManager::activateKeyboardLayoutIfAvailable(const std::vector<std::string>& countryIso3166Codes)
+{
+	std::pair<std::string, std::string> currentKeyboardLayoutInfos = getCurrentKeyboardLayoutNameAndIso3166Name();
+	iterateVectorConst(countryIso3166Codes, std::string)
+	{
+		if ((*it) == currentKeyboardLayoutInfos.second)
+			return false;// not needed, we already use one of the requested layouts
+	}
+
+	HKL hkls[256];
+	int res = GetKeyboardLayoutList(255, hkls);
+	if (res > 0)
+	{
+		wchar_t szBuf[512];
+		for (int i = 0; i < res; i++) // switch between "active" keyboard layouts
+		{
+			std::pair<std::string, std::string> out = getKeyboardLayoutNameAndIso3166Name(hkls[i]);
+			//outputln("Keyboard:" << out.first << ";" << out.second);
+			iterateVectorConst(countryIso3166Codes, std::string)
+			{
+				if ((*it) == out.second)
+				{
+					HKL res2 = ActivateKeyboardLayout(hkls[i], 0);
+					if (res2 == 0)
+					{
+						outputln("ERROR: Failed changing keyboard layout");
+					}
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+#else
+std::pair<std::string, std::string> getCurrentKeyboardLayoutNameAndIso3166Name()
+{
+#pragma message("TODO getCurrentKeyboardLayoutNameAndIso3166Name")
+	return std::pair<std::string, std::string>();
+}
+bool activateKeyboardLayoutIfAvailable(const std::vector<std::string>& countryIso3166Codes)
+{
+#pragma message("TODO activateKeyboardLayoutIfAvailable")
+	return false;
+}
+#endif
 
 //---------------------------------------------------------------------

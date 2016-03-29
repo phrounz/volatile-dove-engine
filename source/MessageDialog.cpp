@@ -21,13 +21,14 @@ namespace
 class MessageDialogPrivate
 {
 public:
-	MessageDialogPrivate() :m_messageOnScreen(""), m_endTimeMessageOnScreen(-1), m_colorText(CoreUtils::colorWhite), m_colorBack(0, 0, 0, 150) {}
+	MessageDialogPrivate() :m_messageOnScreen(""), m_endTimeMessageOnScreen(-1), m_colorText(CoreUtils::colorWhite), m_colorBack(0, 0, 0, 150), m_sizeText(-1.f) {}
 	std::string m_messageOnScreen;
 	int64_t m_startTimeMessageOnScreen;
 	int64_t m_endTimeMessageOnScreen;
 	//Windows::UI::Popups::MessageDialog^ msg;
 	Color m_colorText;
 	Color m_colorBack;
+	float m_sizeText;
 };
 
 //---------------------------------------------------------------------------------------------
@@ -48,6 +49,13 @@ void MessageDialog::setColorText(const Color& color)
 void MessageDialog::setColorBack(const Color& color)
 {
 	messageDialogPrivate->m_colorBack = color;
+}
+
+//---------------------------------------------------------------------------------------------
+
+void MessageDialog::setSizeText(float sizeText)
+{
+	messageDialogPrivate->m_sizeText = sizeText;
 }
 
 //---------------------------------------------------------------------------------------------
@@ -74,7 +82,9 @@ void MessageDialog::draw(bool isSmallWindow) const
 			Int2 centerScreen = scene2D.getWindowSize()*0.5f;
 			Int2 rectHalf = RECTANGLE_MESSAGE_ON_SCREEN_HALF_SIZE*(isSmallWindow ? 0.5f : 1.f);
 			scene2D.drawRoundedRectangle(centerScreen - rectHalf, centerScreen + rectHalf, messageDialogPrivate->m_colorBack, 10, 0, true);
-			scene2D.drawText(NULL, messageDialogPrivate->m_messageOnScreen.c_str(), Int2(10, 10), isSmallWindow ? 15.f : 30.f, messageDialogPrivate->m_colorText, true, true);
+			scene2D.drawText(NULL, messageDialogPrivate->m_messageOnScreen.c_str(), Int2(10, 10), 
+				messageDialogPrivate->m_sizeText == -1.f ? (isSmallWindow ? 15.f : 30.f) : messageDialogPrivate->m_sizeText, 
+				messageDialogPrivate->m_colorText, true, true);
 			//Engine::instance().getScene2DMgr().drawText(NULL, "[ X ]", centerScreen-rectHalf, 30.f, colorWhite, false);
 			//std::stringstream sstr; sstr << sizeof(long) << ";" << Utils::getMillisecond() << "; " << m_endTimeMessageOnScreen;
 			//Engine::instance().getScene2DMgr().drawText(NULL, sstr.str().c_str(), Int2(10, 10), Button::isSmallWindow() ? 15.f : 30.f, colorWhite, true, true);

@@ -18,6 +18,7 @@ public:
 	void forceHideMessage();
 	void setColorText(const Color& color);
 	void setColorBack(const Color& color);
+	void setSizeText(float sizeText);
 	~MessageDialog();
 private:
 	MessageDialogPrivate* messageDialogPrivate;

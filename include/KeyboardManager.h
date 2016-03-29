@@ -2,6 +2,8 @@
 #define KeyboardManager_h_INCLUDED
 
 #include <string>
+#include <vector>
+#include <utility>
 
 typedef int Key;
 
@@ -106,6 +108,10 @@ static const Key KEY_NUMPAD_DIVIDE	= 274;
 	// - "F3" means F3 key
 	static Key convertFromStrToKey(const std::string& chars);
 	static std::string convertFromKeyToStr(Key key);
+
+	//! Functions related to keyboard layout
+	static std::pair<std::string, std::string> getCurrentKeyboardLayoutNameAndIso3166Name();
+	static bool activateKeyboardLayoutIfAvailable(const std::vector<std::string>& countryIso3166Codes);
 	
 private:
 
