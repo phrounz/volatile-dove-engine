@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use File::Basename qw/dirname basename/;
 use Cwd qw/getcwd/;
-use File::Copy::Recursive qw(rcopy);
+##use File::Copy::Recursive qw(rcopy);
 use File::Copy qw/copy/;
 
 use lib "./common/Windows_OpenGL/";
@@ -24,7 +24,7 @@ sub main()
 	print "Generating code\n";
 	my $DIRSRCS = "$project_name/code";
 	mkd($DIRSRCS);
-	writeFile("$DIRSRCS/MainClass.cpp", getStrMainClass());
+	writeFile("$DIRSRCS/MainClass.cpp", getStrMainClass()) unless (-f "$DIRSRCS/MainClass.cpp");
 	
 	print "Generating App_JS_Emscripten\n";
 	mkd("$project_name/App_JS_Emscripten");
@@ -70,10 +70,11 @@ sub main()
 		"$project_name/App_VS2008_SDL", 'App_VS2008_SDL');
 
 	print "Generating App_VS2013_DX_Desktop\n";
-	rcopy("./common/Windows_VS2013_DX_Desktop", "$project_name/App_VS2013_DX_Desktop");
+	copyr("./common/Windows_VS2013_DX_Desktop", "$project_name/App_VS2013_DX_Desktop");
 	
 	print "Generating App_VS2013_DX_Store\n";
-	rcopy("./common/Windows_VS2013_DX_Store", "$project_name/App_VS2013_DX_Store");
+	copyr("./common/Windows_VS2013_DX_Store", "$project_name/App_VS2013_DX_Store");
+	copyr("./common/Windows_VS2013_DX_Store/Assets", "$project_name/App_VS2013_DX_Store/Assets");
 	rename(
 		"$project_name/App_VS2013_DX_Store/copy_work_dir_to_appx.bat", 
 		"$project_name/copy_work_dir_to_appx.bat");
@@ -81,15 +82,18 @@ sub main()
 	print "Generating working directory\n";
 	mkd("$project_name/WorkDir");
 	mkd("$project_name/WorkDir/data");
-	copy("common/default_font.png", "$project_name/WorkDir/data/default_font.png");
+	unless (-f "$project_name/WorkDir/data/default_font.png")
+	{
+		copy("common/default_font.png", "$project_name/WorkDir/data/default_font.png");
+	}
 	foreach my $file (glob("dependancy_libraries/dll/*"))
 	{
 		copy($file, "$project_name/WorkDir/".basename($file));
 	}
-	rcopy("shaders", "$project_name/WorkDir/shaders");
-	mkdir("$project_name/WorkDirStore");
-	mkdir("$project_name/WorkDirStore/AppX");
-	mkdir("$project_name/WorkDirStore/AppX/data");
+	copyr("./shaders", "$project_name/WorkDir/shaders");
+	mkd("$project_name/WorkDirStore");
+	mkd("$project_name/WorkDirStore/AppX");
+	mkd("$project_name/WorkDirStore/AppX/data");
 	
 	print "Done.\n";
 	print "\n";
@@ -103,6 +107,15 @@ sub main()
 }
 
 exit main();
+
+#------------------------
+
+sub copyr($$)
+{
+	my ($src, $dest) = @_;
+	mkd($dest);
+	copy($_,"$dest/".basename($_)) foreach (glob("$src/*"));
+}
 
 #------------------------
 
