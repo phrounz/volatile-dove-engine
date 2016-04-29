@@ -95,6 +95,7 @@ int DesktopAppControls::convertKeyForKeyboardManager(size_t wParam)
 		//case VK_PAGEUP: return KEY_PAGEUP;
 		//case VK_PAGEDOWN: return KEY_PAGEDOWN;
 	case VK_ESCAPE:		return KeyboardManager::KEY_ESCAPE;
+	case VK_DELETE:		return KeyboardManager::KEY_DEL;
 	default: return static_cast<int>(wParam);
 	}
 }

@@ -1,3 +1,2 @@
 #!/bin/sh
-
-make -f ../../common/Linux/Makefile SRCS='$(wildcard ../MainClass*.cpp)' $*
+make -f ../../common/Linux/Makefile SRCS='$(wildcard ../code/*.cpp)' $*

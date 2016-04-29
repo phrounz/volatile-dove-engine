@@ -103,7 +103,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\source\*.cpp" />
     <ClCompile Include="..\..\source\directx\*.cpp" />
-    <ClCompile Include="..\MainClass.cpp" />
+    <ClCompile Include="..\code\*.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\shaders\SimplePixelShader.hlsl">
