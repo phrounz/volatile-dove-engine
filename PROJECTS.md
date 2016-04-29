@@ -34,7 +34,7 @@ Each example project "Application_XXXXXX" may contain the following directories,
    cd [your-download-or-git-directory-here]/volatile-dove-engine/
    cd common/Linux/ && sudo sh install_dependancies.sh && cd ../..
    cd Application_[...]/App_Linux/
-   make
+   sh compile.sh
    cd ../WorkDir/
    ./app
 ```
