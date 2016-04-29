@@ -25,6 +25,10 @@ See [LICENSE.txt](./LICENSE.txt) to know the engine license. Read it before use!
   This will automatically generates the documentation in the directory "html".
   It is currently set up to browse the "include" directory only.
 
+ * [generate_project.pl](./generate_project.pl) helps you to create a new empty project. It requires perl.
+	* On Linux, Perl should be already installed (if not, type: `apt-get install perl` or `yum install perl`.
+    * On Windows, install http://strawberryperl.com/
+
 ### Example projects
 
 See [APPLICATIONS.md](./APPLICATIONS.md) for description of how each example project is organized.
