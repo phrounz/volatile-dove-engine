@@ -10,10 +10,13 @@ use File::Copy qw/copy/;
 use lib "./common/Windows_OpenGL/";
 use generate_vs2008_project;
 
+#------------------------
+# main function
+
 sub main()
 {
 	print "Please enter a project name: ";
-	my $project_name = <>;
+	my $project_name = <>;# wait for user input
 	chomp $project_name;
 	die if ($project_name eq '');
 	print "\n";
@@ -90,7 +93,9 @@ sub main()
 	{
 		copy($file, "$project_name/WorkDir/".basename($file));
 	}
-	copyr("./shaders", "$project_name/WorkDir/shaders");
+	mkd("$project_name/WorkDir/shaders");
+	copy("./shaders/fragmentshader.glsl", "$project_name/WorkDir/shaders/fragmentshader.glsl");
+	copy("./shaders/vertexshader.glsl", "$project_name/WorkDir/shaders/vertexshader.glsl");
 	mkd("$project_name/WorkDirStore");
 	mkd("$project_name/WorkDirStore/AppX");
 	mkd("$project_name/WorkDirStore/AppX/data");
@@ -109,6 +114,7 @@ sub main()
 exit main();
 
 #------------------------
+# copy all files from <first-arg> into <second-arg> (create <second-arg> if it does not exist)
 
 sub copyr($$)
 {
@@ -118,14 +124,17 @@ sub copyr($$)
 }
 
 #------------------------
+# write a file <first-arg> with the content string <second-arg> (clobber it if it already exists)
 
 sub writeFile($$) { (open FDWTMP, ">".shift()) and (print FDWTMP shift()) and (close FDWTMP) }
 
 #------------------------
+# create a directory <arg> if it does not exist
 
 sub mkd($) { my $d = shift;unless (-d $d) { mkdir $d or die $d } }
 
 #------------------------
+# get the content of original MainClass.cpp
 
 sub getStrMainClass() {
 return '
