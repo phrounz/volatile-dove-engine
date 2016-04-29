@@ -21,10 +21,12 @@ LIBS := $(LIBPATHS) -lm -lGL -lGLU -lGLEW -lglut -lopenal -lalut -lpthread -lvor
 OPTIONS := -Wall -Wno-reorder -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-function $(MOPTION)
 DEFINES := -DUSES_LINUX
 
+ifdef STEAMSDK_PATH
 ifneq ($(STEAMSDK_PATH),"")
 INCS := $(INCS) -I"$(STEAMSDK_PATH)/sdk/public"
 LIBS := $(LIBS) -L"$(STEAMSDK_PATH)/sdk/public/steam/lib/linux$(ARCH)" -L"$(STEAMSDK_PATH)/sdk/redistributable_bin/linux$(ARCH)" -lsdkencryptedappticket -lsteam_api
 DEFINES := $(DEFINES) -DUSES_STEAM_INTEGRATION
+endif
 endif
 
 $(TARGET): $(OBJECTS)
