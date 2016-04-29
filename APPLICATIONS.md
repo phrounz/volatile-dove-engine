@@ -17,14 +17,17 @@ Each example project "Application_XXXXXX" may contain the following directories,
 ### App_VS2013_DX_WinStore
  * Requires to compile+run the solution with **Visual Studio 2013 Express For Windows**,
    * then stop debugging after it crashes,
-   * then copy WorkDir\default_font.png into the working directory,
+   * then 
+     * for "Application_EmptyProject": copy WorkDir\default_font.png into the working directory 
+     * for other projects: run copy_work_dir_to_appx.sh,
    * then run the solution again.
- * Working directory is the default one:
-   App_VS2013_DX_Store\Debug[or Release]\App_VS2013_DX_Store\AppX
+ * Working directory is:
+   * for "Application_EmptyProject":  the default one (App_VS2013_DX_Store\Debug[or Release]\App_VS2013_DX_Store\AppX)
+   * for other projects: WorkDirStore\AppX\
 
 ### App_Linux (Experimental)
  * Should work on **Ubuntu 14.04 Desktop LTS 32 bits**.
- * Install the missing packages listed in common/Linux/install_dependancies.sh, compile with "make", and
+ * Install the missing packages listed in common/Linux/install_dependancies.sh, compile with "sh compile.sh", and
    run the executable in ./WorkDir.
  * Or said otherwise, open the terminal and type the commands:
 ```
@@ -36,6 +39,7 @@ Each example project "Application_XXXXXX" may contain the following directories,
    ./app
 ```
  * Working directory is set to "WorkDir" (Included on Git. Contains the data files.)
+ * You can pass Makefile parameters to "sh compile.sh", for example "sh compile.sh clean" cleanups the output files
  * Note to beginners: to develop under Linux, I would suggest one of these editors:
    * Visual Studio Code for Linux (http://code.visualstudio.com)
    * Atom (http://atom.io)
@@ -47,7 +51,7 @@ Each example project "Application_XXXXXX" may contain the following directories,
  * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
 
 ### App_JS_Emscripten (Highly Experimental)
- * Requires perl.
+ * Requires Perl.
  * On Windows please:
    * Install [Emscripten SDK 1.35.0](https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-1.35.0-full-64bit.exe)
    * Install http://strawberryperl.com/

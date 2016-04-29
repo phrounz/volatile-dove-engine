@@ -41,7 +41,7 @@ sub main()
 	mkd("$application_name/App_Linux");
 	writeFile("$application_name/App_Linux/compile.sh", 
 		'#!/bin/sh'."\n"
-		.'make -f ../../common/Linux/Makefile SRCS=\'$(wildcard ../'.$DIRSRCS.'/*.cpp)\' $*'."\n"
+		.'make -f ../../common/Linux/Makefile SRCS=\'$(wildcard ../code/*.cpp)\' $*'."\n"
 		);
 
 	print "Generating App_VS2008_OpenGL/App_VS2008_SDL\n";
@@ -97,7 +97,7 @@ sub main()
 		."projects to '../WorkDir/' ('../WorkDirStore' for App_VS2013_DX_Store)\n";
 	print "\n";
 	
-	system('PAUSE');
+	system('PAUSE') unless ($^O eq 'linux');
 	
 	return 0;
 }
