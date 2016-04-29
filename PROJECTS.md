@@ -17,14 +17,10 @@ Each example project "Application_XXXXXX" may contain the following directories,
 ### App_VS2013_DX_WinStore
  * Requires to compile+run the solution with **Visual Studio 2013 Express For Windows**,
    * then stop debugging after it crashes,
-   * then 
-     * for "Application_EmptyProject": copy WorkDir\default_font.png into the working directory 
-     * for other projects: run copy_work_dir_to_appx.sh,
+   * then run copy_work_dir_to_appx.sh,
    * then run the solution again.
- * Working directory is:
-   * for "Application_EmptyProject":  the default one (App_VS2013_DX_Store\Debug[or Release]\App_VS2013_DX_Store\AppX)
-   * for other projects: WorkDirStore\AppX\
-
+ * Working directory is: WorkDirStore\AppX\
+   
 ### App_Linux (Experimental)
  * Should work on **Ubuntu 14.04 Desktop LTS 32 bits**.
  * Install the missing packages listed in common/Linux/install_dependancies.sh, compile with "sh compile.sh", and
