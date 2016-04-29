@@ -12,41 +12,41 @@ use generate_vs2008_project;
 
 sub main()
 {
-	print "Please enter your application name: ";
-	my $application_name = <>;
-	chomp $application_name;
-	die if ($application_name eq '');
+	print "Please enter a project name: ";
+	my $project_name = <>;
+	chomp $project_name;
+	die if ($project_name eq '');
 	print "\n";
 
-	print "Generating root directory '$application_name'\n";
-	mkd($application_name);
+	print "Generating root directory '$project_name'\n";
+	mkd($project_name);
 
 	print "Generating code\n";
-	my $DIRSRCS = "$application_name/code";
+	my $DIRSRCS = "$project_name/code";
 	mkd($DIRSRCS);
 	writeFile("$DIRSRCS/MainClass.cpp", getStrMainClass());
 	
 	print "Generating App_JS_Emscripten\n";
-	mkd("$application_name/App_JS_Emscripten");
-	writeFile("$application_name/App_JS_Emscripten/compile.bat", 
+	mkd("$project_name/App_JS_Emscripten");
+	writeFile("$project_name/App_JS_Emscripten/compile.bat", 
 		'@echo off'."\n"
 		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
 		.'PAUSE');
-	writeFile("$application_name/App_JS_Emscripten/compile.sh", 
+	writeFile("$project_name/App_JS_Emscripten/compile.sh", 
 		'#!/bin/sh'."\n\n"
 		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
 		);
 
 	print "Generating App_Linux\n";
-	mkd("$application_name/App_Linux");
-	writeFile("$application_name/App_Linux/compile.sh", 
+	mkd("$project_name/App_Linux");
+	writeFile("$project_name/App_Linux/compile.sh", 
 		'#!/bin/sh'."\n"
 		.'make -f ../../common/Linux/Makefile SRCS=\'$(wildcard ../code/*.cpp)\' $*'."\n"
 		);
 
 	print "Generating App_VS2008_OpenGL/App_VS2008_SDL\n";
-	mkd("$application_name/App_VS2008_OpenGL");
-	mkd("$application_name/App_VS2008_SDL");
+	mkd("$project_name/App_VS2008_OpenGL");
+	mkd("$project_name/App_VS2008_SDL");
 	my $COMWIN = "./common/Windows_OpenGL";
 	my $prevdir = getcwd;
 	chdir $COMWIN or die $COMWIN;
@@ -54,47 +54,47 @@ sub main()
 	#print "Source is: ".join(",", @l_code)."\n";
 	generate_vs2008_project::processFile(
 		"App_VS2008_OpenGL.vcproj.src",
-		"../../$application_name/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj",
+		"../../$project_name/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj",
 		\@l_code,
 		0);
 	generate_vs2008_project::processFile(
 		"App_VS2008_SDL.vcproj.src",
-		"../../$application_name/App_VS2008_SDL/App_VS2008_SDL.vcproj",
+		"../../$project_name/App_VS2008_SDL/App_VS2008_SDL.vcproj",
 		\@l_code,
 		1);
 	chdir $prevdir or die $prevdir;
 		
 	generate_vs2008_project::createSolutionFileVS2008(
-		"$application_name/App_VS2008_OpenGL", 'App_VS2008_OpenGL');
+		"$project_name/App_VS2008_OpenGL", 'App_VS2008_OpenGL');
 	generate_vs2008_project::createSolutionFileVS2008(
-		"$application_name/App_VS2008_SDL", 'App_VS2008_SDL');
+		"$project_name/App_VS2008_SDL", 'App_VS2008_SDL');
 
 	print "Generating App_VS2013_DX_Desktop\n";
-	rcopy("./common/Windows_VS2013_DX_Desktop", "$application_name/App_VS2013_DX_Desktop");
+	rcopy("./common/Windows_VS2013_DX_Desktop", "$project_name/App_VS2013_DX_Desktop");
 	
 	print "Generating App_VS2013_DX_Store\n";
-	rcopy("./common/Windows_VS2013_DX_Store", "$application_name/App_VS2013_DX_Store");
+	rcopy("./common/Windows_VS2013_DX_Store", "$project_name/App_VS2013_DX_Store");
 	rename(
-		"$application_name/App_VS2013_DX_Store/copy_work_dir_to_appx.bat", 
-		"$application_name/copy_work_dir_to_appx.bat");
+		"$project_name/App_VS2013_DX_Store/copy_work_dir_to_appx.bat", 
+		"$project_name/copy_work_dir_to_appx.bat");
 	
 	print "Generating working directory\n";
-	mkd("$application_name/WorkDir");
-	mkd("$application_name/WorkDir/data");
-	copy("common/default_font.png", "$application_name/WorkDir/data/default_font.png");
+	mkd("$project_name/WorkDir");
+	mkd("$project_name/WorkDir/data");
+	copy("common/default_font.png", "$project_name/WorkDir/data/default_font.png");
 	foreach my $file (glob("dependancy_libraries/dll/*"))
 	{
-		copy($file, "$application_name/WorkDir/".basename($file));
+		copy($file, "$project_name/WorkDir/".basename($file));
 	}
-	rcopy("shaders", "$application_name/WorkDir/shaders");
-	mkdir("$application_name/WorkDirStore");
-	mkdir("$application_name/WorkDirStore/AppX");
-	mkdir("$application_name/WorkDirStore/AppX/data");
+	rcopy("shaders", "$project_name/WorkDir/shaders");
+	mkdir("$project_name/WorkDirStore");
+	mkdir("$project_name/WorkDirStore/AppX");
+	mkdir("$project_name/WorkDirStore/AppX/data");
 	
 	print "Done.\n";
 	print "\n";
-	print "Don't forget to set up the Working Directory of Visual Studio \n"
-		."projects to '../WorkDir/' ('../WorkDirStore' for App_VS2013_DX_Store)\n";
+	print "Don't forget to set up the Working Directory of Visual Studio projects\n"
+		."to '../WorkDir/' ('../WorkDirStore' for App_VS2013_DX_Store)\n";
 	print "\n";
 	
 	system('PAUSE') unless ($^O eq 'linux');
