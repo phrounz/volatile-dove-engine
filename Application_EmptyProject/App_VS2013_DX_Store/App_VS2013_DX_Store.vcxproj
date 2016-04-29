@@ -94,6 +94,12 @@
   <PropertyGroup>
     <PackageCertificateKeyFile>App_VS2013_DX_Store_TemporaryKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>../WorkDirStore/</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>../WorkDirStore/</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
@@ -159,9 +165,9 @@
     <Image Include="Assets\SplashScreen.scale-100.png" />
   </ItemGroup>
   <ItemGroup>
-	<ClCompile Include="..\..\source\*.cpp" />
+    <ClCompile Include="..\..\source\*.cpp" />
     <ClCompile Include="..\..\source\directx\*.cpp" />
-    <ClCompile Include="..\MainClass.cpp" />
+    <ClCompile Include="..\code\*.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\shaders\SimplePixelShader.hlsl">

@@ -3,6 +3,10 @@
 #include <sstream>
 #include <cmath>
 
+#include "../../include/AbstractMainClass.h"
+#include "../../include/Sprite.h"
+#include "../../include/MathUtils.h"
+#include "../../include/Utils.h"
 
 namespace
 {
@@ -540,6 +544,7 @@ AbstractMainClass* createAbstractMainClass(
 	appSetupInfos.windowSize = Int2(2176/2, RADIUS_MVT/2);
 	appSetupInfos.virtualSize = Int2(2176, RADIUS_MVT);
 	appSetupInfos.automaticFitToWindowSize = true;
+	appSetupInfos.defaultFontImgPath = "data/default_font.png";
 	appSetupInfos.isFullscreen = false;
 	appSetupInfos.automaticFitToWindowSize;
 	appSetupInfos.windowTitle = "The Mad Circle For The Glorious Dice Tower - A Ludum Dare 34 entry by Volatile Dove";
