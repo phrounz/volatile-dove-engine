@@ -87,8 +87,6 @@ namespace Steam
 		m_iAppID = SteamUtils()->GetAppID();
 		m_pAchievements = Achievements;
 		m_iNumAchievements = NumAchievements;
-		bool res = RequestStats();
-		Assert(res);
 	}
 
 	bool CSteamAchievements::RequestStats()
@@ -271,6 +269,14 @@ namespace Steam
 
 		// Create the SteamAchievements object if Steam was successfully initialized
 		g_SteamAchievements = new CSteamAchievements(&g_Achievements[0], g_Achievements.size());
+
+
+		bool res = g_SteamAchievements->RequestStats();
+		if (!res)
+		{
+			AssertMessage(false, "Could not get stats from Steam.\nPlease check that your Internet connection is working correctly and that Steam is up.\n");
+		}
+
 
 		// set our debug handler
 		SteamClient()->SetWarningMessageHook(&SteamAPIDebugTextHook);
