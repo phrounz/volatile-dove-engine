@@ -21,14 +21,17 @@ sub main()
 	die if ($project_name eq '');
 	print "\n";
 
+	#------
 	print "Generating root directory '$project_name'\n";
 	mkd($project_name);
 
+	#------
 	print "Generating code\n";
 	my $DIRSRCS = "$project_name/code";
 	mkd($DIRSRCS);
 	writeFile("$DIRSRCS/MainClass.cpp", getStrMainClass()) unless (-f "$DIRSRCS/MainClass.cpp");
 	
+	#------
 	print "Generating App_JS_Emscripten\n";
 	mkd("$project_name/App_JS_Emscripten");
 	writeFile("$project_name/App_JS_Emscripten/compile.bat", 
@@ -40,6 +43,7 @@ sub main()
 		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
 		);
 
+	#------
 	print "Generating App_Linux\n";
 	mkd("$project_name/App_Linux");
 	writeFile("$project_name/App_Linux/compile.sh", 
@@ -47,6 +51,7 @@ sub main()
 		.'make -f ../../common/Linux/Makefile SRCS=\'$(wildcard ../code/*.cpp)\' $*'."\n"
 		);
 
+	#------
 	print "Generating App_VS2008_OpenGL/App_VS2008_SDL\n";
 	mkd("$project_name/App_VS2008_OpenGL");
 	mkd("$project_name/App_VS2008_SDL");
@@ -65,23 +70,37 @@ sub main()
 		"../../$project_name/App_VS2008_SDL/App_VS2008_SDL.vcproj",
 		\@l_code,
 		1);
-	chdir $prevdir or die $prevdir;
-		
+	chdir $prevdir or die $prevdir;	
 	generate_vs2008_project::createSolutionFileVS2008(
 		"$project_name/App_VS2008_OpenGL", 'App_VS2008_OpenGL');
 	generate_vs2008_project::createSolutionFileVS2008(
 		"$project_name/App_VS2008_SDL", 'App_VS2008_SDL');
 
+	#------
 	print "Generating App_VS2013_DX_Desktop\n";
-	copyr("./common/Windows_VS2013_DX_Desktop", "$project_name/App_VS2013_DX_Desktop");
+	copyr("./common/Windows_VS2013_DX_Desktop", "$project_name/App_VS2013_DX_Desktop", 1);
 	
+	#------
 	print "Generating App_VS2013_DX_Store\n";
-	copyr("./common/Windows_VS2013_DX_Store", "$project_name/App_VS2013_DX_Store");
-	copyr("./common/Windows_VS2013_DX_Store/Assets", "$project_name/App_VS2013_DX_Store/Assets");
-	rename(
-		"$project_name/App_VS2013_DX_Store/copy_work_dir_to_appx.bat", 
-		"$project_name/copy_work_dir_to_appx.bat");
+	my $in_st = "./common/Windows_VS2013_DX_Store";
+	my $out_st = "$project_name/App_VS2013_DX_Store";
+	mkd("$project_name/App_VS2013_DX_Store");
+	copy("$in_st/App_VS2013_DX_Store.sln", "$out_st/App_VS2013_DX_Store.sln");
+	copy("$in_st/App_VS2013_DX_Store.vcxproj", "$out_st/App_VS2013_DX_Store.vcxproj");
+	copy("$in_st/Package.appxmanifest", "$out_st/Package.appxmanifest") unless (-f "$out_st/Package.appxmanifest");
+	copyr("./common/Windows_VS2013_DX_Store/Assets", "$project_name/App_VS2013_DX_Store/Assets", 0);
+	unless (-f "$project_name/copy_work_dir_to_appx.bat")
+	{
+		rename(
+			"$project_name/App_VS2013_DX_Store/copy_work_dir_to_appx.bat", 
+			"$project_name/copy_work_dir_to_appx.bat");
+	}
+	else
+	{
+		unlink "$project_name/App_VS2013_DX_Store/copy_work_dir_to_appx.bat";
+	}
 	
+	#------
 	print "Generating working directory\n";
 	mkd("$project_name/WorkDir");
 	mkd("$project_name/WorkDir/data");
@@ -100,6 +119,7 @@ sub main()
 	mkd("$project_name/WorkDirStore/AppX");
 	mkd("$project_name/WorkDirStore/AppX/data");
 	
+	#------
 	print "Done.\n";
 	print "\n";
 	print "Don't forget to set up the Working Directory of Visual Studio projects\n"
@@ -115,12 +135,16 @@ exit main();
 
 #------------------------
 # copy all files from <first-arg> into <second-arg> (create <second-arg> if it does not exist)
+# if <third-arg> is true, clobber existing files
 
-sub copyr($$)
+sub copyr($$$)
 {
-	my ($src, $dest) = @_;
+	my ($src, $dest, $clobber) = @_;
 	mkd($dest);
-	copy($_,"$dest/".basename($_)) foreach (glob("$src/*"));
+	foreach (glob("$src/*"))
+	{
+		copy($_,"$dest/".basename($_)) if ($clobber || !(-f "$dest/".basename($_)));
+	}
 }
 
 #------------------------
