@@ -195,7 +195,7 @@ std::string KeyboardManager::convertFromKeyToStr(Key key)
 
 
 //-------------------------------------------------------------------------
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(USES_WINDOWS8_METRO)
 
 namespace
 {

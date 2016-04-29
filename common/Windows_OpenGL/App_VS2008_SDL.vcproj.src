@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="App_VS2008_OpenGL"
+	Name="App_VS2008_SDL"
 	ProjectGUID="{609CC8B0-B8BA-4DE1-9EB3-25C4925225E2}"
-	RootNamespace="App_VS2008_OpenGL"
+	RootNamespace="App_VS2008_SDL"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -237,26 +237,11 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
-		<File
-			RelativePath="..\MainClass.cpp"
+		<Filter
+			Name="code"
 			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories="C:\progs\GnuWin32\include;&quot;d:\progs\OpenAL 1.1 SDK\include&quot;;"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories="C:\progs\GnuWin32\include;&quot;d:\progs\OpenAL 1.1 SDK\include&quot;;"
-				/>
-			</FileConfiguration>
-		</File>
+			AUTOMATIC_HIGH_LEVEL_CODE
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
