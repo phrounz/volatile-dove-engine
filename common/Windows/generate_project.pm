@@ -6,39 +6,13 @@ use strict;
 use warnings;
 use File::Basename qw/dirname basename/;
 
+#----------------------------------------------
+
 my @L_DISABLE_3D_SKIPPED_MODULES = (
 	'Animated3DModel','GroupOfQuads','Material','Meshes3D','Obj3D','RenderGroup','Scene3D',
 	'Scene3DPrivate', 'VBO', 'VBOGroup', 'GroupOfQuadsByTexture' );
 my @L_DISABLE_3D_SKIPPED_CPP = map { "$_.cpp" } @L_DISABLE_3D_SKIPPED_MODULES;
 my @L_DISABLE_3D_SKIPPED_H = map { "$_.cpp" } @L_DISABLE_3D_SKIPPED_MODULES;
-
-#----------------------------------------------
-
-sub createSolutionFileVS2008($$) {
-	my ($output_directory, $project_basename) = @_;
-	open FDW, ">$output_directory/$project_basename.sln";
-	print FDW 'Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C++ Express 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "'.$project_basename.'", "'.$project_basename.'.vcproj", "{609CC8B0-B8BA-4DE1-9EB3-25C4925225E2}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Win32 = Debug|Win32
-		Release|Win32 = Release|Win32
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{609CC8B0-B8BA-4DE1-9EB3-25C4925225E2}.Debug|Win32.ActiveCfg = Debug|Win32
-		{609CC8B0-B8BA-4DE1-9EB3-25C4925225E2}.Debug|Win32.Build.0 = Debug|Win32
-		{609CC8B0-B8BA-4DE1-9EB3-25C4925225E2}.Release|Win32.ActiveCfg = Release|Win32
-		{609CC8B0-B8BA-4DE1-9EB3-25C4925225E2}.Release|Win32.Build.0 = Release|Win32
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-EndGlobal
-';
-	close FDW;
-}
 
 #----------------------------------------------
 
