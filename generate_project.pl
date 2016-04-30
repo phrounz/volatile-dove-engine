@@ -7,8 +7,8 @@ use Cwd qw/getcwd/;
 ##use File::Copy::Recursive qw(rcopy);
 use File::Copy qw/copy/;
 
-use lib "./common/Windows_OpenGL/";
-use generate_vs2008_project;
+use lib "./common/Windows/";
+use generate_project;
 
 #------------------------
 # main function
@@ -52,53 +52,58 @@ sub main()
 		);
 
 	#------
-	print "Generating App_VS2008_OpenGL/App_VS2008_SDL\n";
+	print "Generating App_VS2008_OpenGL/App_VS2008_SDL/App_VS2013_DX_Desktop/App_VS2013_DX_Store\n";
+	# create directories
 	mkd("$project_name/App_VS2008_OpenGL");
 	mkd("$project_name/App_VS2008_SDL");
-	my $COMWIN = "./common/Windows_OpenGL";
+	mkd("$project_name/App_VS2013_DX_Desktop");
+	mkd("$project_name/App_VS2013_DX_Store");
+	# create projects
+	my $COMWIN = "./common/Windows";
 	my $prevdir = getcwd;
 	chdir $COMWIN or die $COMWIN;
-	my @l_code = (glob("../../$DIRSRCS/*.cpp"), glob("../../$DIRSRCS/*.h"));
+	my $relt = "../../$project_name";
+	my @l_code = (
+		glob("../../$DIRSRCS/*.cpp"), glob("../../$DIRSRCS/*.h")
+		#glob("../../$DIRSRCS/*/*.cpp"), glob("../../$DIRSRCS/*/*.h")
+		);
 	#print "Source is: ".join(",", @l_code)."\n";
-	generate_vs2008_project::processFile(
-		"App_VS2008_OpenGL.vcproj.src",
-		"../../$project_name/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj",
-		\@l_code,
-		0);
-	generate_vs2008_project::processFile(
-		"App_VS2008_SDL.vcproj.src",
-		"../../$project_name/App_VS2008_SDL/App_VS2008_SDL.vcproj",
-		\@l_code,
+	generate_project::processFile(
+		"App_VS2008_OpenGL.vcproj.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj", \@l_code, 0, 0, 0);
+	generate_project::processFile(
+		"App_VS2008_SDL.vcproj.src", "$relt/App_VS2008_SDL/App_VS2008_SDL.vcproj", \@l_code, 1, 0, 0);
+	generate_project::processFile(
+		"App_VS2013_DX_Desktop.vcxproj.src",
+		"$relt/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.vcxproj", \@l_code, 0, 1, 1);
+	generate_project::processFile(
+		"App_VS2013_DX_Store.vcxproj.src",
+		"$relt/App_VS2013_DX_Store/App_VS2013_DX_Store.vcxproj", \@l_code, 0, 1, 1);
+	chdir $prevdir or die $prevdir;
+	# create solution files
+	copyOrFail(
+		"./common/Windows_VS2008_OpenGL/App_VS2008_OpenGL.sln",
+		"$project_name/App_VS2008_OpenGL/App_VS2008_OpenGL.sln",
 		1);
-	chdir $prevdir or die $prevdir;	
-	generate_vs2008_project::createSolutionFileVS2008(
-		"$project_name/App_VS2008_OpenGL", 'App_VS2008_OpenGL');
-	generate_vs2008_project::createSolutionFileVS2008(
-		"$project_name/App_VS2008_SDL", 'App_VS2008_SDL');
+	copyOrFail(
+		"./common/Windows_VS2008_SDL/App_VS2008_SDL.sln",
+		"$project_name/App_VS2008_SDL/App_VS2008_SDL.sln",
+		1);
+	copyOrFail(
+		"./common/Windows_VS2013_DX_Desktop/App_VS2013_DX_Desktop.sln",
+		"$project_name/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.sln",
+		1);
+	copyOrFail(
+		"./common/Windows_VS2013_DX_Store/App_VS2013_DX_Store.sln",
+		"$project_name/App_VS2013_DX_Store/App_VS2013_DX_Store.sln",
+		1);
 
 	#------
-	print "Generating App_VS2013_DX_Desktop\n";
-	copyr("./common/Windows_VS2013_DX_Desktop", "$project_name/App_VS2013_DX_Desktop", 1);
-	
-	#------
-	print "Generating App_VS2013_DX_Store\n";
+	print "Generating other stuff for App_VS2013_DX_Store\n";
 	my $in_st = "./common/Windows_VS2013_DX_Store";
 	my $out_st = "$project_name/App_VS2013_DX_Store";
-	mkd("$project_name/App_VS2013_DX_Store");
-	copy("$in_st/App_VS2013_DX_Store.sln", "$out_st/App_VS2013_DX_Store.sln");
-	copy("$in_st/App_VS2013_DX_Store.vcxproj", "$out_st/App_VS2013_DX_Store.vcxproj");
-	copy("$in_st/Package.appxmanifest", "$out_st/Package.appxmanifest") unless (-f "$out_st/Package.appxmanifest");
-	copyr("./common/Windows_VS2013_DX_Store/Assets", "$project_name/App_VS2013_DX_Store/Assets", 0);
-	unless (-f "$project_name/copy_work_dir_to_appx.bat")
-	{
-		rename(
-			"$project_name/App_VS2013_DX_Store/copy_work_dir_to_appx.bat", 
-			"$project_name/copy_work_dir_to_appx.bat");
-	}
-	else
-	{
-		unlink "$project_name/App_VS2013_DX_Store/copy_work_dir_to_appx.bat";
-	}
+	copyOrFail("$in_st/Package.appxmanifest", "$out_st/Package.appxmanifest", 0);
+	copyr("$in_st/Assets", "$out_st/Assets", 0);
+	copyOrFail("$in_st/copy_work_dir_to_appx.bat", "$project_name/copy_work_dir_to_appx.bat", 0);
 	
 	#------
 	print "Generating working directory\n";
@@ -134,18 +139,9 @@ sub main()
 exit main();
 
 #------------------------
-# copy all files from <first-arg> into <second-arg> (create <second-arg> if it does not exist)
-# if <third-arg> is true, clobber existing files
+# create a directory <arg> if it does not exist
 
-sub copyr($$$)
-{
-	my ($src, $dest, $clobber) = @_;
-	mkd($dest);
-	foreach (glob("$src/*"))
-	{
-		copy($_,"$dest/".basename($_)) if ($clobber || !(-f "$dest/".basename($_)));
-	}
-}
+sub mkd($) { my $d = shift;unless (-d $d) { mkdir $d or die $d } }
 
 #------------------------
 # write a file <first-arg> with the content string <second-arg> (clobber it if it already exists)
@@ -153,9 +149,26 @@ sub copyr($$$)
 sub writeFile($$) { (open FDWTMP, ">".shift()) and (print FDWTMP shift()) and (close FDWTMP) }
 
 #------------------------
-# create a directory <arg> if it does not exist
+# copy all files from <first-arg> into <second-arg> (create <second-arg> if it does not exist)
+# if <third-arg> is true, clobber existing files
 
-sub mkd($) { my $d = shift;unless (-d $d) { mkdir $d or die $d } }
+sub copyr($$$) {
+	my ($src, $dest, $clobber) = @_;
+	mkd($dest);
+	foreach (glob("$src/*")) {
+		copyOrFail($_,"$dest/".basename($_), $clobber);
+	}
+}
+
+#------------------------
+# copy file <first-arg> <second-arg> (clobber it if it already exists and <third-arg> is true)
+
+sub copyOrFail($$$) {
+	my ($src, $dest, $clobber) = @_;
+	if ($clobber || !$dest) {
+		copy($src, $dest) or die "copy from $src to $dest failed";
+	}
+}
 
 #------------------------
 # get the content of original MainClass.cpp

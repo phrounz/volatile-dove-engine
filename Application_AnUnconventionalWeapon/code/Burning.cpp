@@ -187,6 +187,10 @@ Burning::~Burning()
 	{
 		delete *it;
 	}
+	iterateList(m_firesCannon, Fire*)
+	{
+		delete *it;
+	}
 
 	Engine::instance().getSoundMgr().removeSound(m_soundBurning);
 }

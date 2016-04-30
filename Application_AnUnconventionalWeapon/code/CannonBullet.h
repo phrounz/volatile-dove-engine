@@ -28,7 +28,7 @@ public:
 private:
 	Sprite* m_cannonBullet;
 	Double2 m_cannonBulletPos;
-	Sprite* m_cannonExplosion;
+	//Sprite* m_cannonExplosion;
 	Double2 m_speed;
 };
 

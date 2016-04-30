@@ -101,9 +101,12 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\*.cpp" />
-    <ClCompile Include="..\..\source\directx\*.cpp" />
-    <ClCompile Include="..\code\*.cpp" />
+    AUTOMATIC_HIGH_LEVEL_CODE
+	<!--<ClCompile Include="..\code\*.cpp" />-->
+  </ItemGroup>
+  <ItemGroup>
+    AUTOMATIC_SOURCE_PATHS
+    <!--<ClCompile Include="..\..\source\*.cpp" /><ClCompile Include="..\..\source\directx\*.cpp" />-->
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\shaders\SimplePixelShader.hlsl">
@@ -116,9 +119,10 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\*.h" />
+    AUTOMATIC_INCLUDE_PATHS
+    <!--<ClInclude Include="..\..\include\*.h" />
     <ClInclude Include="..\..\source\*.h" />
-    <ClInclude Include="..\..\source\directx\*.h" />
+    <ClInclude Include="..\..\source\directx\*.h" />-->
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

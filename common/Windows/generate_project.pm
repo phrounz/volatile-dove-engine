@@ -42,9 +42,9 @@ EndGlobal
 
 #----------------------------------------------
 
-sub processFile($$$$)
+sub processFile($$$$$$)
 {
-	my ($input, $output, $rl_high_level_src, $disable_3d) = @_;
+	my ($input, $output, $rl_high_level_src, $disable_3d, $recent_visual_studio, $use_directx) = @_;
 	die unless (defined $input && defined $output && defined $rl_high_level_src);
 	
 	print "# Process file: $input\n";
@@ -60,14 +60,12 @@ sub processFile($$$$)
 			my $str = '';
 			foreach my $file (glob("../../include/*"))
 			{
-				$file =~ s/\//\\/g;
-				$str .= '<File RelativePath="'.$file.'"></File>'."\n";
+				$str .= getStrToInclude($file, $recent_visual_studio);
 			}
 			$_ = $str;
 		}
 		elsif ($_ =~ m/AUTOMATIC_SOURCE_PATHS/)
 		{
-			
 			my $str = '';
 			foreach my $file (glob("../../source/*"))
 			{
@@ -75,26 +73,18 @@ sub processFile($$$$)
 				{
 					if ($disable_3d)
 					{
-						if (grep { basename($file) eq $_ } (@L_DISABLE_3D_SKIPPED_CPP,@L_DISABLE_3D_SKIPPED_H))
-						{
-							next;
-						}
+						next if (grep { basename($file) eq $_ } (@L_DISABLE_3D_SKIPPED_CPP,@L_DISABLE_3D_SKIPPED_H));
 					}
-					$file =~ s/\//\\/g;
-					$str .= '<File RelativePath="'.$file.'"></File>'."\n";
+					$str .= getStrToInclude($file, $recent_visual_studio);
 				}
 			}
-			foreach my $file2 (glob("../../source/opengl/*"))
+			foreach my $file2 ($use_directx ? glob("../../source/directx/*") : glob("../../source/opengl/*"))
 			{
 				if ($disable_3d)
 				{
-					if (grep { basename($file2) eq $_ } (@L_DISABLE_3D_SKIPPED_CPP,@L_DISABLE_3D_SKIPPED_H))
-					{
-						next;
-					}
+					next if (grep { basename($file2) eq $_ } (@L_DISABLE_3D_SKIPPED_CPP,@L_DISABLE_3D_SKIPPED_H));
 				}
-				$file2 =~ s/\//\\/g;
-				$str .= '<File RelativePath="'.$file2.'"></File>'."\n";
+				$str .= getStrToInclude($file2, $recent_visual_studio);
 			}
 			$_ = $str;
 		}
@@ -103,8 +93,7 @@ sub processFile($$$$)
 			my $str = '';
 			foreach my $file (@$rl_high_level_src)
 			{
-				$file =~ s/\//\\/g;
-				$str .= '<File RelativePath="'.$file.'"></File>'."\n";
+				$str .= getStrToInclude($file, $recent_visual_studio);
 			}
 			$_ = $str;
 		}
@@ -114,5 +103,28 @@ sub processFile($$$$)
 	print FDW $_ foreach (@lines);
 	close FDW;
 }
+
+#------------------------
+
+sub getStrToInclude($$)
+{
+	my ($file, $recent_visual_studio) = @_;
+	$file =~ s/\//\\/g;
+	if ($recent_visual_studio)
+	{
+		my $compile_or_include = (isSourceFile($file) ? 'ClCompile' : 'ClInclude');
+		return '<'.$compile_or_include.' Include="'.$file.'" />'."\n";
+	}
+	else
+	{
+		return '<File RelativePath="'.$file.'"></File>'."\n";
+	}
+}
+
+#------------------------
+
+sub isSourceFile() { my $file = shift; return ($file=~m/\.cpp$/ || $file=~m/\.c$/ || $file=~m/\.cc$/ ? 1 : 0); }
+
+#------------------------
 
 1;

@@ -231,6 +231,7 @@ Cannon::~Cannon()
 	delete m_cannonBulletForMachine;
 	delete m_cannonCollisionImage;
 	delete m_cannonDamaged;
+	delete m_bonusCounterBitmap;
 	Engine::instance().getSoundMgr().removeSound(m_soundFire);
 	Engine::instance().getSoundMgr().removeSound(m_soundFireMiniBullets);
 }

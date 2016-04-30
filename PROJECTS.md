@@ -2,6 +2,9 @@
 
 Each example project "Application_XXXXXX" may contain the following directories, which correspond to different targets/environments:
 
+### code/
+ * Contains the common C++ source code, used by all targets.
+
 ### App_VS2008GL or App_VS2008_OpenGL
  * Should work just by opening the solution with **Visual Studio 2008 Express** and 
    compiling+running it (with F5).
