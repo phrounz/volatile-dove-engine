@@ -52,7 +52,11 @@ sub main()
 		);
 
 	#------
-	print "Generating App_VS2008_OpenGL/App_VS2008_SDL/App_VS2013_DX_Desktop/App_VS2013_DX_Store\n";
+	print "Generating \n"
+		."  App_VS2008_OpenGL\n"
+		."  App_VS2008_SDL\n"
+		."  App_VS2013_DX_Desktop\n"
+		."  App_VS2013_DX_Store\n";
 	# create directories
 	mkd("$project_name/App_VS2008_OpenGL");
 	mkd("$project_name/App_VS2008_SDL");
@@ -129,6 +133,8 @@ sub main()
 	print "\n";
 	print "Don't forget to set up the Working Directory of Visual Studio projects\n"
 		."to '..\\WorkDir' ('..\\WorkDirStore' for App_VS2013_DX_Store)\n";
+	print "Also, you may have to put new Visual Studio Project GUID numbers\n"
+		."(and Package.appxmanifest identity name)\n";
 	print "\n";
 	
 	system('PAUSE') unless ($^O eq 'linux');
