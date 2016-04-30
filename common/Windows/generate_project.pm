@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-package generate_vs2008_project;
+package generate_project;
 
 use strict;
 use warnings;

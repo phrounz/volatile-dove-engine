@@ -128,7 +128,7 @@ sub main()
 	print "Done.\n";
 	print "\n";
 	print "Don't forget to set up the Working Directory of Visual Studio projects\n"
-		."to '../WorkDir/' ('../WorkDirStore' for App_VS2013_DX_Store)\n";
+		."to '..\\WorkDir' ('..\\WorkDirStore' for App_VS2013_DX_Store)\n";
 	print "\n";
 	
 	system('PAUSE') unless ($^O eq 'linux');
