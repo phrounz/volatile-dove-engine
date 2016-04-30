@@ -165,7 +165,7 @@ sub copyr($$$) {
 
 sub copyOrFail($$$) {
 	my ($src, $dest, $clobber) = @_;
-	if ($clobber || !$dest) {
+	if ($clobber || !(-f $dest)) {
 		copy($src, $dest) or die "copy from $src to $dest failed";
 	}
 }

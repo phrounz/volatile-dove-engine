@@ -98,7 +98,6 @@
     <OutDir>../WorkDirStore/</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>../WorkDirStore/</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
@@ -159,18 +158,6 @@
     <None Include="App_VS2013_DX_Store_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Assets\Logo.scale-100.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="Assets\SmallLogo.scale-100.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="Assets\StoreLogo.scale-100.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="Assets\SplashScreen.scale-100.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\*.cpp" />
