@@ -271,11 +271,16 @@ namespace Meshes3D
 				memcpy(&(basicQuad->basicVertex[2].norm), normalsTop, 3 * sizeof(float));
 				memcpy(&(basicQuad->basicVertex[3].norm), normalsTop, 3 * sizeof(float));
 
-				float texCoord[8] = {
+				/*float texCoord[8] = {
 					parTexCoordBeginOtherSide.x(), 1.f - parTexCoordEndOtherSide.z(),
 					parTexCoordBeginOtherSide.x(), 1.f - parTexCoordBeginOtherSide.z(),
 					parTexCoordEndOtherSide.x(), 1.f - parTexCoordBeginOtherSide.z(),
-					parTexCoordEndOtherSide.x(), 1.f - parTexCoordEndOtherSide.z() };
+					parTexCoordEndOtherSide.x(), 1.f - parTexCoordEndOtherSide.z() };*/
+				float texCoord[8] = {
+					 1.f - parTexCoordBeginOtherSide.x(), 1.f - parTexCoordBeginOtherSide.z(),
+					 1.f - parTexCoordBeginOtherSide.x(), 1.f - parTexCoordEndOtherSide.z(),
+					 1.f - parTexCoordEndOtherSide.x(), 1.f - parTexCoordEndOtherSide.z(),
+					 1.f - parTexCoordEndOtherSide.x(), 1.f - parTexCoordBeginOtherSide.z() };
 				basicQuad->basicVertex[0].copyTexCoordFrom(&texCoord[0]);
 				basicQuad->basicVertex[1].copyTexCoordFrom(&texCoord[2]);
 				basicQuad->basicVertex[2].copyTexCoordFrom(&texCoord[4]);
@@ -343,11 +348,11 @@ namespace Meshes3D
 			}
 			else if (faceId == FACE_BACK)
 			{
-				float vertices[12] = {
+				float vertices[12] = {-size.x() + posCube.x(), -size.y() + posCube.y(), -size.z() + posCube.z(),
 					-size.x() + posCube.x(), size.y() + posCube.y(), -size.z() + posCube.z(),
 					size.x() + posCube.x(), size.y() + posCube.y(), -size.z() + posCube.z(),
-					size.x() + posCube.x(), -size.y() + posCube.y(), -size.z() + posCube.z(),
-					-size.x() + posCube.x(), -size.y() + posCube.y(), -size.z() + posCube.z() };
+					size.x() + posCube.x(), -size.y() + posCube.y(), -size.z() + posCube.z()
+					 };
 				basicQuad->basicVertex[0].copyVerticesFrom(&vertices[0]);
 				basicQuad->basicVertex[1].copyVerticesFrom(&vertices[3]);
 				basicQuad->basicVertex[2].copyVerticesFrom(&vertices[6]);
@@ -358,11 +363,16 @@ namespace Meshes3D
 				memcpy(&(basicQuad->basicVertex[2].norm), normalsBack, 3 * sizeof(float));
 				memcpy(&(basicQuad->basicVertex[3].norm), normalsBack, 3 * sizeof(float));
 
-				float texCoord[8] = {
+				/*float texCoord[8] = {
 					1.f - parTexCoordBeginOtherSide.x(), 1.f - parTexCoordEndOtherSide.y(),
 					1.f - parTexCoordEndOtherSide.x(), 1.f - parTexCoordEndOtherSide.y(),
 					1.f - parTexCoordEndOtherSide.x(), 1.f - parTexCoordBeginOtherSide.y(),
-					1.f - parTexCoordBeginOtherSide.x(), 1.f - parTexCoordBeginOtherSide.y() };
+					1.f - parTexCoordBeginOtherSide.x(), 1.f - parTexCoordBeginOtherSide.y() };*/
+				float texCoord[8] = {
+					1.f - parTexCoordBeginOtherSide.x(), 1.f - parTexCoordBeginOtherSide.y(),
+					1.f - parTexCoordBeginOtherSide.x(), 1.f - parTexCoordEndOtherSide.y(),
+					1.f - parTexCoordEndOtherSide.x(), 1.f - parTexCoordEndOtherSide.y(),
+					1.f - parTexCoordEndOtherSide.x(), 1.f - parTexCoordBeginOtherSide.y() };
 				basicQuad->basicVertex[0].copyTexCoordFrom(&texCoord[0]);
 				basicQuad->basicVertex[1].copyTexCoordFrom(&texCoord[2]);
 				basicQuad->basicVertex[2].copyTexCoordFrom(&texCoord[4]);
@@ -412,11 +422,17 @@ namespace Meshes3D
 				memcpy(&(basicQuad->basicVertex[2].norm), normalsRight, 3 * sizeof(float));
 				memcpy(&(basicQuad->basicVertex[3].norm), normalsRight, 3 * sizeof(float));
 
-				float texCoord[8] = {
+				/*float texCoord[8] = {
 					parTexCoordEndOtherSide.z(), 1.f - parTexCoordBeginOtherSide.y(),
 					parTexCoordEndOtherSide.z(), 1.f - parTexCoordEndOtherSide.y(),
 					parTexCoordBeginOtherSide.z(), 1.f - parTexCoordEndOtherSide.y(),
-					parTexCoordBeginOtherSide.z(), 1.f - parTexCoordBeginOtherSide.y() };
+					parTexCoordBeginOtherSide.z(), 1.f - parTexCoordBeginOtherSide.y() };*/
+				float texCoord[8] = {
+					1.f - parTexCoordBeginOtherSide.z(), 1.f - parTexCoordBeginOtherSide.y(),
+					1.f - parTexCoordBeginOtherSide.z(), 1.f - parTexCoordEndOtherSide.y(),
+					1.f - parTexCoordEndOtherSide.z(), 1.f - parTexCoordEndOtherSide.y(),
+					1.f - parTexCoordEndOtherSide.z(), 1.f - parTexCoordBeginOtherSide.y() };
+				//float texCoord[8] = {1.f,1.f,1.f,1.f, 1.f,1.f,1.f,1.f};
 				basicQuad->basicVertex[0].copyTexCoordFrom(&texCoord[0]);
 				basicQuad->basicVertex[1].copyTexCoordFrom(&texCoord[2]);
 				basicQuad->basicVertex[2].copyTexCoordFrom(&texCoord[4]);

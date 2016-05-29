@@ -303,10 +303,10 @@ void Bitmap::drawFragment(const Int2& pos, float x1,float y1,float x2,float y2, 
 #elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
 
 	D2D1_RECT_F rectSource;
-	rectSource.left   = x1 * this->size().width();
-	rectSource.top    = y1 * this->size().height();
-	rectSource.right  = x2 * this->size().width();
-	rectSource.bottom = y2 * this->size().height();
+	rectSource.left   = x1 * (float)this->size().width();
+	rectSource.top    = y1 * (float)this->size().height();
+	rectSource.right  = x2 * (float)this->size().width();
+	rectSource.bottom = y2 * (float)this->size().height();
 
 	D2D1_RECT_F rectDest = D2D1::RectF(0.f, 0.f, (float)width, (float)height);
 
