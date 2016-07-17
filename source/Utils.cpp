@@ -167,13 +167,15 @@ void warningMessageToUser(const std::string& message)
 
 //-------------------------------------------------------------------------
 
-//#define LOG_MESSAGES
-
-#ifdef LOG_MESSAGES
-	static FILE* fdLog = NULL;
-#endif
+static FILE* fdLog = NULL;
+static bool s_logMessages = false;
+static std::string log_basename = "log.txt";
 
 static int s_logIndentation = 0;
+
+void enableMessagesInLogFile(bool yesNo) { s_logMessages = yesNo; }
+void setLogFileName(const std::string& filename) { log_basename = filename; }
+std::string getLogFileFullPath() { return FileUtil::getFullPath(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()); }
 
 void indentLog() { s_logIndentation++; }
 void unindentLog() { s_logIndentation--; }
@@ -193,19 +195,21 @@ void print(const char* text)
 	#ifdef USES_WINDOWS_OPENGL
 		OutputDebugStringW(Utils::convertStringToWString(finalText).c_str());
 	#endif
-	#ifdef LOG_MESSAGES
-		if (fdLog == NULL) fdLog = fopen("stdout.txt", "w");
+	if (s_logMessages)
+	{
+		if (fdLog == NULL) fdLog = fopen(FileUtil::getFullPath(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()).c_str(), "w");
 		fprintf(fdLog, finalText.c_str());
 		fflush(fdLog);
-	#endif
+	}
 #elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
 	OutputDebugStringW(Utils::convertStringToWString(std::string(finalText)).c_str());
-	#ifdef LOG_MESSAGES
+	if (s_logMessages)
+	{
 		size_t size = 0;
 		void* buffer = NULL;
-		if (FileUtil::fileExists(FileUtil::APPLICATION_DATA_FOLDER, "log.txt"))
+		if (FileUtil::fileExists(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()))
 		{
-			buffer = FileUtil::readFile(FileUtil::APPLICATION_DATA_FOLDER, "log.txt", &size);
+			buffer = FileUtil::readFile(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str(), &size);
 		}
 		size_t size2 = size + finalText.size();
 
@@ -213,11 +217,11 @@ void print(const char* text)
 		if (size > 0) memcpy(buffer2, buffer, size);
 		memcpy(&buffer2[size], finalText.c_str(), finalText.size());
 
-		FileUtil::writeFile(FileUtil::APPLICATION_DATA_FOLDER, "log.txt", buffer2, size2);
+		FileUtil::writeFile(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str(), buffer2, size2);
 
 		delete [] buffer;
 		delete [] buffer2;
-	#endif
+	}
 #endif
 }
 
