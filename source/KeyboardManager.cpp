@@ -233,7 +233,7 @@ bool KeyboardManager::activateKeyboardLayoutIfAvailable(const std::vector<std::s
 	int res = GetKeyboardLayoutList(255, hkls);
 	if (res > 0)
 	{
-		wchar_t szBuf[512];
+		//wchar_t szBuf[512];
 		for (int i = 0; i < res; i++) // switch between "active" keyboard layouts
 		{
 			std::pair<std::string, std::string> out = getKeyboardLayoutNameAndIso3166Name(hkls[i]);
