@@ -191,7 +191,7 @@ void print(const char* text)
 
 	std::cout << finalText << std::flush;
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN) || defined(USES_WINDOWS8_DESKTOP)
 	#ifdef USES_WINDOWS_OPENGL
 		OutputDebugStringW(Utils::convertStringToWString(finalText).c_str());
 	#endif
@@ -201,7 +201,7 @@ void print(const char* text)
 		fprintf(fdLog, finalText.c_str());
 		fflush(fdLog);
 	}
-#elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
+#elif defined(USES_WINDOWS8_METRO)
 	OutputDebugStringW(Utils::convertStringToWString(std::string(finalText)).c_str());
 	if (s_logMessages)
 	{

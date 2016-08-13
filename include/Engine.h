@@ -62,14 +62,14 @@ public:
 
 	bool isInit() const { return m_isInit; }
 
-
 	virtual bool isRunning() const { return m_isAppRunning; }
 
 	void startRender();
 	void endRender();
 	void clearScreen(const Color& color);
-	Color getDefaultBackgroundColor();
-	Color getDefaultForegroundColor();
+
+	//------------
+	// accessors
 
 	inline Scene2D& getScene2DMgr() { return *m_scene2D; }						///< get 2d display-related singleton
 #ifdef USES_SCENE3D
@@ -81,6 +81,9 @@ public:
 #ifdef USES_SOUND
 	inline SoundManager& getSoundMgr() { return *m_soundManager; }				///< get sound-related singleton
 #endif
+
+	//------------
+	// misc
 	
 	inline int64_t getFrameDuration() const { return m_frameDuration; }			///< Last frame duration in miliseconds
 	
@@ -90,6 +93,9 @@ public:
 
 	void unlockSteamAchievement(std::string str);
 	void clearSteamAchievement(std::string str);
+	Color getDefaultBackgroundColor();
+	Color getDefaultForegroundColor();
+	Int2 getDesktopScreenResolution();
 
 	struct SteamAchievementInfo
 	{

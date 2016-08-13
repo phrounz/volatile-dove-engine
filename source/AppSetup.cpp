@@ -46,6 +46,16 @@ void AppSetup::init()
 
 //-------------------------------------------------------------------------
 
+void AppSetup::setVirtualSize(bool yesNo, const Int2& virtualSize, const Color& borderColor)
+{
+	m_inf.automaticFitToWindowSize = yesNo;
+	m_inf.virtualSize = virtualSize;
+	m_inf.virtualSizeBorderColor = borderColor;
+	this->onResizeWindow(this->getWindowRealSize());
+}
+
+//-------------------------------------------------------------------------
+
 void AppSetup::onResizeWindow(const Int2& newSize)
 {
 	m_inf.windowSize = newSize;

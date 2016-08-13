@@ -1,6 +1,7 @@
 #ifdef USES_WINDOWS8_DESKTOP
 #include <windowsx.h>
 
+#include "../AppSetup.h"
 #include "../../include/AbstractMainClass.h"
 #include "../../include/Engine.h"
 
@@ -15,6 +16,7 @@ void DesktopAppControls::onMessage(UINT message, WPARAM wParam, LPARAM lParam, A
 	bool isPressed = false;
 	POINT pt;
 	//RECT* rc = (LPRECT)lParam;
+	Int2 fixedCoordMouse = AppSetup::instance().convertRealPositionToVirtualPosition(Int2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
 	switch (message)
 	{
 	case WM_KEYDOWN:
@@ -28,38 +30,38 @@ void DesktopAppControls::onMessage(UINT message, WPARAM wParam, LPARAM lParam, A
 		mainClass->onKeyReleased(key);
 		break;
 	case WM_LBUTTONDOWN:
-		Engine::instance().onPointerPressedInternals(MouseManager::MOUSE_LEFT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-		mainClass->onPointerPressed(MouseManager::MOUSE_LEFT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		Engine::instance().onPointerPressedInternals(MouseManager::MOUSE_LEFT_BUTTON, fixedCoordMouse.x(), fixedCoordMouse.y());
+		mainClass->onPointerPressed(MouseManager::MOUSE_LEFT_BUTTON, fixedCoordMouse.x(), fixedCoordMouse.y());
 		break;
 	case WM_MBUTTONDOWN:
-		Engine::instance().onPointerPressedInternals(MouseManager::MOUSE_MIDDLE_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-		mainClass->onPointerPressed(MouseManager::MOUSE_MIDDLE_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		Engine::instance().onPointerPressedInternals(MouseManager::MOUSE_MIDDLE_BUTTON, fixedCoordMouse.x(), fixedCoordMouse.y());
+		mainClass->onPointerPressed(MouseManager::MOUSE_MIDDLE_BUTTON, fixedCoordMouse.x(), fixedCoordMouse.y());
 		break;
 	case WM_RBUTTONDOWN:
-		Engine::instance().onPointerPressedInternals(MouseManager::MOUSE_RIGHT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-		mainClass->onPointerPressed(MouseManager::MOUSE_RIGHT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		Engine::instance().onPointerPressedInternals(MouseManager::MOUSE_RIGHT_BUTTON, fixedCoordMouse.x(), fixedCoordMouse.y());
+		mainClass->onPointerPressed(MouseManager::MOUSE_RIGHT_BUTTON, fixedCoordMouse.x(), fixedCoordMouse.y());
 		break;
 	case WM_LBUTTONUP:
-		Engine::instance().onPointerReleasedInternals(MouseManager::MOUSE_LEFT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-		mainClass->onPointerReleased(MouseManager::MOUSE_LEFT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		Engine::instance().onPointerReleasedInternals(MouseManager::MOUSE_LEFT_BUTTON, fixedCoordMouse.x(), fixedCoordMouse.y());
+		mainClass->onPointerReleased(MouseManager::MOUSE_LEFT_BUTTON, fixedCoordMouse.x(), fixedCoordMouse.y());
 		break;
 	case WM_MBUTTONUP:
-		Engine::instance().onPointerReleasedInternals(MouseManager::MOUSE_MIDDLE_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-		mainClass->onPointerReleased(MouseManager::MOUSE_MIDDLE_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		Engine::instance().onPointerReleasedInternals(MouseManager::MOUSE_MIDDLE_BUTTON, fixedCoordMouse.x(), fixedCoordMouse.y());
+		mainClass->onPointerReleased(MouseManager::MOUSE_MIDDLE_BUTTON, fixedCoordMouse.x(), fixedCoordMouse.y());
 		break;
 	case WM_RBUTTONUP:
-		Engine::instance().onPointerReleasedInternals(MouseManager::MOUSE_RIGHT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-		mainClass->onPointerReleased(MouseManager::MOUSE_RIGHT_BUTTON, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		Engine::instance().onPointerReleasedInternals(MouseManager::MOUSE_RIGHT_BUTTON, fixedCoordMouse.x(), fixedCoordMouse.y());
+		mainClass->onPointerReleased(MouseManager::MOUSE_RIGHT_BUTTON, fixedCoordMouse.x(), fixedCoordMouse.y());
 		break;
 	case WM_MOUSEMOVE:
 		isPressed = ((wParam & (MK_LBUTTON | MK_MBUTTON | MK_RBUTTON)) ? true : false);
-		Engine::instance().onPointerMovedInternals(isPressed, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-		mainClass->onPointerMoved(isPressed, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		Engine::instance().onPointerMovedInternals(isPressed, fixedCoordMouse.x(), fixedCoordMouse.y());
+		mainClass->onPointerMoved(isPressed, fixedCoordMouse.x(), fixedCoordMouse.y());
 		break;
 	case WM_MOUSEWHEEL:
 		// http://stackoverflow.com/questions/29915639/why-get-x-lparam-does-return-an-absolute-position-on-mouse-wheel
-		pt.x = GET_X_LPARAM(lParam);
-		pt.y = GET_Y_LPARAM(lParam);
+		pt.x = fixedCoordMouse.x();
+		pt.y = fixedCoordMouse.y();
 		ScreenToClient(windowHandle, &pt);
 		mainClass->onPointerWheelChanged(GET_WHEEL_DELTA_WPARAM(wParam), pt.x, pt.y);// / WHEEL_DELTA
 		break;

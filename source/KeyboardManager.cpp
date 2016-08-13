@@ -255,12 +255,12 @@ bool KeyboardManager::activateKeyboardLayoutIfAvailable(const std::vector<std::s
 	return false;
 }
 #else
-std::pair<std::string, std::string> getCurrentKeyboardLayoutNameAndIso3166Name()
+std::pair<std::string, std::string> KeyboardManager::getCurrentKeyboardLayoutNameAndIso3166Name()
 {
 #pragma message("TODO getCurrentKeyboardLayoutNameAndIso3166Name")
 	return std::pair<std::string, std::string>();
 }
-bool activateKeyboardLayoutIfAvailable(const std::vector<std::string>& countryIso3166Codes)
+bool KeyboardManager::activateKeyboardLayoutIfAvailable(const std::vector<std::string>& countryIso3166Codes)
 {
 #pragma message("TODO activateKeyboardLayoutIfAvailable")
 	return false;

@@ -21,7 +21,8 @@ public:
 	//! get window size in pixel units
 	Int2 getWindowSize() const;
 	Int2 getWindowRealSize() const;
-	void setPixelPerPoint(const Float2& ppp, const Int2& topLeftCornerInWindow, const Int2& windowVirtualSize);
+	void setVirtualSize(bool yesNo, const Int2& virtualSize, const Color& borderColor);
+	//void setPixelPerPoint(const Float2& ppp, const Int2& topLeftCornerInWindow, const Int2& windowVirtualSize);
 	inline float getWindowAspectRatio() const { return (float)this->getWindowSize().width() / (float)this->getWindowSize().height(); }
 	Int2 convertVirtualPositionToRealPosition(const Int2& pos) const;
 	

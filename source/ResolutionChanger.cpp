@@ -25,6 +25,18 @@ namespace ResolutionChanger
 
 namespace ResolutionChanger
 {
+	// http://www.cplusplus.com/forum/unices/108795/
+
+	void getDesktopResolution(int* horizontal, int* vertical)
+	{
+#warning "getDesktopResolution() is not tested"
+		Display* disp = XOpenDisplay(NULL);
+		Screen*  scrn = DefaultScreenOfDisplay(disp);
+		*horizontal = scrn->height;
+		*vertical = = scrn->width;
+	}
+
+
 	/*void testResolutions()
 	{
 		Display* dpy = XOpenDisplay(NULL);// connect to X server
@@ -137,10 +149,46 @@ namespace ResolutionChanger
 //-------------------------------------------------------------------------
 #elif USES_WINDOWS8_METRO
 
+#include <wrl/client.h>
+#include <d3d11_1.h>
+#include <d2d1_1.h>
+#include <d2d1effects.h>
+#include <dwrite_1.h>
+#include <wincodec.h>
+#include <agile.h>
+#include <windows.ui.xaml.media.dxinterop.h>
+
+using namespace Microsoft::WRL;
+using namespace Windows::Foundation;
+using namespace MetroHelpers;
+using namespace Platform;
+using namespace D2D1;
+
 #include "ResolutionChanger.h"
+
+// http://blogs.microsoft.co.il/tomershamam/2012/07/24/get-screen-resolution-in-windows-8-metro-style-application/
 
 namespace ResolutionChanger
 {
+#warning "not tested ResolutionChanger::getDesktopResolution"
+	void getDesktopResolution(int* horizontal, int* vertical)
+	{
+		ComPtr<IDXGIDevice> dxgiDevice;
+		DX::ThrowIfFailed(m_d3dDevice.As(&dxgiDevice));
+
+		ComPtr<IDXGIAdapter> dxgiAdapter;
+		DX::ThrowIfFailed(dxgiDevice->GetAdapter(&dxgiAdapter));
+
+		IDXGIOutput * pOutput;
+		if (dxgiAdapter->EnumOutputs(0, &pOutput) != DXGI_ERROR_NOT_FOUND)
+		{
+			DXGI_OUTPUT_DESC desc;
+			pOutput->GetDesc(&desc);
+			*horizontal = desc.DesktopCoordinates.right;
+			*vertical = desc.DesktopCoordinates.bottom;
+		}
+	}
+
 	bool changeResolution(int width, int height)
 	{
 		// no way to change the resolution
@@ -153,11 +201,25 @@ namespace ResolutionChanger
 #else // !USES_LINUX
 
 #include <Windows.h>
+#include <wtypes.h>
+#include <iostream>
 
 #include "ResolutionChanger.h"
 
 namespace ResolutionChanger
 {
+	// http://stackoverflow.com/questions/8690619/how-to-get-screen-resolution-in-c
+	
+	void getDesktopResolution(int* horizontal, int* vertical)
+	{
+	   RECT desktop;
+	   const HWND hDesktop = GetDesktopWindow();// get desktop window handle
+	   GetWindowRect(hDesktop, &desktop);// get size of screen
+	   // top left corner have coordinates (0,0) and bottom right corner will have coordinates (horizontal, vertical)
+	   *horizontal = desktop.right;
+	   *vertical = desktop.bottom;
+	}
+
 	bool changeResolution(int width, int height)
 	{
 		// http://www.gamedev.net/topic/602791-c-change-screen-resolution/

@@ -16,6 +16,7 @@ public:
 
 	void init();
 	void onResizeWindow(const Int2& newSize);
+	void setVirtualSize(bool yesNo, const Int2& virtualSize, const Color& borderColor);
 	void setPixelPerPoint(const Float2& ppp, const Int2& topLeftCornerInWindow, const Int2& windowVirtualSize);
 	Int2 convertRealPositionToVirtualPosition(const Int2& pos) const;
 	Int2 convertVirtualPositionToRealPosition(const Int2& pos) const;

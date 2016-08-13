@@ -28,6 +28,13 @@ Scene2D::Scene2D()
 }
 
 //---------------------------------------------------------------------
+
+void Scene2D::setVirtualSize(bool yesNo, const Int2& virtualSize, const Color& borderColor)
+{
+	AppSetup::instance().setVirtualSize(yesNo, virtualSize, borderColor);
+}
+
+//---------------------------------------------------------------------
 //	Activate the 2D mode to display 2d
 
 void Scene2D::set2DMode()
@@ -151,10 +158,10 @@ Int2 Scene2D::getWindowRealSize() const
 
 //---------------------------------------------------------------------
 
-void Scene2D::setPixelPerPoint(const Float2& ppp, const Int2& topLeftCornerInWindow, const Int2& windowVirtualSize)
+/*void Scene2D::setPixelPerPoint(const Float2& ppp, const Int2& topLeftCornerInWindow, const Int2& windowVirtualSize)
 {
 	AppSetup::instance().setPixelPerPoint(ppp, topLeftCornerInWindow, windowVirtualSize);
-}
+}*/
 
 //---------------------------------------------------------------------
 

@@ -8,6 +8,7 @@
 #include "../include/Engine.h"
 #include "../include/FileUtil.h"
 #include "Steam.h"
+#include "ResolutionChanger.h"
 
 #include "AppSetup.h"
 
@@ -151,6 +152,13 @@ Color Engine::getDefaultBackgroundColor()
 Color Engine::getDefaultForegroundColor()
 {
 	return AppSetup::instance().getDefaultForegroundColor();
+}
+
+Int2 Engine::getDesktopScreenResolution()
+{
+	Int2 size;
+	ResolutionChanger::getDesktopResolution(&(size.data[0]), &(size.data[1]));
+	return size;
 }
 
 void Engine::startRender()
