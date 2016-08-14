@@ -53,6 +53,8 @@
 	#include <GL/glut.h>
 	#include <GL/freeglut_ext.h>
 
+	#define USES_SDL_FOR_SOUND
+
 #else
 	#error
 #endif

@@ -7,3 +7,5 @@ apt-get install libopenal-dev libopenal1 libalut0 libalut-dev
 apt-get install libvorbis-dbg libvorbis-dev libvorbis0a libvorbisenc2
 apt-get install libxrandr-dev libxrandr2
 apt-get install libxml2 libxml2-dev
+apt-get install libsdl-mixer1.2 libsdl-mixer1.2-dev
+apt-get install libsdl-sound1.2 libsdl-sound1.2-dev
