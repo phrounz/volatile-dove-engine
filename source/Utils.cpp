@@ -42,7 +42,7 @@
 const int MAX_PATH = FILENAME_MAX;
 
 #ifdef USES_JS_EMSCRIPTEN
-	
+
 	void printTrace()
 	{
 		printf("(Call stack not available)\n");
@@ -52,7 +52,7 @@ const int MAX_PATH = FILENAME_MAX;
 #else
 
 	#include <execinfo.h>
-	
+
 	void printTrace()
 	{
 		void *stackAddrs[100];
@@ -198,7 +198,7 @@ void print(const char* text)
 	if (s_logMessages)
 	{
 		if (fdLog == NULL) fdLog = fopen(FileUtil::getFullPath(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()).c_str(), "w");
-		fprintf(fdLog, finalText.c_str());
+		fprintf(fdLog, "%s", finalText.c_str());
 		fflush(fdLog);
 	}
 #elif defined(USES_WINDOWS8_METRO)
@@ -283,13 +283,13 @@ HANDLE checkFileHandle(HANDLE handle, const char* filenamefordebug = NULL)
 
 	if (handle == NULL)
 	{
-		if (filenamefordebug != NULL) 
+		if (filenamefordebug != NULL)
 			dieErrorMessageToUser(std::string(filenamefordebug));
 		Assert(false);
 	}
-	
+
 #elif USES_WINDOWS8_METRO
-	
+
 	if (INVALID_HANDLE_VALUE == handle)
 	{
 		DWORD errorCode = GetLastError();
@@ -419,15 +419,15 @@ void checkHResult(HRESULT hresult)
 			FORMAT_MESSAGE_FROM_SYSTEM
 			// allocate buffer on local heap for error text
 			//|FORMAT_MESSAGE_ALLOCATE_BUFFER
-			// Important! will fail otherwise, since we're not 
+			// Important! will fail otherwise, since we're not
 			// (and CANNOT) pass insertion parameters
-			|FORMAT_MESSAGE_IGNORE_INSERTS,  
+			|FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL,    // unused with FORMAT_MESSAGE_FROM_SYSTEM
 			hresult,
 			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPTSTR)&errorText,  // output 
+			(LPTSTR)&errorText,  // output
 			0, // minimum size for output buffer
-			NULL);   // arguments - see note 
+			NULL);   // arguments - see note
 
 		if ( NULL != errorText )
 		{
@@ -443,7 +443,7 @@ void checkHResult(HRESULT hresult)
 }
 #endif
 //-------------------------------------------------------------------------
-	
+
 wchar_t* getCurrentDirectoryStatic()
 {
 			//s_pwd = L"foobar";
@@ -457,7 +457,7 @@ wchar_t* getCurrentDirectoryStatic()
 }
 
 //-------------------------------------------------------------------------
-	
+
 std::string getCurrentDirectory()
 {
 #if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
@@ -481,7 +481,7 @@ std::wstring getCurrentDirectoryUnicode()
 }
 
 //-------------------------------------------------------------------------
-	
+
 /*void setCurrentDirectory(const std::string& newdir)
 {
 	#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
@@ -600,17 +600,17 @@ void initClock() // first run -> initialization (must be called before the 72nd 
 }
 
 int64_t getMillisecond()
-{	
+{
 	// http://stackoverflow.com/questions/3133857/c-count-time-overcoming-72-minutes-range-of-clock-t
 	//
 	// This hack should be useful and work whether CLOCKS_PER_SEC=1000 or CLOCKS_PER_SEC=1000000 or another value
 
 	int64_t clo = getClockForMili_();
 	int64_t timeDiff = getTimeForMili_() - clo;
-	// check that clock() did not overlap. 
+	// check that clock() did not overlap.
 
 	// If clock() value overlapped and is now too small (i.e. timeDiff bigger than expected)
-	// OR: 
+	// OR:
 	// If clock() value is too big (should not happen, except maybe because of an unlikely multi-thread concurrence on s_shiftForClockOverflow)
 	// (Note: We use a margin of 20000 (20 seconds) to avoid overreacting, but in theory anything between 1000 (1 second) and ~4320000 (72 minutes) should work).
 	if (timeDiff > s_timeDiff + 20000 || timeDiff < s_timeDiff - 20000)
@@ -618,11 +618,11 @@ int64_t getMillisecond()
 		// Fix s_shiftForClockOverflow to keep getClockForMili_() correct.
 		s_shiftForClockOverflow += timeDiff - s_timeDiff;
 
-		// Now call recursively to be sure that the value is now ok. 
+		// Now call recursively to be sure that the value is now ok.
 		// Also this might help in multi-thread environment, if threads are concurrent to modify s_shiftForClockOverflow value.
 		return getMillisecond();
 	}
-	
+
     return clo;
 }
 

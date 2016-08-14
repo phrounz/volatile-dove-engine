@@ -29,11 +29,11 @@ namespace ResolutionChanger
 
 	void getDesktopResolution(int* horizontal, int* vertical)
 	{
-#warning "getDesktopResolution() is not tested"
 		Display* disp = XOpenDisplay(NULL);
 		Screen*  scrn = DefaultScreenOfDisplay(disp);
-		*horizontal = scrn->height;
-		*vertical = scrn->width;
+		printf("%d %d\n", scrn->width, scrn->height);
+		*horizontal = scrn->width;
+		*vertical = scrn->height;
 	}
 
 
@@ -209,7 +209,7 @@ namespace ResolutionChanger
 namespace ResolutionChanger
 {
 	// http://stackoverflow.com/questions/8690619/how-to-get-screen-resolution-in-c
-	
+
 	void getDesktopResolution(int* horizontal, int* vertical)
 	{
 	   RECT desktop;

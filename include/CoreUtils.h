@@ -35,7 +35,7 @@ namespace CoreUtils
 {
 	//---------------------------------------------------------------------
 	/**
-	* \brief A template vector used to store and manage pair, triplet, etc of values. 
+	* \brief A template vector used to store and manage pair, triplet, etc of values.
 	* See also the typedef as Int2,Int3,Float2,Float3,Color,etc.
 	*/
 
@@ -336,7 +336,7 @@ namespace CoreUtils
 	BasicVector<nbElements, TypeOfElement2> basicVectorCast(const BasicVector<nbElements, TypeOfElement1>& parInput)
 	{
 		BasicVector<nbElements, TypeOfElement2> result;
-		for (int i = 0; i < nbElements; ++i)
+		for (size_t i = 0; i < nbElements; ++i)
 		{
 			result.data[i] = (TypeOfElement2)parInput.data[i];
 		}

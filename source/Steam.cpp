@@ -132,7 +132,7 @@ namespace Steam
 	void CSteamAchievements::OnUserStatsReceived(UserStatsReceived_t *pCallback)
 	{
 		// we may get callbacks for other games' stats arriving, ignore them
-		if (m_iAppID == pCallback->m_nGameID)
+		if (m_iAppID == static_cast<int64>(pCallback->m_nGameID))
 		{
 			if (k_EResultOK == pCallback->m_eResult)
 			{
@@ -162,7 +162,7 @@ namespace Steam
 	void CSteamAchievements::OnUserStatsStored(UserStatsStored_t *pCallback)
 	{
 		// we may get callbacks for other games' stats arriving, ignore them
-		if (m_iAppID == pCallback->m_nGameID)
+		if (m_iAppID == static_cast<int64>(pCallback->m_nGameID))
 		{
 			if (k_EResultOK == pCallback->m_eResult)
 			{
@@ -180,7 +180,7 @@ namespace Steam
 	void CSteamAchievements::OnAchievementStored(UserAchievementStored_t *pCallback)
 	{
 		// we may get callbacks for other games' stats arriving, ignore them
-		if (m_iAppID == pCallback->m_nGameID)
+		if (m_iAppID == static_cast<int64>(pCallback->m_nGameID))
 		{
 			Utils::print("Stored Achievement for Steam\n");
 		}
@@ -210,7 +210,7 @@ namespace Steam
 		// if you're running in the debugger, only warnings (nSeverity >= 1) will be sent
 		// if you add -debug_steamapi to the command-line, a lot of extra informational messages will also be sent
 #ifdef USES_LINUX
-		printf(pchDebugText);
+		printf("%s", pchDebugText);
 #else
 		::OutputDebugStringA(pchDebugText);
 #endif
@@ -226,7 +226,7 @@ namespace Steam
 	void init(const std::vector<AchievementInfo>& achievementInfos) //const char *pchCmdLine, HINSTANCE hInstance, int nCmdShow)
 	{
 		g_AchievementInfosCopy = achievementInfos;
-		for (int i = 0; i < achievementInfos.size(); ++i)
+		for (size_t i = 0; i < achievementInfos.size(); ++i)
 		{
 			Achievement_t achievementData;
 			achievementData.m_eAchievementID = i;
@@ -237,10 +237,10 @@ namespace Steam
 			achievementData.m_iIconImage = 0;
 			g_Achievements.push_back(achievementData);
 		}
-		
+
 		if (SteamAPI_RestartAppIfNecessary(k_uAppIdInvalid))
 		{
-			// if Steam is not running or the game wasn't started through Steam, SteamAPI_RestartAppIfNecessary starts the 
+			// if Steam is not running or the game wasn't started through Steam, SteamAPI_RestartAppIfNecessary starts the
 			// local Steam client and also launches this game again.
 
 			// Once you get a public Steam AppID assigned for this game, you need to replace k_uAppIdInvalid with it and
@@ -295,9 +295,9 @@ namespace Steam
 		SteamClient()->SetWarningMessageHook(&SteamAPIDebugTextHook);
 
 		// Tell Steam where it's overlay should show notification dialogs, this can be top right, top left,
-		// bottom right, bottom left. The default position is the bottom left if you don't call this.  
-		// Generally you should use the default and not call this as users will be most comfortable with 
-		// the default position.  The API is provided in case the bottom right creates a serious conflict 
+		// bottom right, bottom left. The default position is the bottom left if you don't call this.
+		// Generally you should use the default and not call this as users will be most comfortable with
+		// the default position.  The API is provided in case the bottom right creates a serious conflict
 		// with important UI in your game.
 		SteamUtils()->SetOverlayNotificationPosition(k_EPositionTopRight);
 
@@ -313,12 +313,12 @@ namespace Steam
 			}
 		}
 
-		// We are going to use the controller interface, initialize it, which is a seperate step as it 
+		// We are going to use the controller interface, initialize it, which is a seperate step as it
 		// create a new thread in the game proc and we don't want to force that on games that don't
 		// have native Steam controller implementations
 
 		std::string rgchCWD = Utils::getCurrentDirectory();
-		
+
 		char rgchFullPath[1024];
 #if defined(_WIN32)
 		_snprintf(rgchFullPath, sizeof(rgchFullPath), "%s\\%s", rgchCWD.c_str(), "controller.vdf");
@@ -343,7 +343,7 @@ namespace Steam
 
 		// init VR before we make the window
 
-		// Construct a new instance of the game engine 
+		// Construct a new instance of the game engine
 		// bugbug jmccaskey - make screen resolution dynamic, maybe take it on command line?
 		/*IGameEngine *pGameEngine =
 #if defined(_WIN32)
