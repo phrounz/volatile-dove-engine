@@ -33,7 +33,7 @@ namespace ResolutionChanger
 		Display* disp = XOpenDisplay(NULL);
 		Screen*  scrn = DefaultScreenOfDisplay(disp);
 		*horizontal = scrn->height;
-		*vertical = = scrn->width;
+		*vertical = scrn->width;
 	}
 
 

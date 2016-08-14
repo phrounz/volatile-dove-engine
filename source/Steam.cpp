@@ -252,7 +252,11 @@ namespace Steam
 		// Init Steam CEG
 		if (!Steamworks_InitCEGLibrary())
 		{
-			AssertMessage(false, "Steam must be running to play this game (InitDrmLibrary() failed).");
+			Utils::sleepMs(1000);
+			if (!Steamworks_InitCEGLibrary()) // try twice - it may be a glitch in the network?
+			{
+				AssertMessage(false, "Steam must be running to play this game (InitDrmLibrary() failed).");
+			}
 		}
 
 		// Initialize SteamAPI, if this fails we bail out since we depend on Steam for lots of stuff.
@@ -264,7 +268,11 @@ namespace Steam
 		// even when not launched via steam.
 		if (!SteamAPI_Init())
 		{
-			AssertMessage(false, "Steam must be running to play this game (SteamAPI_Init() failed).\n");
+			Utils::sleepMs(1000);
+			if (!SteamAPI_Init())
+			{
+				AssertMessage(false, "Steam must be running to play this game (SteamAPI_Init() failed).\n");
+			}
 		}
 
 		// Create the SteamAchievements object if Steam was successfully initialized
@@ -274,7 +282,12 @@ namespace Steam
 		bool res = g_SteamAchievements->RequestStats();
 		if (!res)
 		{
-			AssertMessage(false, "Could not get stats from Steam.\nPlease check that your Internet connection is working correctly and that Steam is up.\n");
+			Utils::sleepMs(1000);
+			res = g_SteamAchievements->RequestStats();
+			if (!res)
+			{
+				AssertMessage(false, "Could not get stats from Steam.\nPlease check that your Internet connection is working correctly and that Steam is up.\n");
+			}
 		}
 
 
@@ -293,7 +306,11 @@ namespace Steam
 		// will return false.
 		if (!SteamUser()->BLoggedOn())
 		{
-			AssertMessage(false, "Steam user must be logged in to play this game (SteamUser()->BLoggedOn() returned false).\n");
+			Utils::sleepMs(1000);
+			if (!SteamUser()->BLoggedOn())
+			{
+				AssertMessage(false, "Steam user must be logged in to play this game (SteamUser()->BLoggedOn() returned false).\n");
+			}
 		}
 
 		// We are going to use the controller interface, initialize it, which is a seperate step as it 
