@@ -14,12 +14,16 @@ namespace ResolutionChanger
 
 #elif defined(USES_LINUX)
 
+//#define CHANGERESOLUTION_LINUX
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <X11/Xlib.h>
+#if CHANGERESOLUTION_LINUX
 #include <X11/extensions/Xrandr.h>
+#endif
 
 #include "ResolutionChanger.h"
 
@@ -91,6 +95,7 @@ namespace ResolutionChanger
 
 	bool changeResolution(int width, int height)
 	{
+#if CHANGERESOLUTION_LINUX
 		Display* dpy = XOpenDisplay(NULL);// connect to X server
 		Window root = RootWindow(dpy, 0);// get root window id
 
@@ -142,6 +147,7 @@ namespace ResolutionChanger
 		XCloseDisplay(dpy);// exit
 
 		return (idRes != -1);
+#endif
 	}
 }
 

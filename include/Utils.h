@@ -60,6 +60,7 @@ namespace Utils
 	wchar_t* getCurrentDirectoryStatic();//TODO check
 	std::string getCurrentDirectory();
 	std::wstring getCurrentDirectoryUnicode();
+	bool changeCurrentDirectory(const char* path);
 	//void setCurrentDirectory(const std::string& newdir);
 
 	void initRandomSeed();

@@ -3,10 +3,13 @@
 	#define COMPILE_COMPRESS
 #endif
 
+#include <cstdio>
+#include <cstdlib>
+
 #ifdef COMPILE_COMPRESS
-	#include <cstdio>
-	#include <cstdlib>
 	#include <zlib.h>
+#else
+	#include <cstring>
 #endif
 
 #include "../include/CompressUtil.h"

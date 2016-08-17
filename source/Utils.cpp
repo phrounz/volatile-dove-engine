@@ -470,6 +470,17 @@ std::string getCurrentDirectory()
 
 //-------------------------------------------------------------------------
 
+bool changeCurrentDirectory(const char* path)
+{
+#ifdef WIN32
+	return (_chdir(path) == 0);
+#else
+	return (chdir(path) == 0);
+#endif
+}
+
+//-------------------------------------------------------------------------
+
 std::wstring getCurrentDirectoryUnicode()
 {
 #if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
