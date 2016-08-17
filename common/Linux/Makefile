@@ -7,10 +7,10 @@ STEAMSDK_PATH :=
 ARCH := 32
 
 MOPTION := -m32
-TARGET := App_Linux_32bits.$(shell uname -r)
+TARGET := App_Linux_32bit.$(shell uname -r)
 ifeq ($(ARCH),64)
 MOPTION := -m64
-TARGET := App_Linux_64bits.$(shell uname -r)
+TARGET := App_Linux_64bit.$(shell uname -r)
 endif
 
 SOURCES := $(wildcard ../../source/opengl/*.cpp) $(wildcard ../../source/*.cpp) $(SRCS)
