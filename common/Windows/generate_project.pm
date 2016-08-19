@@ -106,11 +106,11 @@ sub processFile($$$$$$$$$$$)
 			}
 			elsif (@$rl_additional_include_dirs > 0 && $line =~ m/^(.*)AdditionalIncludeDirectories=\"([^"]*)\"(.*)$/)
 			{
-				$line = $1.'AdditionalIncludeDirectories="'.$2.' '.join(';',@$rl_additional_include_dirs).'"'.$3."\n";
+				$line = $1.'AdditionalIncludeDirectories="'.$2.';'.join(';',@$rl_additional_include_dirs).'"'.$3."\n";
 			}
 			elsif (@$rl_additional_lib_dirs > 0 && $line =~ m/^(.*)AdditionalLibraryDirectories=\"([^"]*)\"(.*)$/)
 			{
-				$line = $1.'AdditionalLibraryDirectories="'.$2.' '.join(';',@$rl_additional_lib_dirs).'"'.$3."\n";
+				$line = $1.'AdditionalLibraryDirectories="'.$2.';'.join(';',@$rl_additional_lib_dirs).'"'.$3."\n";
 			}
 			elsif (@$rl_additional_libs > 0 && $line =~ m/^(.*)AdditionalDependencies=\"([^"]*)\"(.*)$/)
 			{
@@ -118,7 +118,7 @@ sub processFile($$$$$$$$$$$)
 			}
 			elsif (@$rl_additional_defines > 0 && $line =~ m/^(.*)PreprocessorDefinitions=\"([^"]*)\"(.*)$/)
 			{
-				$line = $1.'PreprocessorDefinitions="'.$2.' '.join(' ',@$rl_additional_defines).'"'.$3."\n";
+				$line = $1.'PreprocessorDefinitions="'.$2.';'.join(';',@$rl_additional_defines).'"'.$3."\n";
 			}
 		}
 	}

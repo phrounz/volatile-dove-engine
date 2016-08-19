@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\dependancy_libraries\OpenAL 1.1 SDK\include&quot;;&quot;$(SolutionDir)\..\..\dependancy_libraries\include&quot;"
-				PreprocessorDefinitions="USES_WINDOWS_OPENGL;USES_SDL_INSTEAD_OF_GLUT"
+				PreprocessorDefinitions="USES_WINDOWS_OPENGL;USES_SDL_INSTEAD_OF_GLUT;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -119,7 +119,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\dependancy_libraries\OpenAL 1.1 SDK\include&quot;;&quot;$(SolutionDir)\..\..\dependancy_libraries\include&quot;"
-				PreprocessorDefinitions="USES_WINDOWS_OPENGL;USES_SDL_INSTEAD_OF_GLUT"
+				PreprocessorDefinitions="USES_WINDOWS_OPENGL;USES_SDL_INSTEAD_OF_GLUT;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -245,15 +245,11 @@
 <File RelativePath="..\..\source\Image.cpp"></File>
 <File RelativePath="..\..\source\JoystickManager.cpp"></File>
 <File RelativePath="..\..\source\KeyboardManager.cpp"></File>
-<File RelativePath="..\..\source\lodepng.cpp"></File>
-<File RelativePath="..\..\source\lodepng.h"></File>
-<File RelativePath="..\..\source\main.cpp"></File>
 <File RelativePath="..\..\source\MathUtils.cpp"></File>
 <File RelativePath="..\..\source\MemoryPool.cpp"></File>
 <File RelativePath="..\..\source\MessageDialog.cpp"></File>
 <File RelativePath="..\..\source\MouseManager.cpp"></File>
 <File RelativePath="..\..\source\Network.cpp"></File>
-<File RelativePath="..\..\source\network_stdincludes.h"></File>
 <File RelativePath="..\..\source\ParallelTasks.cpp"></File>
 <File RelativePath="..\..\source\PositionsGraph.cpp"></File>
 <File RelativePath="..\..\source\ResolutionChanger.cpp"></File>
@@ -274,6 +270,10 @@
 <File RelativePath="..\..\source\TextureReal.h"></File>
 <File RelativePath="..\..\source\Thread.cpp"></File>
 <File RelativePath="..\..\source\Utils.cpp"></File>
+<File RelativePath="..\..\source\lodepng.cpp"></File>
+<File RelativePath="..\..\source\lodepng.h"></File>
+<File RelativePath="..\..\source\main.cpp"></File>
+<File RelativePath="..\..\source\network_stdincludes.h"></File>
 <File RelativePath="..\..\source\opengl\ARB_Multisample.h"></File>
 <File RelativePath="..\..\source\opengl\CameraBasic.cpp"></File>
 <File RelativePath="..\..\source\opengl\CameraBasic.h"></File>
@@ -282,24 +282,24 @@
 <File RelativePath="..\..\source\opengl\GLExtension.h"></File>
 <File RelativePath="..\..\source\opengl\OpenGL.cpp"></File>
 <File RelativePath="..\..\source\opengl\OpenGL.h"></File>
-<File RelativePath="..\..\source\opengl\opengl_inc.h"></File>
 <File RelativePath="..\..\source\opengl\OpenGLApp.cpp"></File>
 <File RelativePath="..\..\source\opengl\OpenGLApp.h"></File>
 <File RelativePath="..\..\source\opengl\OpenGLAppControls.cpp"></File>
 <File RelativePath="..\..\source\opengl\OpenGLAppControls.h"></File>
 <File RelativePath="..\..\source\opengl\OpenGLDraw.cpp"></File>
 <File RelativePath="..\..\source\opengl\OpenGLDraw.h"></File>
-<File RelativePath="..\..\source\opengl\Scene3DPrivate.h"></File>
 <File RelativePath="..\..\source\opengl\SDLDraw.cpp"></File>
 <File RelativePath="..\..\source\opengl\SDLDraw.h"></File>
+<File RelativePath="..\..\source\opengl\Scene3DPrivate.h"></File>
 <File RelativePath="..\..\source\opengl\Shader.cpp"></File>
 <File RelativePath="..\..\source\opengl\Shader.h"></File>
-<File RelativePath="..\..\source\opengl\Sound_Basic.cpp"></File>
-<File RelativePath="..\..\source\opengl\Sound_Basic.h"></File>
 <File RelativePath="..\..\source\opengl\SoundLoad.cpp"></File>
 <File RelativePath="..\..\source\opengl\SoundLoad.h"></File>
+<File RelativePath="..\..\source\opengl\Sound_Basic.cpp"></File>
+<File RelativePath="..\..\source\opengl\Sound_Basic.h"></File>
 <File RelativePath="..\..\source\opengl\TextureReal.cpp"></File>
 <File RelativePath="..\..\source\opengl\VBO.h"></File>
+<File RelativePath="..\..\source\opengl\opengl_inc.h"></File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

@@ -51,7 +51,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;VERSION_X86;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;VERSION_X86;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\..\..\dependancy_libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAsWinRT>true</CompileAsWinRT>
@@ -79,7 +79,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;VERSION_X86;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;VERSION_X86;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\..\..\dependancy_libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAsWinRT>true</CompileAsWinRT>
@@ -129,16 +129,12 @@
 <ClCompile Include="..\..\source\Image.cpp" />
 <ClCompile Include="..\..\source\JoystickManager.cpp" />
 <ClCompile Include="..\..\source\KeyboardManager.cpp" />
-<ClCompile Include="..\..\source\lodepng.cpp" />
-<ClInclude Include="..\..\source\lodepng.h" />
-<ClCompile Include="..\..\source\main.cpp" />
 <ClCompile Include="..\..\source\Material.cpp" />
 <ClCompile Include="..\..\source\MathUtils.cpp" />
 <ClCompile Include="..\..\source\MemoryPool.cpp" />
 <ClCompile Include="..\..\source\MessageDialog.cpp" />
 <ClCompile Include="..\..\source\MouseManager.cpp" />
 <ClCompile Include="..\..\source\Network.cpp" />
-<ClInclude Include="..\..\source\network_stdincludes.h" />
 <ClCompile Include="..\..\source\Obj3D.cpp" />
 <ClCompile Include="..\..\source\ParallelTasks.cpp" />
 <ClCompile Include="..\..\source\PositionsGraph.cpp" />
@@ -163,26 +159,28 @@
 <ClCompile Include="..\..\source\Thread.cpp" />
 <ClCompile Include="..\..\source\Utils.cpp" />
 <ClCompile Include="..\..\source\VBOGroup.cpp" />
+<ClCompile Include="..\..\source\lodepng.cpp" />
+<ClInclude Include="..\..\source\lodepng.h" />
+<ClCompile Include="..\..\source\main.cpp" />
+<ClInclude Include="..\..\source\network_stdincludes.h" />
 <ClInclude Include="..\..\source\directx\AbstractWindow.h" />
 <ClCompile Include="..\..\source\directx\BasicReaderWriter.cpp" />
-<ClInclude Include="..\..\source\directx\basicreaderwriter.h" />
 <ClCompile Include="..\..\source\directx\BasicTimer.cpp" />
 <ClInclude Include="..\..\source\directx\BasicTimer.h" />
+<ClCompile Include="..\..\source\directx\DXMain.cpp" />
+<ClInclude Include="..\..\source\directx\DXMain.h" />
 <ClCompile Include="..\..\source\directx\DesktopApp.cpp" />
 <ClInclude Include="..\..\source\directx\DesktopApp.h" />
 <ClCompile Include="..\..\source\directx\DesktopAppControls.cpp" />
 <ClInclude Include="..\..\source\directx\DesktopAppControls.h" />
 <ClCompile Include="..\..\source\directx\DesktopWindow.cpp" />
 <ClInclude Include="..\..\source\directx\DesktopWindow.h" />
-<ClInclude Include="..\..\source\directx\directx_inc.h" />
 <ClCompile Include="..\..\source\directx\DirectXBase.cpp" />
 <ClInclude Include="..\..\source\directx\DirectXBase.h" />
 <ClCompile Include="..\..\source\directx\DirectXDraw.cpp" />
 <ClInclude Include="..\..\source\directx\DirectXDraw.h" />
 <ClCompile Include="..\..\source\directx\DirectXHelper.cpp" />
 <ClInclude Include="..\..\source\directx\DirectXHelper.h" />
-<ClCompile Include="..\..\source\directx\DXMain.cpp" />
-<ClInclude Include="..\..\source\directx\DXMain.h" />
 <ClCompile Include="..\..\source\directx\FileUtilAsync.cpp" />
 <ClInclude Include="..\..\source\directx\FileUtilAsync.h" />
 <ClCompile Include="..\..\source\directx\MediaStreamer.cpp" />
@@ -199,12 +197,12 @@
 <ClInclude Include="..\..\source\directx\Scene3DPrivate.h" />
 <ClCompile Include="..\..\source\directx\Shader.cpp" />
 <ClInclude Include="..\..\source\directx\Shader.h" />
+<ClCompile Include="..\..\source\directx\SoundFileReader.cpp" />
+<ClInclude Include="..\..\source\directx\SoundFileReader.h" />
 <ClCompile Include="..\..\source\directx\Sound_Basic.cpp" />
 <ClInclude Include="..\..\source\directx\Sound_Basic.h" />
 <ClCompile Include="..\..\source\directx\Sound_Stream.cpp" />
 <ClInclude Include="..\..\source\directx\Sound_Stream.h" />
-<ClCompile Include="..\..\source\directx\SoundFileReader.cpp" />
-<ClInclude Include="..\..\source\directx\SoundFileReader.h" />
 <ClCompile Include="..\..\source\directx\StreamEffect.cpp" />
 <ClInclude Include="..\..\source\directx\StreamEffect.h" />
 <ClCompile Include="..\..\source\directx\TextElement.cpp" />
@@ -220,6 +218,8 @@
 <ClInclude Include="..\..\source\directx\WinStoreAppWindow.h" />
 <ClCompile Include="..\..\source\directx\XAudio2SoundPlayer.cpp" />
 <ClInclude Include="..\..\source\directx\XAudio2SoundPlayer.h" />
+<ClInclude Include="..\..\source\directx\basicreaderwriter.h" />
+<ClInclude Include="..\..\source\directx\directx_inc.h" />
     <!--<ClCompile Include="..\..\source\*.cpp" /><ClCompile Include="..\..\source\directx\*.cpp" />-->
   </ItemGroup>
   <ItemGroup>
