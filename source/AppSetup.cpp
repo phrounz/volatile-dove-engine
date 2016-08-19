@@ -166,7 +166,9 @@ void AppSetup::set2DMode()
 {
 	m_is3DModeInsteadOf2DMode = false;
 #if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
+#ifndef USES_SDL_INSTEAD_OF_GLUT
 	Shader::instance().stopUsing();
+#endif
 	m_openGL->set2DMode();
 #else
 	DXMain::instance()->set2DMode();
