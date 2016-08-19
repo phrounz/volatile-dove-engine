@@ -153,6 +153,10 @@ sub writeFileWithConfirmationForDifferences($$)
 			print "\n";
 			rename "$output_file.new", $output_file if ($yes_no eq "y");
 		}
+		else
+		{
+			unlink "$output_file.new";
+		}
 	}
 	else
 	{
