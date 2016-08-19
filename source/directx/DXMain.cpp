@@ -695,6 +695,24 @@ void DXMain::initializeDpi() {
 		m_d2dContext->GetDpi(&(m_defaultDpi.data[0]), &(m_defaultDpi.data[1]));
 }
 
+void DXMain::getResolution(int* horizontal, int* vertical)
+{
+	ComPtr<IDXGIDevice> dxgiDevice;
+	DX::ThrowIfFailed(m_d3dDevice.As(&dxgiDevice));
+
+	ComPtr<IDXGIAdapter> dxgiAdapter;
+	DX::ThrowIfFailed(dxgiDevice->GetAdapter(&dxgiAdapter));
+
+	IDXGIOutput * pOutput;
+	if (dxgiAdapter->EnumOutputs(0, &pOutput) != DXGI_ERROR_NOT_FOUND)
+	{
+		DXGI_OUTPUT_DESC desc;
+		pOutput->GetDesc(&desc);
+		*horizontal = desc.DesktopCoordinates.right;
+		*vertical = desc.DesktopCoordinates.bottom;
+	}
+}
+
 void DXMain::flushContext()
 {
 	m_d2dContext->Flush();

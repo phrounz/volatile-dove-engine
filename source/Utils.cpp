@@ -470,14 +470,17 @@ std::string getCurrentDirectory()
 
 //-------------------------------------------------------------------------
 
+#ifndef USES_WINDOWS8_METRO
+
 bool changeCurrentDirectory(const char* path)
 {
-#ifdef WIN32
+#if defined(WIN32)
 	return (_chdir(path) == 0);
 #else
 	return (chdir(path) == 0);
 #endif
 }
+#endif
 
 //-------------------------------------------------------------------------
 

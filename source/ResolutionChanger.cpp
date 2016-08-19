@@ -164,35 +164,24 @@ namespace ResolutionChanger
 #include <agile.h>
 #include <windows.ui.xaml.media.dxinterop.h>
 
-using namespace Microsoft::WRL;
+/*using namespace Microsoft::WRL;
 using namespace Windows::Foundation;
-using namespace MetroHelpers;
+//using namespace MetroHelpers;
 using namespace Platform;
-using namespace D2D1;
+using namespace D2D1;*/
 
 #include "ResolutionChanger.h"
+
+#include "directx/DXMain.h"
 
 // http://blogs.microsoft.co.il/tomershamam/2012/07/24/get-screen-resolution-in-windows-8-metro-style-application/
 
 namespace ResolutionChanger
 {
-#warning "not tested ResolutionChanger::getDesktopResolution"
+#pragma message ("Warning : not tested ResolutionChanger::getDesktopResolution")
 	void getDesktopResolution(int* horizontal, int* vertical)
 	{
-		ComPtr<IDXGIDevice> dxgiDevice;
-		DX::ThrowIfFailed(m_d3dDevice.As(&dxgiDevice));
-
-		ComPtr<IDXGIAdapter> dxgiAdapter;
-		DX::ThrowIfFailed(dxgiDevice->GetAdapter(&dxgiAdapter));
-
-		IDXGIOutput * pOutput;
-		if (dxgiAdapter->EnumOutputs(0, &pOutput) != DXGI_ERROR_NOT_FOUND)
-		{
-			DXGI_OUTPUT_DESC desc;
-			pOutput->GetDesc(&desc);
-			*horizontal = desc.DesktopCoordinates.right;
-			*vertical = desc.DesktopCoordinates.bottom;
-		}
+		DXMain::instance()->getResolution(horizontal, vertical);
 	}
 
 	bool changeResolution(int width, int height)

@@ -17,7 +17,7 @@ use generate_project;
 sub main()
 {
 	# if windows, change the width of the console window
-	if ($^O eq 'MSWin32') { `mode 180,60 ` }
+	#if ($^O eq 'MSWin32') { `mode 180,1200 ` }
 
 	$SIG{INT} = sub { print "\nCaught a sigint, stopping now.\n"; exit 1; };
 
@@ -65,7 +65,8 @@ sub main()
 		linux_make_additional_arguments => 'Arguments added when building App_Linux/compile.sh',
 		windows_additional_include_dirs => 'Additional include directories for Windows, comma-separated',
 		windows_additional_lib_dirs => 'Additional library directories for Windows, comma-separated',
-		windows_additional_libs => 'Additional libraries for Windows, comma-separated'
+		windows_additional_libs => 'Additional libraries for Windows, comma-separated',
+		windows_additional_defines => 'Additional #defines for Windows, comma-separated'
 		};
 	my $rh_setup_value_by_var = {};
 	if (-f "$project_name/setup.ini")
@@ -73,7 +74,7 @@ sub main()
 		$rh_setup_value_by_var = readSetupIniFile("$project_name/setup.ini");
 		foreach my $var (keys %$rh_setup_desc_by_var)
 		{
-			$rh_setup_value_by_var->{$_} = '' unless defined $rh_setup_value_by_var->{$_};
+			$rh_setup_value_by_var->{$var} = '' unless defined $rh_setup_value_by_var->{$var};
 		}
 		writeFile("$project_name/setup.ini", 
 			join("\n", map { "; $rh_setup_desc_by_var->{$_}\n$_=".($rh_setup_value_by_var->{$_}) } sort keys %$rh_setup_desc_by_var));
@@ -140,6 +141,7 @@ sub main()
 	my @l_windows_additional_include_dirs = split(/,/, $rh_setup_value_by_var->{windows_additional_include_dirs});
 	my @l_windows_additional_lib_dirs = split(/,/, $rh_setup_value_by_var->{windows_additional_lib_dirs});
 	my @l_windows_additional_libs = split(/,/, $rh_setup_value_by_var->{windows_additional_libs});
+	my @l_windows_additional_defines = split(/,/, $rh_setup_value_by_var->{windows_additional_defines});
 	my $gitignore_visual_studio = join("\n", qw/Debug Release *.ncb *.suo *.vcproj.*.user *.vcproj.new *.vcxproj.new .gitignore.new/)."\n";
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2008_OpenGL/.gitignore", $gitignore_visual_studio);
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2008_SDL/.gitignore", $gitignore_visual_studio);
@@ -147,16 +149,16 @@ sub main()
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2013_DX_Store/.gitignore", $gitignore_visual_studio);
 	generate_project::processFile(
 		"App_VS2008_OpenGL.vcproj.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj", \@l_code, 0, 0, 0, 
-		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs);
+		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines);
 	generate_project::processFile(
 		"App_VS2008_SDL.vcproj.src", "$relt/App_VS2008_SDL/App_VS2008_SDL.vcproj", \@l_code, 1, 0, 0, 
-		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs);
+		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines);
 	generate_project::processFile(
 		"App_VS2013_DX_Desktop.vcxproj.src", "$relt/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.vcxproj", \@l_code, 0, 1, 1,
-		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs);
+		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines);
 	generate_project::processFile(
 		"App_VS2013_DX_Store.vcxproj.src", "$relt/App_VS2013_DX_Store/App_VS2013_DX_Store.vcxproj", \@l_code, 0, 1, 1,
-		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs);
+		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines);
 	chdir $prevdir or die $prevdir;
 	# create solution files
 	copyOrFail(

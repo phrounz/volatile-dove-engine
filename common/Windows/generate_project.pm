@@ -16,10 +16,10 @@ my @L_DISABLE_3D_SKIPPED_H = map { "$_.cpp" } @L_DISABLE_3D_SKIPPED_MODULES;
 
 #----------------------------------------------
 
-sub processFile($$$$$$$$$$)
+sub processFile($$$$$$$$$$$)
 {
 	my ($input_file, $output_file, $rl_high_level_src, $disable_3d, $recent_visual_studio, $use_directx, $steam_sdk_path_or_empty,
-		$rl_additional_include_dirs, $rl_additional_lib_dirs, $rl_additional_libs) = @_;
+		$rl_additional_include_dirs, $rl_additional_lib_dirs, $rl_additional_libs, $rl_additional_defines) = @_;
 	die unless (defined $input_file && defined $output_file && defined $rl_high_level_src);
 	
 	#print "# Process file: $input_file\n";
@@ -51,7 +51,7 @@ sub processFile($$$$$$$$$$)
 				{
 					if ($disable_3d)
 					{
-						next if (grep { basename($file) eq $line } (@L_DISABLE_3D_SKIPPED_CPP,@L_DISABLE_3D_SKIPPED_H));
+						next if (grep { basename($file) eq $_ } (@L_DISABLE_3D_SKIPPED_CPP,@L_DISABLE_3D_SKIPPED_H));
 					}
 					$str .= getStrToInclude($file, $recent_visual_studio);
 				}
@@ -60,7 +60,7 @@ sub processFile($$$$$$$$$$)
 			{
 				if ($disable_3d)
 				{
-					next if (grep { basename($file2) eq $line } (@L_DISABLE_3D_SKIPPED_CPP,@L_DISABLE_3D_SKIPPED_H));
+					next if (grep { basename($file2) eq $_ } (@L_DISABLE_3D_SKIPPED_CPP,@L_DISABLE_3D_SKIPPED_H));
 				}
 				$str .= getStrToInclude($file2, $recent_visual_studio);
 			}
@@ -93,6 +93,10 @@ sub processFile($$$$$$$$$$)
 			{
 				$line = "$1<AdditionalDependencies>$2;".join(';',@$rl_additional_libs).";<\/AdditionalDependencies>$3\n";
 			}
+			elsif (@$rl_additional_defines > 0 && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
+			{
+				$line = "$1<PreprocessorDefinitions>$2;".join(';',@$rl_additional_defines).";<\/PreprocessorDefinitions>$3\n";
+			}
 		}
 		else
 		{
@@ -111,6 +115,10 @@ sub processFile($$$$$$$$$$)
 			elsif (@$rl_additional_libs > 0 && $line =~ m/^(.*)AdditionalDependencies=\"([^"]*)\"(.*)$/)
 			{
 				$line = $1.'AdditionalDependencies="'.$2.' '.join(' ',@$rl_additional_libs).'"'.$3."\n";
+			}
+			elsif (@$rl_additional_defines > 0 && $line =~ m/^(.*)PreprocessorDefinitions=\"([^"]*)\"(.*)$/)
+			{
+				$line = $1.'PreprocessorDefinitions="'.$2.' '.join(' ',@$rl_additional_defines).'"'.$3."\n";
 			}
 		}
 	}

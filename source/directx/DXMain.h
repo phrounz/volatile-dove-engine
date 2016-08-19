@@ -57,6 +57,7 @@ public:
 	~DXMain();
 	void uninitializeWindow();
 	void initializeDpi();
+	void getResolution(int* horizontal, int* vertical);
 
 	//-------------------
 	// misc

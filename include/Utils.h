@@ -60,7 +60,9 @@ namespace Utils
 	wchar_t* getCurrentDirectoryStatic();//TODO check
 	std::string getCurrentDirectory();
 	std::wstring getCurrentDirectoryUnicode();
+#ifndef USES_WINDOWS8_METRO
 	bool changeCurrentDirectory(const char* path);
+#endif
 	//void setCurrentDirectory(const std::string& newdir);
 
 	void initRandomSeed();
