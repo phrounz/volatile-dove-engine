@@ -2,3 +2,6 @@ output.js
 output.data
 output.html
 output.html.mem
+compile.bat.new
+compile.sh.new
+.gitignore.new
