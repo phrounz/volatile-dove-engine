@@ -6,6 +6,7 @@ use File::Basename qw/dirname basename/;
 use Cwd qw/getcwd/;
 ##use File::Copy::Recursive qw(rcopy);
 use File::Copy qw/copy/;
+use Data::Dumper;
 
 use lib "./common/Windows/";
 use generate_project;
@@ -15,18 +16,78 @@ use generate_project;
 
 sub main()
 {
-	print "Please enter a project name: ";
-	my $project_name = <>;# wait for user input
-	chomp $project_name;
-	die if ($project_name eq '');
-	print "\n";
+	# if windows, change the width of the console window
+	if ($^O eq 'MSWin32') { `mode 180,60 ` }
 
+	$SIG{INT} = sub { print "\nCaught a sigint, stopping now.\n"; exit 1; };
+
+	print "Please select a project to create/maintain:\n";
+	print "0) NEW PROJECT\n";
+	my $i = 1;
+	my %h_project_by_answer;
+	foreach my $project (glob("*"))
+	{
+		if (-d $project && -f "$project/setup.ini")
+		{
+			print "$i) $project\n";
+			$h_project_by_answer{$i} = $project;
+			$i++;
+		}
+	}
+	
+	print "Answer: ";
+	my $project_id = <>;# wait for user input
+	chomp $project_id;
+	
+	my $project_name = undef;
+	if ($project_id == 0)
+	{
+		print "Please enter the name of the project: ";
+		$project_name = <>;# wait for user input
+		chomp $project_name;
+		die if ($project_name eq '');
+	}
+	else
+	{
+		$project_name = $h_project_by_answer{$project_id};
+		die "bad arg\n" unless defined $project_name;
+	}
+	print "\n";
+	
 	#------
 	print "Generating root directory '$project_name'\n";
 	mkd($project_name);
 
 	#------
-	print "Generating code\n";
+	print "Generating or reading setup.ini\n";
+	my $rh_setup_desc_by_var = {
+		steam_sdk_path => 'Steam SDK path or empty string if the project does not use Steam SDK',
+		linux_make_additional_arguments => 'Arguments added when building App_Linux/compile.sh',
+		windows_additional_include_dirs => 'Additional include directories for Windows, comma-separated',
+		windows_additional_lib_dirs => 'Additional library directories for Windows, comma-separated',
+		windows_additional_libs => 'Additional libraries for Windows, comma-separated'
+		};
+	my $rh_setup_value_by_var = {};
+	if (-f "$project_name/setup.ini")
+	{
+		$rh_setup_value_by_var = readSetupIniFile("$project_name/setup.ini");
+		foreach my $var (keys %$rh_setup_desc_by_var)
+		{
+			$rh_setup_value_by_var->{$_} = '' unless defined $rh_setup_value_by_var->{$_};
+		}
+		writeFile("$project_name/setup.ini", 
+			join("\n", map { "; $rh_setup_desc_by_var->{$_}\n$_=".($rh_setup_value_by_var->{$_}) } sort keys %$rh_setup_desc_by_var));
+	}
+	else
+	{
+		writeFile("$project_name/setup.ini", 
+			join("\n", map { "; $rh_setup_desc_by_var->{$_}\n$_=" } keys %$rh_setup_desc_by_var));
+		foreach (keys %$rh_setup_value_by_var) { $rh_setup_value_by_var->{$_} = '' }
+	}
+		#USES_STEAM_INTEGRATION;
+
+	#------
+	print "Generating code directory\n";
 	my $DIRSRCS = "$project_name/code";
 	mkd($DIRSRCS);
 	writeFile("$DIRSRCS/MainClass.cpp", getStrMainClass()) unless (-f "$DIRSRCS/MainClass.cpp");
@@ -34,11 +95,13 @@ sub main()
 	#------
 	print "Generating App_JS_Emscripten\n";
 	mkd("$project_name/App_JS_Emscripten");
-	writeFile("$project_name/App_JS_Emscripten/compile.bat", 
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_JS_Emscripten/.gitignore",
+		join("\n", qw/output.js output.data output.html output.html.mem compile.bat.new compile.sh.new .gitignore.new/)."\n");
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_JS_Emscripten/compile.bat", 
 		'@echo off'."\n"
 		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
-		.'PAUSE');
-	writeFile("$project_name/App_JS_Emscripten/compile.sh", 
+		."PAUSE\n");
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_JS_Emscripten/compile.sh", 
 		'#!/bin/sh'."\n\n"
 		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
 		);
@@ -46,9 +109,11 @@ sub main()
 	#------
 	print "Generating App_Linux\n";
 	mkd("$project_name/App_Linux");
-	writeFile("$project_name/App_Linux/compile.sh", 
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_Linux/.gitignore", "compile.sh.new\n.gitignore.new\n");
+	my $add_args = (defined $rh_setup_value_by_var->{linux_make_additional_arguments}?$rh_setup_value_by_var->{linux_make_additional_arguments}:"");
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_Linux/compile.sh", 
 		'#!/bin/sh'."\n"
-		.'make -f ../../common/Linux/Makefile SRCS=\'$(wildcard ../code/*.cpp)\' $*'."\n"
+		.'make $* -f ../../common/Linux/Makefile SRCS=\'$(wildcard ../code/*.cpp)\''." $add_args\n"
 		);
 
 	#------
@@ -72,16 +137,26 @@ sub main()
 		#glob("../../$DIRSRCS/*/*.cpp"), glob("../../$DIRSRCS/*/*.h")
 		);
 	#print "Source is: ".join(",", @l_code)."\n";
+	my @l_windows_additional_include_dirs = split(/,/, $rh_setup_value_by_var->{windows_additional_include_dirs});
+	my @l_windows_additional_lib_dirs = split(/,/, $rh_setup_value_by_var->{windows_additional_lib_dirs});
+	my @l_windows_additional_libs = split(/,/, $rh_setup_value_by_var->{windows_additional_libs});
+	my $gitignore_visual_studio = join("\n", qw/Debug Release *.ncb *.suo *.vcproj.*.user *.vcproj.new *.vcxproj.new .gitignore.new/)."\n";
+	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2008_OpenGL/.gitignore", $gitignore_visual_studio);
+	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2008_SDL/.gitignore", $gitignore_visual_studio);
+	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2013_DX_Desktop/.gitignore", $gitignore_visual_studio);
+	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2013_DX_Store/.gitignore", $gitignore_visual_studio);
 	generate_project::processFile(
-		"App_VS2008_OpenGL.vcproj.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj", \@l_code, 0, 0, 0);
+		"App_VS2008_OpenGL.vcproj.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj", \@l_code, 0, 0, 0, 
+		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs);
 	generate_project::processFile(
-		"App_VS2008_SDL.vcproj.src", "$relt/App_VS2008_SDL/App_VS2008_SDL.vcproj", \@l_code, 1, 0, 0);
+		"App_VS2008_SDL.vcproj.src", "$relt/App_VS2008_SDL/App_VS2008_SDL.vcproj", \@l_code, 1, 0, 0, 
+		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs);
 	generate_project::processFile(
-		"App_VS2013_DX_Desktop.vcxproj.src",
-		"$relt/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.vcxproj", \@l_code, 0, 1, 1);
+		"App_VS2013_DX_Desktop.vcxproj.src", "$relt/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.vcxproj", \@l_code, 0, 1, 1,
+		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs);
 	generate_project::processFile(
-		"App_VS2013_DX_Store.vcxproj.src",
-		"$relt/App_VS2013_DX_Store/App_VS2013_DX_Store.vcxproj", \@l_code, 0, 1, 1);
+		"App_VS2013_DX_Store.vcxproj.src", "$relt/App_VS2013_DX_Store/App_VS2013_DX_Store.vcxproj", \@l_code, 0, 1, 1,
+		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs);
 	chdir $prevdir or die $prevdir;
 	# create solution files
 	copyOrFail(
@@ -131,6 +206,7 @@ sub main()
 	#------
 	print "Done.\n";
 	print "\n";
+	#unless (scalar glob("App_VS2008_OpenGL.vcproj.*.user") > 0 || -f scalar glob("App_VS2008_OpenGL.vcproj.user") > 0
 	print "Don't forget to set up the Working Directory of Visual Studio projects\n"
 		."to '..\\WorkDir' ('..\\WorkDirStore' for App_VS2013_DX_Store)\n";
 	print "Also, you may have to put new Visual Studio Project GUID numbers\n"
@@ -143,6 +219,27 @@ sub main()
 }
 
 exit main();
+
+#------------------------
+
+sub readSetupIniFile($)
+{
+	my $path = shift;
+	my $rh_setup_value_by_var = {};
+	open (FD, $path) or die $path;
+	foreach my $line (<FD>)
+	{
+		chomp $line;
+		unless ($line =~ /^;/)
+		{
+			my @l_tabs = split(/=/, $line);
+			my $var = shift @l_tabs;
+			my $value = join('=', @l_tabs);
+			$rh_setup_value_by_var->{$var} = $value;
+		}
+	}
+	return $rh_setup_value_by_var;
+}
 
 #------------------------
 # create a directory <arg> if it does not exist
