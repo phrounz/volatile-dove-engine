@@ -84,7 +84,7 @@ sub main()
 	{
 		writeFile("$project_name/setup.ini", 
 			join("\n", map { "; $rh_setup_desc_by_var->{$_}\n$_=" } keys %$rh_setup_desc_by_var));
-		foreach (keys %$rh_setup_value_by_var) { $rh_setup_value_by_var->{$_} = '' }
+		foreach (keys %$rh_setup_desc_by_var) { $rh_setup_value_by_var->{$_} = '' }
 	}
 		#USES_STEAM_INTEGRATION;
 
