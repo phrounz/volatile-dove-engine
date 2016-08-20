@@ -10,8 +10,8 @@ Each example project "Application_XXXXXX" may contain the following directories,
   * Note that in this file, the windows_* values must be separated by commmas (if there are several values) and also they can have special optional syntaxes:
     * ```ONLY:the-directory:the-value```
     * ```EXCEPT:the-directory:the-value```
-    * ```ONLY:the-directory:the-arch:the-value``` (``the-arch`` can be 64 or 32)
-    * ```EXCEPT:the-directory:the-arch:the-value``` (``the-arch`` can be 64 or 32)
+    * ```ONLY:the-directory:the-arch:the-value``` (``the-arch`` can be 64 or 32 or ARM)
+    * ```EXCEPT:the-directory:the-arch:the-value``` (``the-arch`` can be 64 or 32 or ARM)
   * For example the line below would apply ```COMPILE_WITH_TEST``` on all Visual Studio projects of the project, ```_CRT_SECURE_NO_WARNINGS``` applies only to App_VS2013_DX_Desktop for 64bit, and ```COMPILE_WITH_DX``` applies on all Visual Studio projects of the project except App_VS2013_DX_Desktop.
 ```
    windows_additional_defines=ONLY:App_VS2013_DX_Desktop:64:_CRT_SECURE_NO_WARNINGS,COMPILE_WITH_TEST,EXCEPT:App_VS2013_DX_Desktop:COMPILE_WITH_DX
