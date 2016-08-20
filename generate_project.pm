@@ -167,7 +167,7 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 			{
 				$line = "$1<PreprocessorDefinitions>$2;".join(';',@l_additional_defines_32).";<\/PreprocessorDefinitions>$3\n";
 			}
-			elsif (($arch eq '64') && && @l_additional_include_dirs_64 > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			elsif (($arch eq '64') && @l_additional_include_dirs_64 > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
 			{
 				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@l_additional_include_dirs_64).";<\/AdditionalIncludeDirectories>$3\n";
 			}
@@ -183,7 +183,7 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 			{
 				$line = "$1<PreprocessorDefinitions>$2;".join(';',@l_additional_defines_64).";<\/PreprocessorDefinitions>$3\n";
 			}
-			elsif (($arch eq 'ARM') && && @l_additional_include_dirs_arm > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			elsif (($arch eq 'ARM') && @l_additional_include_dirs_arm > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
 			{
 				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@l_additional_include_dirs_arm).";<\/AdditionalIncludeDirectories>$3\n";
 			}

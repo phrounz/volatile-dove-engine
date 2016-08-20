@@ -113,7 +113,7 @@ sub main()
 	mkd("$project_name/App_Linux");
 	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_Linux/.gitignore", "compile.sh.new\n.gitignore.new\n");
 	my $add_args = (defined $rh_setup_value_by_var->{linux_make_additional_arguments}?$rh_setup_value_by_var->{linux_make_additional_arguments}:"");
-	$add_args .= " STEAMSDK_PATH='$rh_setup_desc_by_var->{steam_sdk_path}' " if (defined $rh_setup_desc_by_var->{steam_sdk_path} && $rh_setup_desc_by_var->{steam_sdk_path} ne '');
+	$add_args .= " STEAMSDK_PATH='$rh_setup_value_by_var->{steam_sdk_path}' " if (defined $rh_setup_value_by_var->{steam_sdk_path} && $rh_setup_value_by_var->{steam_sdk_path} ne '');
 	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_Linux/compile.sh", 
 		'#!/bin/sh'."\n"
 		.'make $* -f ../../common/Linux/Makefile SRCS=\'$(wildcard ../code/*.cpp)\''." $add_args\n"
@@ -193,11 +193,11 @@ sub main()
 		"$project_name/App_VS2013_DX_Store/App_VS2013_DX_Store.sln",
 		1);
 	
-	# if (defined $rh_setup_desc_by_var->{steam_sdk_path} && $rh_setup_desc_by_var->{steam_sdk_path} ne '')
+	# if (defined $rh_setup_value_by_var->{steam_sdk_path} && $rh_setup_value_by_var->{steam_sdk_path} ne '')
 	# {
-		# copyOrFail($rh_setup_desc_by_var->{steam_sdk_path}."/public/steam/lib/win32/sdkencryptedappticket.dll", "$project_name/WorkDir/sdkencryptedappticket.dll");
-		# copyOrFail($rh_setup_desc_by_var->{steam_sdk_path}."/public/steam/lib/win64/sdkencryptedappticket64.dll", "$project_name/WorkDir/sdkencryptedappticket64.dll");
-		# copyOrFail($rh_setup_desc_by_var->{steam_sdk_path}."/public/steam/lib/Linux/libsdkencryptedappticket.so";
+		# copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/public/steam/lib/win32/sdkencryptedappticket.dll", "$project_name/WorkDir/sdkencryptedappticket.dll");
+		# copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/public/steam/lib/win64/sdkencryptedappticket64.dll", "$project_name/WorkDir/sdkencryptedappticket64.dll");
+		# copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/public/steam/lib/Linux/libsdkencryptedappticket.so";
 	# }
 
 	#------
