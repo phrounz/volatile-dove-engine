@@ -12,7 +12,7 @@ Each example project "Application_XXXXXX" may contain the following directories,
    windows_additional_defines=ONLY:App_VS2013_DX_Desktop:_CRT_SECURE_NO_WARNINGS,COMPILE_WITH_TEST,EXCEPT:App_VS2013_DX_Desktop:COMPILE_WITH_DX
 ```
 
-### App_VS2008GL or App_VS2008_OpenGL
+### App_VS2008_OpenGL
  * Should work just by opening the solution with **Visual Studio 2008 Express** and 
    compiling+running it (with F5).
  * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
