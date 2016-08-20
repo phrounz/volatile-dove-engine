@@ -45,10 +45,28 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 		$rl_additional_include_dirs, $rl_additional_lib_dirs, $rl_additional_libs, $rl_additional_defines, $visual_studio_store_app_guid) = @_;
 	die unless (defined $input_file && defined $output_file && defined $rl_high_level_src);
 	my $output_dir = basename(dirname($output_file));
-	my @l_additional_include_dirs = filterOnlyAndExcept($rl_additional_include_dirs, $output_dir);
-	my @l_additional_lib_dirs = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir);
-	my @l_additional_libs = filterOnlyAndExcept($rl_additional_libs, $output_dir);
-	my @l_additional_defines = filterOnlyAndExcept($rl_additional_defines, $output_dir);
+	
+	my @l_additional_include_dirs_32 = filterOnlyAndExcept($rl_additional_include_dirs, $output_dir, 0);
+	my @l_additional_lib_dirs_32 = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir, 0);
+	my @l_additional_libs_32 = filterOnlyAndExcept($rl_additional_libs, $output_dir, 0);
+	my @l_additional_defines_32 = filterOnlyAndExcept($rl_additional_defines, $output_dir, 0);
+	
+	my @l_additional_include_dirs_64 = filterOnlyAndExcept($rl_additional_include_dirs, $output_dir, 1);
+	my @l_additional_lib_dirs_64 = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir, 1);
+	my @l_additional_libs_64 = filterOnlyAndExcept($rl_additional_libs, $output_dir, 1);
+	my @l_additional_defines_64 = filterOnlyAndExcept($rl_additional_defines, $output_dir, 1);
+	
+	if ($steam_sdk_path_or_empty ne '')
+	{
+		push @l_additional_include_dirs_32, "$steam_sdk_path_or_empty\\sdk\\public";
+		push @l_additional_include_dirs_64, "$steam_sdk_path_or_empty\\sdk\\public\\steam\\lib\\win64";
+		push @l_additional_lib_dirs_32, "$steam_sdk_path_or_empty\\sdk\\redistributable_bin";
+		push @l_additional_lib_dirs_64, "$steam_sdk_path_or_empty\\sdk\\redistributable_bin";
+		push @l_additional_lib_dirs_32, "$steam_sdk_path_or_empty\\sdk\\public\\steam\\lib\\win32";
+		push @l_additional_lib_dirs_64, "$steam_sdk_path_or_empty\\sdk\\public\\steam\\lib\\win64";
+		#push @l_additional_libs_32, "sdkencryptedappticket.lib";# already in Steam.cpp
+		#push @l_additional_libs_64, "sdkencryptedappticket64.lib";# already in Steam.cpp
+	}
 	
 	#print "# Process file: $input_file\n";
 	#print "# Output file is: $output_file\n";
@@ -56,8 +74,18 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 	my @lines = <FD>;
 	close FD;
 
+	my $is_x64 = 0;
 	foreach my $line (@lines)
 	{
+		if ($line =~ m/\'(Release|Debug)\|Win32\'/)
+		{
+			$is_x64 = 0;
+		}
+		elsif ($line =~ m/\'(Release|Debug)\|x64\'/)
+		{
+			$is_x64 = 1;
+		}
+		
 		if ($line =~ m/<File RelativePath="[^\"]+"><\/File>/)
 		{
 		}
@@ -114,21 +142,37 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 			{
 				$line = "$1<PreprocessorDefinitions>$2;USES_STEAM_INTEGRATION;<\/PreprocessorDefinitions>$3\n";
 			}
-			elsif (@l_additional_include_dirs > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			elsif (!$is_x64 && @l_additional_include_dirs_32 > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
 			{
-				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@l_additional_include_dirs).";<\/AdditionalIncludeDirectories>$3\n";
+				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@l_additional_include_dirs_32).";<\/AdditionalIncludeDirectories>$3\n";
 			}
-			elsif (@l_additional_lib_dirs > 0 && $line =~ m/^(.*)<AdditionalLibraryDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			elsif ($is_x64 && @l_additional_include_dirs_64 > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
 			{
-				$line = "$1<AdditionalLibraryDirectories>$2;".join(';',@l_additional_lib_dirs).";<\/AdditionalLibraryDirectories>$3\n";
+				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@l_additional_include_dirs_64).";<\/AdditionalIncludeDirectories>$3\n";
 			}
-			elsif (@l_additional_libs > 0 && $line =~ m/^(.*)<AdditionalDependencies>([^<]+)<\/AdditionalDependencies>(.*)/)
+			elsif (!$is_x64 && @l_additional_lib_dirs_32 > 0 && $line =~ m/^(.*)<AdditionalLibraryDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
 			{
-				$line = "$1<AdditionalDependencies>$2;".join(';',@l_additional_libs).";<\/AdditionalDependencies>$3\n";
+				$line = "$1<AdditionalLibraryDirectories>$2;".join(';',@l_additional_lib_dirs_32).";<\/AdditionalLibraryDirectories>$3\n";
 			}
-			elsif (@l_additional_defines > 0 && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
+			elsif ($is_x64 && @l_additional_lib_dirs_64 > 0 && $line =~ m/^(.*)<AdditionalLibraryDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
 			{
-				$line = "$1<PreprocessorDefinitions>$2;".join(';',@l_additional_defines).";<\/PreprocessorDefinitions>$3\n";
+				$line = "$1<AdditionalLibraryDirectories>$2;".join(';',@l_additional_lib_dirs_64).";<\/AdditionalLibraryDirectories>$3\n";
+			}
+			elsif (!$is_x64 && @l_additional_libs_32 > 0 && $line =~ m/^(.*)<AdditionalDependencies>([^<]+)<\/AdditionalDependencies>(.*)/)
+			{
+				$line = "$1<AdditionalDependencies>$2;".join(';',@l_additional_libs_32).";<\/AdditionalDependencies>$3\n";
+			}
+			elsif ($is_x64 && @l_additional_libs_64 > 0 && $line =~ m/^(.*)<AdditionalDependencies>([^<]+)<\/AdditionalDependencies>(.*)/)
+			{
+				$line = "$1<AdditionalDependencies>$2;".join(';',@l_additional_libs_64).";<\/AdditionalDependencies>$3\n";
+			}
+			elsif (!$is_x64 && @l_additional_defines_32 > 0 && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
+			{
+				$line = "$1<PreprocessorDefinitions>$2;".join(';',@l_additional_defines_32).";<\/PreprocessorDefinitions>$3\n";
+			}
+			elsif ($is_x64 && @l_additional_defines_64 > 0 && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
+			{
+				$line = "$1<PreprocessorDefinitions>$2;".join(';',@l_additional_defines_64).";<\/PreprocessorDefinitions>$3\n";
 			}
 		}
 		else
@@ -137,21 +181,21 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 			{
 				$line = $1.'PreprocessorDefinitions="'.$2.';USES_STEAM_INTEGRATION;"'.$3."\n";
 			}
-			elsif (@l_additional_include_dirs > 0 && $line =~ m/^(.*)AdditionalIncludeDirectories=\"([^"]*)\"(.*)$/)
+			elsif (@l_additional_include_dirs_32 > 0 && $line =~ m/^(.*)AdditionalIncludeDirectories=\"([^"]*)\"(.*)$/)
 			{
-				$line = $1.'AdditionalIncludeDirectories="'.$2.';'.join(';',@l_additional_include_dirs).'"'.$3."\n";
+				$line = $1.'AdditionalIncludeDirectories="'.$2.';'.join(';',@l_additional_include_dirs_32).'"'.$3."\n";
 			}
-			elsif (@l_additional_lib_dirs > 0 && $line =~ m/^(.*)AdditionalLibraryDirectories=\"([^"]*)\"(.*)$/)
+			elsif (@l_additional_lib_dirs_32 > 0 && $line =~ m/^(.*)AdditionalLibraryDirectories=\"([^"]*)\"(.*)$/)
 			{
-				$line = $1.'AdditionalLibraryDirectories="'.$2.';'.join(';',@l_additional_lib_dirs).'"'.$3."\n";
+				$line = $1.'AdditionalLibraryDirectories="'.$2.';'.join(';',@l_additional_lib_dirs_32).'"'.$3."\n";
 			}
-			elsif (@l_additional_libs > 0 && $line =~ m/^(.*)AdditionalDependencies=\"([^"]*)\"(.*)$/)
+			elsif (@l_additional_libs_32 > 0 && $line =~ m/^(.*)AdditionalDependencies=\"([^"]*)\"(.*)$/)
 			{
-				$line = $1.'AdditionalDependencies="'.$2.' '.join(' ',@l_additional_libs).'"'.$3."\n";
+				$line = $1.'AdditionalDependencies="'.$2.' '.join(' ',@l_additional_libs_32).'"'.$3."\n";
 			}
-			elsif (@l_additional_defines > 0 && $line =~ m/^(.*)PreprocessorDefinitions=\"([^"]*)\"(.*)$/)
+			elsif (@l_additional_defines_32 > 0 && $line =~ m/^(.*)PreprocessorDefinitions=\"([^"]*)\"(.*)$/)
 			{
-				$line = $1.'PreprocessorDefinitions="'.$2.';'.join(';',@l_additional_defines).'"'.$3."\n";
+				$line = $1.'PreprocessorDefinitions="'.$2.';'.join(';',@l_additional_defines_32).'"'.$3."\n";
 			}
 		}
 	}
@@ -161,13 +205,14 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 
 #------------------------
 
-sub filterOnlyAndExcept($$)
+sub filterOnlyAndExcept($$$)
 {
-	my ($rl_values, $output_dir) = @_;
+	my ($rl_values, $output_dir, $is_x64) = @_;
 	my @l_values;
+	my $str_arch = ($is_x64 ? "64" : "32");
 	foreach (@$rl_values)
 	{
-		if (!($_ =~ m/^ONLY\:.+\:.+$/) && !($_ =~ m/^EXCEPT\:.+\:.+$/))
+		if (!($_ =~ m/^ONLY\:.+\:.+$/) && !($_ =~ m/^EXCEPT\:.+\:.+$/) && !($_ =~ m/^ONLY\:.+\:.+\:.+$/) && !($_ =~ m/^EXCEPT\:.+\:.+\:.+$/))
 		{
 			push @l_values, $_;
 		}
@@ -175,7 +220,15 @@ sub filterOnlyAndExcept($$)
 		{
 			push @l_values, $1;
 		}
+		elsif (($_ =~ m/^ONLY\:.+\:.+\:.+$/) && ($_ =~ m/^ONLY\:$output_dir\:$str_arch\:(.+)$/))
+		{
+			push @l_values, $1;
+		}
 		elsif (!($_ =~ m/^EXCEPT\:$output_dir\:.+$/) && ($_ =~ m/^EXCEPT\:.+\:(.+)$/))
+		{
+			push @l_values, $1;
+		}
+		elsif (!($_ =~ m/^EXCEPT\:$output_dir\:$str_arch\:.+$/) && ($_ =~ m/^EXCEPT\:.+\:.+\:(.+)$/))
 		{
 			push @l_values, $1;
 		}
