@@ -18,7 +18,8 @@ See [LICENSE.txt](./LICENSE.txt) to know the engine license. Read it before use!
  * [source](./source) are the Volatile Dove Engine "source" files
  
  * [common](./common) contains files common to several projects (Application_... directories), 
-   for example compilation procedures for a given target platform common to several projects.
+   for example compilation procedures for a given target platform common to several projects
+   and stuff used by generate_project.pl.
 
  * [Doxyfile](./Doxyfile) is the Doxygen file, which requires 
   [Doxygen](http://www.stack.nl/~dimitri/doxygen/),
