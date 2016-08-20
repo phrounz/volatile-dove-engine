@@ -6,8 +6,9 @@ Each example project "Application_XXXXXX" may contain the following directories,
  * Contains the common C++ source code, used by all targets.
 
 ### setup.ini
- * Contains the global configuration file of the project. You shall run generate_project.pl again to take into consideration any modification in this file.
-   Note that in this file, the windows_* values have a special optional syntax ONLY:the-directory:the-value and EXCEPT:the-directory:the-value. For example the line below would apply COMPILE_WITH_TEST on all Visual Studio projects of the project, _CRT_SECURE_NO_WARNINGS applies only to App_VS2013_DX_Desktop, and COMPILE_WITH_DX applies on all Visual Studio projects of the project except App_VS2013_DX_Desktop.
+ * Contains the global configuration file of the project. You shall run [generate_project.pl](./README.md#generate_projectpl) again to take into consideration any modification in this file.
+   Note that in this file, the windows_* values have a special optional syntax ```ONLY:the-directory:the-value``` and ```EXCEPT:the-directory:the-value```. For example:
+  * the line below would apply ```COMPILE_WITH_TEST``` on all Visual Studio projects of the project, ```_CRT_SECURE_NO_WARNINGS``` applies only to App_VS2013_DX_Desktop, and ```COMPILE_WITH_DX``` applies on all Visual Studio projects of the project except App_VS2013_DX_Desktop.
 ```
    windows_additional_defines=ONLY:App_VS2013_DX_Desktop:_CRT_SECURE_NO_WARNINGS,COMPILE_WITH_TEST,EXCEPT:App_VS2013_DX_Desktop:COMPILE_WITH_DX
 ```
@@ -32,7 +33,7 @@ Each example project "Application_XXXXXX" may contain the following directories,
  * Working directory is: WorkDirStore\AppX\
    
 ### App_Linux (Experimental)
- * Should work on **Ubuntu 14.04 Desktop LTS 32 bits**.
+ * Should work on **Ubuntu 14.04 Desktop LTS 32 bits** and **SteamOS 2.0**.
  * Install the missing packages listed in common/Linux/install_dependancies.sh, compile with "sh compile.sh", and
    run the executable in ./WorkDir.
  * Or said otherwise, open the terminal and type the commands:

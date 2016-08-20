@@ -18,16 +18,23 @@ See [LICENSE.txt](./LICENSE.txt) to know the engine license. Read it before use!
  * [source](./source) are the Volatile Dove Engine "source" files
  
  * [common](./common) contains files common to several projects (Application_... directories), 
-   for example compilation procedures for a given target platform common to several projects.
+   for example compilation procedures for a given target platform common to several projects
+   and stuff used by generate_project.pl.
 
  * [Doxyfile](./Doxyfile) is the Doxygen file, which requires 
   [Doxygen](http://www.stack.nl/~dimitri/doxygen/),
   This will automatically generates the documentation in the directory "html".
   It is currently set up to browse the "include" directory only.
 
- * [generate_project.pl](./generate_project.pl) is a Perl script which helps you to create a new empty project.
-	* On Linux, Perl should be already installed (if not, type: `apt-get install perl` or `yum install perl`)
-    * On Windows, install http://strawberryperl.com/ . When Perl is installed, just double-click on the .pl file.
+### generate_project.pl
+
+The script [generate_project.pl](./generate_project.pl) is a Perl script which helps you to create a new empty project and maintain existing ones.
+ * Installation:
+  * On Linux, Perl should be already installed (if not, type: `apt-get install perl` or `yum install perl`)
+  * On Windows, install http://strawberryperl.com/ . When Perl is installed, just double-click on the .pl file.
+ * How it works: This script is used to:
+  * create a new project
+  * update an existing project. This can be useful if you pull changes from GitHub and new sources files are available, for example, or if there are new cpp/h files to take into consideration in code/. If there are local modifications you made on the .sln,.vcproj, and any other file which was created by the script it will ask for changes confirmation in order to choose between the generated version and the local version (note: for some items like code/MainClass.cpp, WorkDir/data/default_font.png, copy_work_dir_to_appx.bat, and files in App_VS2013_DX_Store/Assets/ , local version will always be kept if existing). When a project is created for the first time, it is created with the file [setup.ini](./PROJECTS.md#setupini) and re-running the script will take into consideration the configuration you made manually in this file.
 
 ### Example projects
 
