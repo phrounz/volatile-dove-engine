@@ -6,11 +6,15 @@ Each example project "Application_XXXXXX" may contain the following directories,
  * Contains the common C++ source code, used by all targets.
 
 ### setup.ini
- * Contains the global configuration file of the project. You shall run [generate_project.pl](./README.md#generate_projectpl) again to take into consideration any modification in this file.
-   Note that in this file, the windows_* values have a special optional syntax ```ONLY:the-directory:the-value``` and ```EXCEPT:the-directory:the-value```. For example:
-  * the line below would apply ```COMPILE_WITH_TEST``` on all Visual Studio projects of the project, ```_CRT_SECURE_NO_WARNINGS``` applies only to App_VS2013_DX_Desktop, and ```COMPILE_WITH_DX``` applies on all Visual Studio projects of the project except App_VS2013_DX_Desktop.
+ * Contains the global configuration file of the project. You shall run [generate_project.pl](./README.md#generate_projectpl)    again to take into consideration any modification in this file.
+  * Note that in this file, the windows_* values must be separated by commmas (if there are several values) and also they can have special optional syntaxes:
+    * ```ONLY:the-directory:the-value```
+    * ```EXCEPT:the-directory:the-value```
+    * ```ONLY:the-directory:the-arch:the-value``` (``the-arch`` can be 64 or 32)
+    * ```EXCEPT:the-directory:the-arch:the-value``` (``the-arch`` can be 64 or 32)
+  * For example the line below would apply ```COMPILE_WITH_TEST``` on all Visual Studio projects of the project, ```_CRT_SECURE_NO_WARNINGS``` applies only to App_VS2013_DX_Desktop for 64bit, and ```COMPILE_WITH_DX``` applies on all Visual Studio projects of the project except App_VS2013_DX_Desktop.
 ```
-   windows_additional_defines=ONLY:App_VS2013_DX_Desktop:_CRT_SECURE_NO_WARNINGS,COMPILE_WITH_TEST,EXCEPT:App_VS2013_DX_Desktop:COMPILE_WITH_DX
+   windows_additional_defines=ONLY:App_VS2013_DX_Desktop:64:_CRT_SECURE_NO_WARNINGS,COMPILE_WITH_TEST,EXCEPT:App_VS2013_DX_Desktop:COMPILE_WITH_DX
 ```
 
 ### App_VS2008_OpenGL
