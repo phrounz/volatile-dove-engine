@@ -7,9 +7,6 @@ See [LICENSE.txt](./LICENSE.txt) to know the engine license. Read it before use!
 
 ### Engine source code and dependancies
    
- * [dependancy_libraries](./dependancy_libraries) are all the dependancies for Windows
-   (includes, lib and dll already compiled)
-
  * [include](./include) are the Volatile Dove Engine "include" files
 
  * [shaders](./shaders) are the default source shaders files used in the application
@@ -20,6 +17,9 @@ See [LICENSE.txt](./LICENSE.txt) to know the engine license. Read it before use!
  * [common](./common) contains files common to several projects (Application_... directories), 
    for example compilation procedures for a given target platform common to several projects
    and stuff used by generate_project.pl.
+   * [common/dependancy_libraries](./common/dependancy_libraries) are all the dependancies for Windows
+   (includes, lib and dll already compiled)
+
 
  * [Doxyfile](./Doxyfile) is the Doxygen file, which requires 
   [Doxygen](http://www.stack.nl/~dimitri/doxygen/),
