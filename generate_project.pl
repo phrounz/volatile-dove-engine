@@ -113,6 +113,7 @@ sub main()
 	mkd("$project_name/App_Linux");
 	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_Linux/.gitignore", "compile.sh.new\n.gitignore.new\n");
 	my $add_args = (defined $rh_setup_value_by_var->{linux_make_additional_arguments}?$rh_setup_value_by_var->{linux_make_additional_arguments}:"");
+	$add_args .= " STEAMSDK_PATH='$rh_setup_desc_by_var->{steam_sdk_path}' " if (defined $rh_setup_desc_by_var->{steam_sdk_path} && $rh_setup_desc_by_var->{steam_sdk_path} ne '');
 	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_Linux/compile.sh", 
 		'#!/bin/sh'."\n"
 		.'make $* -f ../../common/Linux/Makefile SRCS=\'$(wildcard ../code/*.cpp)\''." $add_args\n"
