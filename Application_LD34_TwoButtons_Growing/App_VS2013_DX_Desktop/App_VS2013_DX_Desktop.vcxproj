@@ -53,7 +53,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;VERSION_X86;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\..\dependancy_libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAsWinRT>true</CompileAsWinRT>
       <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
       <MinimalRebuild>false</MinimalRebuild>
@@ -62,13 +62,13 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>dxgi.lib;d2d1.lib;d3d11.lib;ole32.lib;windowscodecs.lib;dwrite.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;pthreadVC2.lib;libxml2.lib;zlib.lib;libiconv.lib;WSock32.Lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\dependancy_libraries\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\lib</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ObjectFileOutput>..\WorkDir\shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)\..\..\dependancy_libraries\dll\*.dll $(SolutionDir)\..\WorkDir\</Command>
+      <Command>copy $(SolutionDir)\..\..\common\dependancy_libraries\dll\*.dll $(SolutionDir)\..\WorkDir\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -81,7 +81,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;VERSION_X86;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\..\dependancy_libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAsWinRT>true</CompileAsWinRT>
       <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
     </ClCompile>
@@ -91,13 +91,13 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>dxgi.lib;d2d1.lib;d3d11.lib;ole32.lib;windowscodecs.lib;dwrite.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;pthreadVC2.lib;libxml2.lib;zlib.lib;libiconv.lib;WSock32.Lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\dependancy_libraries\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\lib</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ObjectFileOutput>..\WorkDir\shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <PostBuildEvent>
-      <Command>copy $(SolutionDir)\..\..\dependancy_libraries\dll\*.dll $(SolutionDir)\..\WorkDir\</Command>
+      <Command>copy $(SolutionDir)\..\..\common\dependancy_libraries\dll\*.dll $(SolutionDir)\..\WorkDir\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
