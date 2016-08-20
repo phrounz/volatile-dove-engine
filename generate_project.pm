@@ -46,15 +46,20 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 	die unless (defined $input_file && defined $output_file && defined $rl_high_level_src);
 	my $output_dir = basename(dirname($output_file));
 	
-	my @l_additional_include_dirs_32 = filterOnlyAndExcept($rl_additional_include_dirs, $output_dir, 0);
-	my @l_additional_lib_dirs_32 = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir, 0);
-	my @l_additional_libs_32 = filterOnlyAndExcept($rl_additional_libs, $output_dir, 0);
-	my @l_additional_defines_32 = filterOnlyAndExcept($rl_additional_defines, $output_dir, 0);
+	my @l_additional_include_dirs_32 = filterOnlyAndExcept($rl_additional_include_dirs, $output_dir, "32");
+	my @l_additional_lib_dirs_32 = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir, "32");
+	my @l_additional_libs_32 = filterOnlyAndExcept($rl_additional_libs, $output_dir, "32");
+	my @l_additional_defines_32 = filterOnlyAndExcept($rl_additional_defines, $output_dir, "32");
 	
-	my @l_additional_include_dirs_64 = filterOnlyAndExcept($rl_additional_include_dirs, $output_dir, 1);
-	my @l_additional_lib_dirs_64 = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir, 1);
-	my @l_additional_libs_64 = filterOnlyAndExcept($rl_additional_libs, $output_dir, 1);
-	my @l_additional_defines_64 = filterOnlyAndExcept($rl_additional_defines, $output_dir, 1);
+	my @l_additional_include_dirs_64 = filterOnlyAndExcept($rl_additional_include_dirs, $output_dir, "64");
+	my @l_additional_lib_dirs_64 = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir, "64");
+	my @l_additional_libs_64 = filterOnlyAndExcept($rl_additional_libs, $output_dir, "64");
+	my @l_additional_defines_64 = filterOnlyAndExcept($rl_additional_defines, $output_dir, "64");
+	
+	my @l_additional_include_dirs_arm = filterOnlyAndExcept($rl_additional_include_dirs, $output_dir, "ARM");
+	my @l_additional_lib_dirs_arm = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir, "ARM");
+	my @l_additional_libs_arm = filterOnlyAndExcept($rl_additional_libs, $output_dir, "ARM");
+	my @l_additional_defines_arm = filterOnlyAndExcept($rl_additional_defines, $output_dir, "ARM");
 	
 	if ($steam_sdk_path_or_empty ne '')
 	{
@@ -74,16 +79,20 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 	my @lines = <FD>;
 	close FD;
 
-	my $is_x64 = 0;
+	my $arch = "32";
 	foreach my $line (@lines)
 	{
 		if ($line =~ m/\'(Release|Debug)\|Win32\'/)
 		{
-			$is_x64 = 0;
+			$arch = "32";
 		}
 		elsif ($line =~ m/\'(Release|Debug)\|x64\'/)
 		{
-			$is_x64 = 1;
+			$arch = "64";
+		}
+		elsif ($line =~ m/\'(Release|Debug)\|ARM\'/)
+		{
+			$arch = "ARM";
 		}
 		
 		if ($line =~ m/<File RelativePath="[^\"]+"><\/File>/)
@@ -142,37 +151,53 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 			{
 				$line = "$1<PreprocessorDefinitions>$2;USES_STEAM_INTEGRATION;<\/PreprocessorDefinitions>$3\n";
 			}
-			elsif (!$is_x64 && @l_additional_include_dirs_32 > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			elsif (($arch eq '32') && @l_additional_include_dirs_32 > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
 			{
 				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@l_additional_include_dirs_32).";<\/AdditionalIncludeDirectories>$3\n";
 			}
-			elsif ($is_x64 && @l_additional_include_dirs_64 > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
-			{
-				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@l_additional_include_dirs_64).";<\/AdditionalIncludeDirectories>$3\n";
-			}
-			elsif (!$is_x64 && @l_additional_lib_dirs_32 > 0 && $line =~ m/^(.*)<AdditionalLibraryDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			elsif (($arch eq '32') && @l_additional_lib_dirs_32 > 0 && $line =~ m/^(.*)<AdditionalLibraryDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
 			{
 				$line = "$1<AdditionalLibraryDirectories>$2;".join(';',@l_additional_lib_dirs_32).";<\/AdditionalLibraryDirectories>$3\n";
 			}
-			elsif ($is_x64 && @l_additional_lib_dirs_64 > 0 && $line =~ m/^(.*)<AdditionalLibraryDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
-			{
-				$line = "$1<AdditionalLibraryDirectories>$2;".join(';',@l_additional_lib_dirs_64).";<\/AdditionalLibraryDirectories>$3\n";
-			}
-			elsif (!$is_x64 && @l_additional_libs_32 > 0 && $line =~ m/^(.*)<AdditionalDependencies>([^<]+)<\/AdditionalDependencies>(.*)/)
+			elsif (($arch eq '32') && @l_additional_libs_32 > 0 && $line =~ m/^(.*)<AdditionalDependencies>([^<]+)<\/AdditionalDependencies>(.*)/)
 			{
 				$line = "$1<AdditionalDependencies>$2;".join(';',@l_additional_libs_32).";<\/AdditionalDependencies>$3\n";
 			}
-			elsif ($is_x64 && @l_additional_libs_64 > 0 && $line =~ m/^(.*)<AdditionalDependencies>([^<]+)<\/AdditionalDependencies>(.*)/)
-			{
-				$line = "$1<AdditionalDependencies>$2;".join(';',@l_additional_libs_64).";<\/AdditionalDependencies>$3\n";
-			}
-			elsif (!$is_x64 && @l_additional_defines_32 > 0 && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
+			elsif (($arch eq '32') && @l_additional_defines_32 > 0 && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
 			{
 				$line = "$1<PreprocessorDefinitions>$2;".join(';',@l_additional_defines_32).";<\/PreprocessorDefinitions>$3\n";
 			}
-			elsif ($is_x64 && @l_additional_defines_64 > 0 && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
+			elsif (($arch eq '64') && && @l_additional_include_dirs_64 > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			{
+				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@l_additional_include_dirs_64).";<\/AdditionalIncludeDirectories>$3\n";
+			}
+			elsif (($arch eq '64') && @l_additional_lib_dirs_64 > 0 && $line =~ m/^(.*)<AdditionalLibraryDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			{
+				$line = "$1<AdditionalLibraryDirectories>$2;".join(';',@l_additional_lib_dirs_64).";<\/AdditionalLibraryDirectories>$3\n";
+			}
+			elsif (($arch eq '64') && @l_additional_libs_64 > 0 && $line =~ m/^(.*)<AdditionalDependencies>([^<]+)<\/AdditionalDependencies>(.*)/)
+			{
+				$line = "$1<AdditionalDependencies>$2;".join(';',@l_additional_libs_64).";<\/AdditionalDependencies>$3\n";
+			}
+			elsif (($arch eq '64') && @l_additional_defines_64 > 0 && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
 			{
 				$line = "$1<PreprocessorDefinitions>$2;".join(';',@l_additional_defines_64).";<\/PreprocessorDefinitions>$3\n";
+			}
+			elsif (($arch eq 'ARM') && && @l_additional_include_dirs_arm > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			{
+				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@l_additional_include_dirs_arm).";<\/AdditionalIncludeDirectories>$3\n";
+			}
+			elsif (($arch eq 'ARM') && @l_additional_lib_dirs_arm > 0 && $line =~ m/^(.*)<AdditionalLibraryDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			{
+				$line = "$1<AdditionalLibraryDirectories>$2;".join(';',@l_additional_lib_dirs_arm).";<\/AdditionalLibraryDirectories>$3\n";
+			}
+			elsif (($arch eq 'ARM') && @l_additional_libs_arm > 0 && $line =~ m/^(.*)<AdditionalDependencies>([^<]+)<\/AdditionalDependencies>(.*)/)
+			{
+				$line = "$1<AdditionalDependencies>$2;".join(';',@l_additional_libs_arm).";<\/AdditionalDependencies>$3\n";
+			}
+			elsif (($arch eq 'ARM') && @l_additional_defines_arm > 0 && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
+			{
+				$line = "$1<PreprocessorDefinitions>$2;".join(';',@l_additional_defines_arm).";<\/PreprocessorDefinitions>$3\n";
 			}
 		}
 		else
@@ -207,9 +232,8 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 
 sub filterOnlyAndExcept($$$)
 {
-	my ($rl_values, $output_dir, $is_x64) = @_;
+	my ($rl_values, $output_dir, $str_arch) = @_;
 	my @l_values;
-	my $str_arch = ($is_x64 ? "64" : "32");
 	foreach (@$rl_values)
 	{
 		if (!($_ =~ m/^ONLY\:.+\:.+$/) && !($_ =~ m/^EXCEPT\:.+\:.+$/) && !($_ =~ m/^ONLY\:.+\:.+\:.+$/) && !($_ =~ m/^EXCEPT\:.+\:.+\:.+$/))
