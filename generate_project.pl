@@ -192,6 +192,13 @@ sub main()
 		"./common/Windows/Windows_VS2013_DX_Store/App_VS2013_DX_Store.sln",
 		"$project_name/App_VS2013_DX_Store/App_VS2013_DX_Store.sln",
 		1);
+	
+	# if (defined $rh_setup_desc_by_var->{steam_sdk_path} && $rh_setup_desc_by_var->{steam_sdk_path} ne '')
+	# {
+		# copyOrFail($rh_setup_desc_by_var->{steam_sdk_path}."/public/steam/lib/win32/sdkencryptedappticket.dll", "$project_name/WorkDir/sdkencryptedappticket.dll");
+		# copyOrFail($rh_setup_desc_by_var->{steam_sdk_path}."/public/steam/lib/win64/sdkencryptedappticket64.dll", "$project_name/WorkDir/sdkencryptedappticket64.dll");
+		# copyOrFail($rh_setup_desc_by_var->{steam_sdk_path}."/public/steam/lib/Linux/libsdkencryptedappticket.so";
+	# }
 
 	#------
 	print "Generating other stuff for App_VS2013_DX_Store\n";
