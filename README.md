@@ -25,7 +25,7 @@ See [LICENSE.txt](./LICENSE.txt) to know the engine license. Read it before use!
   This will automatically generates the documentation in the directory "html".
   It is currently set up to browse the "include" directory only.
 
-#### generate_project.pl
+### generate_project.pl
 
 [generate_project.pl](./generate_project.pl) is a Perl script which helps you to create a new empty project and maintain existing ones.
     * Installation:
