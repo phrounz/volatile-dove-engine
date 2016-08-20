@@ -1,7 +1,7 @@
 
 ## The Volatile Dove Engine 
 
-... is a lightweight video game engine. See http://www.volatiledove.com/Engine for more informations.
+... is a video game engine, using Visual Studio, Makefiles, etc and a script to manage your multi-plaftorm video games projects easily. See http://www.volatiledove.com/Engine for more informations.
 
 See [LICENSE.txt](./LICENSE.txt) to know the engine license. Read it before use!
 
@@ -31,7 +31,7 @@ The script [generate_project.pl](./generate_project.pl) is a Perl script which h
   * On Linux, Perl should be already installed (if not, type: `apt-get install perl` or `yum install perl`)
   * On Windows, install http://strawberryperl.com/ . When Perl is installed, just double-click on the .pl file.
  * How it works: This script is used to:
-  * create a new project
+  * create a new project. A new directory with the name of your project will then be been created. You can then [take notice](./PROJECTS.md) of the particularities of each target platforms within this project.
   * update an existing project. This can be useful if you pull changes from GitHub and new sources files are available, for example, or if there are new cpp/h files to take into consideration in code/. If there are local modifications you made on the .sln,.vcproj, and any other file which was created by the script it will ask for changes confirmation in order to choose between the generated version and the local version (note: for some items like code/MainClass.cpp, WorkDir/data/default_font.png, copy_work_dir_to_appx.bat, and files in App_VS2013_DX_Store/Assets/ , local version will always be kept if existing). When a project is created for the first time, it is created with the file [setup.ini](./PROJECTS.md#setupini) and re-running the script will take into consideration the configuration you made manually in this file.
 
 ### Example projects

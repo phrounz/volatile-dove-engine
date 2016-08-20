@@ -32,7 +32,7 @@ Each example project "Application_XXXXXX" may contain the following directories,
    * then run the solution again.
  * Working directory is: WorkDirStore\AppX\
    
-### App_Linux (Experimental)
+### App_Linux
  * Should work on **Ubuntu 14.04 Desktop LTS 32 bits** and **SteamOS 2.0**.
  * Install the missing packages listed in common/Linux/install_dependancies.sh, compile with "sh compile.sh", and
    run the executable in ./WorkDir.
