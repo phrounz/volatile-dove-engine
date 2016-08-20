@@ -16,11 +16,39 @@ my @L_DISABLE_3D_SKIPPED_H = map { "$_.cpp" } @L_DISABLE_3D_SKIPPED_MODULES;
 
 #----------------------------------------------
 
-sub processFile($$$$$$$$$$$)
+sub processVisualStudioProjectUserFile($$)
+{
+	my ($input_file, $output_file) = @_;
+	
+	open FD, $input_file or die $input_file;
+	my @lines = <FD>;
+	close FD;
+	
+	foreach my $line (@lines)
+	{
+		if ($line =~ m/^(.*)AUTOMATIC_HOST(.*)$/)
+		{
+			my $host = uc `hostname`;
+			chomp $host;
+			$line = "$1$host$2";
+		}
+	}
+	
+	writeFileWithConfirmationForDifferences($output_file, join('', @lines));
+}
+
+#----------------------------------------------
+
+sub processVisualStudioProjectFile($$$$$$$$$$$$)
 {
 	my ($input_file, $output_file, $rl_high_level_src, $disable_3d, $recent_visual_studio, $use_directx, $steam_sdk_path_or_empty,
-		$rl_additional_include_dirs, $rl_additional_lib_dirs, $rl_additional_libs, $rl_additional_defines) = @_;
+		$rl_additional_include_dirs, $rl_additional_lib_dirs, $rl_additional_libs, $rl_additional_defines, $visual_studio_store_app_guid) = @_;
 	die unless (defined $input_file && defined $output_file && defined $rl_high_level_src);
+	my $output_dir = basename(dirname($output_file));
+	my @l_additional_include_dirs = filterOnlyAndExcept($rl_additional_include_dirs, $output_dir);
+	my @l_additional_lib_dirs = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir);
+	my @l_additional_libs = filterOnlyAndExcept($rl_additional_libs, $output_dir);
+	my @l_additional_defines = filterOnlyAndExcept($rl_additional_defines, $output_dir);
 	
 	#print "# Process file: $input_file\n";
 	#print "# Output file is: $output_file\n";
@@ -75,27 +103,32 @@ sub processFile($$$$$$$$$$$)
 			}
 			$line = $str;
 		}
+		elsif ($line =~ m/^(.*)AUTOMATIC_STORE_GUID(.*)$/)
+		{
+			$visual_studio_store_app_guid = '90347322-85ff-4500-95e8-aafdc8cfa1bf' if ($visual_studio_store_app_guid eq '');
+			$line = $1.$visual_studio_store_app_guid.$2."\n";
+		}
 		if ($recent_visual_studio)
 		{
 			if ((defined $steam_sdk_path_or_empty) && ($steam_sdk_path_or_empty ne '') && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
 			{
 				$line = "$1<PreprocessorDefinitions>$2;USES_STEAM_INTEGRATION;<\/PreprocessorDefinitions>$3\n";
 			}
-			elsif (@$rl_additional_include_dirs > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			elsif (@l_additional_include_dirs > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
 			{
-				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@$rl_additional_include_dirs).";<\/AdditionalIncludeDirectories>$3\n";
+				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@l_additional_include_dirs).";<\/AdditionalIncludeDirectories>$3\n";
 			}
-			elsif (@$rl_additional_lib_dirs > 0 && $line =~ m/^(.*)<AdditionalLibraryDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			elsif (@l_additional_lib_dirs > 0 && $line =~ m/^(.*)<AdditionalLibraryDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
 			{
-				$line = "$1<AdditionalLibraryDirectories>$2;".join(';',@$rl_additional_lib_dirs).";<\/AdditionalLibraryDirectories>$3\n";
+				$line = "$1<AdditionalLibraryDirectories>$2;".join(';',@l_additional_lib_dirs).";<\/AdditionalLibraryDirectories>$3\n";
 			}
-			elsif (@$rl_additional_libs > 0 && $line =~ m/^(.*)<AdditionalDependencies>([^<]+)<\/AdditionalDependencies>(.*)/)
+			elsif (@l_additional_libs > 0 && $line =~ m/^(.*)<AdditionalDependencies>([^<]+)<\/AdditionalDependencies>(.*)/)
 			{
-				$line = "$1<AdditionalDependencies>$2;".join(';',@$rl_additional_libs).";<\/AdditionalDependencies>$3\n";
+				$line = "$1<AdditionalDependencies>$2;".join(';',@l_additional_libs).";<\/AdditionalDependencies>$3\n";
 			}
-			elsif (@$rl_additional_defines > 0 && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
+			elsif (@l_additional_defines > 0 && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
 			{
-				$line = "$1<PreprocessorDefinitions>$2;".join(';',@$rl_additional_defines).";<\/PreprocessorDefinitions>$3\n";
+				$line = "$1<PreprocessorDefinitions>$2;".join(';',@l_additional_defines).";<\/PreprocessorDefinitions>$3\n";
 			}
 		}
 		else
@@ -104,26 +137,50 @@ sub processFile($$$$$$$$$$$)
 			{
 				$line = $1.'PreprocessorDefinitions="'.$2.';USES_STEAM_INTEGRATION;"'.$3."\n";
 			}
-			elsif (@$rl_additional_include_dirs > 0 && $line =~ m/^(.*)AdditionalIncludeDirectories=\"([^"]*)\"(.*)$/)
+			elsif (@l_additional_include_dirs > 0 && $line =~ m/^(.*)AdditionalIncludeDirectories=\"([^"]*)\"(.*)$/)
 			{
-				$line = $1.'AdditionalIncludeDirectories="'.$2.';'.join(';',@$rl_additional_include_dirs).'"'.$3."\n";
+				$line = $1.'AdditionalIncludeDirectories="'.$2.';'.join(';',@l_additional_include_dirs).'"'.$3."\n";
 			}
-			elsif (@$rl_additional_lib_dirs > 0 && $line =~ m/^(.*)AdditionalLibraryDirectories=\"([^"]*)\"(.*)$/)
+			elsif (@l_additional_lib_dirs > 0 && $line =~ m/^(.*)AdditionalLibraryDirectories=\"([^"]*)\"(.*)$/)
 			{
-				$line = $1.'AdditionalLibraryDirectories="'.$2.';'.join(';',@$rl_additional_lib_dirs).'"'.$3."\n";
+				$line = $1.'AdditionalLibraryDirectories="'.$2.';'.join(';',@l_additional_lib_dirs).'"'.$3."\n";
 			}
-			elsif (@$rl_additional_libs > 0 && $line =~ m/^(.*)AdditionalDependencies=\"([^"]*)\"(.*)$/)
+			elsif (@l_additional_libs > 0 && $line =~ m/^(.*)AdditionalDependencies=\"([^"]*)\"(.*)$/)
 			{
-				$line = $1.'AdditionalDependencies="'.$2.' '.join(' ',@$rl_additional_libs).'"'.$3."\n";
+				$line = $1.'AdditionalDependencies="'.$2.' '.join(' ',@l_additional_libs).'"'.$3."\n";
 			}
-			elsif (@$rl_additional_defines > 0 && $line =~ m/^(.*)PreprocessorDefinitions=\"([^"]*)\"(.*)$/)
+			elsif (@l_additional_defines > 0 && $line =~ m/^(.*)PreprocessorDefinitions=\"([^"]*)\"(.*)$/)
 			{
-				$line = $1.'PreprocessorDefinitions="'.$2.';'.join(';',@$rl_additional_defines).'"'.$3."\n";
+				$line = $1.'PreprocessorDefinitions="'.$2.';'.join(';',@l_additional_defines).'"'.$3."\n";
 			}
 		}
 	}
 
 	writeFileWithConfirmationForDifferences($output_file, join('', @lines));
+}
+
+#------------------------
+
+sub filterOnlyAndExcept($$)
+{
+	my ($rl_values, $output_dir) = @_;
+	my @l_values;
+	foreach (@$rl_values)
+	{
+		if (!($_ =~ m/^ONLY\:.+\:.+$/) && !($_ =~ m/^EXCEPT\:.+\:.+$/))
+		{
+			push @l_values, $_;
+		}
+		elsif (($_ =~ m/^ONLY\:.+\:.+$/) && ($_ =~ m/^ONLY\:$output_dir\:(.+)$/))
+		{
+			push @l_values, $1;
+		}
+		elsif (!($_ =~ m/^EXCEPT\:$output_dir\:.+$/) && ($_ =~ m/^EXCEPT\:.+\:(.+)$/))
+		{
+			push @l_values, $1;
+		}
+	}
+	return @l_values;
 }
 
 #------------------------
@@ -140,13 +197,13 @@ sub writeFileWithConfirmationForDifferences($$)
 		if (defined $diff_output)
 		{
 			##system("D:\\progs\\WinMerge\\winmergeU.exe '$output_file' '$output_file.new'");
-			print "File '$output_file' changed, see below the differences:\n";
 			##`color 9`;
 			#print "$diff_output\n";
 			print "................................................................\n";
 			print "..... $_\n" foreach (split(/\n/, $diff_output));
 			print "................................................................\n";
 			##`color 7`;
+			print "\nFile '$output_file' changed, see above the differences:\n";
 			print "Confirm overwriting (y/n): ";
 			my $yes_no = <>;# wait for user input
 			chomp $yes_no;

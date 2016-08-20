@@ -8,7 +8,7 @@ use Cwd qw/getcwd/;
 use File::Copy qw/copy/;
 use Data::Dumper;
 
-use lib "./common/Windows/";
+use lib ".";
 use generate_project;
 
 #------------------------
@@ -66,7 +66,8 @@ sub main()
 		windows_additional_include_dirs => 'Additional include directories for Windows, comma-separated',
 		windows_additional_lib_dirs => 'Additional library directories for Windows, comma-separated',
 		windows_additional_libs => 'Additional libraries for Windows, comma-separated',
-		windows_additional_defines => 'Additional #defines for Windows, comma-separated'
+		windows_additional_defines => 'Additional #defines for Windows, comma-separated',
+		visual_studio_store_app_guid => 'Visual Studio 2013 For Windows - GUID of the project for a Store App (or empty for test default)'
 		};
 	my $rh_setup_value_by_var = {};
 	if (-f "$project_name/setup.ini")
@@ -118,11 +119,7 @@ sub main()
 		);
 
 	#------
-	print "Generating \n"
-		."  App_VS2008_OpenGL\n"
-		."  App_VS2008_SDL\n"
-		."  App_VS2013_DX_Desktop\n"
-		."  App_VS2013_DX_Store\n";
+	print "Generating App_VS2008_OpenGL, App_VS2008_SDL, App_VS2013_DX_Desktop, and App_VS2013_DX_Store\n";
 	# create directories
 	mkd("$project_name/App_VS2008_OpenGL");
 	mkd("$project_name/App_VS2008_SDL");
@@ -142,45 +139,62 @@ sub main()
 	my @l_windows_additional_lib_dirs = split(/,/, $rh_setup_value_by_var->{windows_additional_lib_dirs});
 	my @l_windows_additional_libs = split(/,/, $rh_setup_value_by_var->{windows_additional_libs});
 	my @l_windows_additional_defines = split(/,/, $rh_setup_value_by_var->{windows_additional_defines});
+	my $visual_studio_store_app_guid = $rh_setup_value_by_var->{visual_studio_store_app_guid};
 	my $gitignore_visual_studio = join("\n", qw/Debug Release *.ncb *.suo *.vcproj.*.user *.vcproj.new *.vcxproj.new .gitignore.new/)."\n";
+	
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2008_OpenGL/.gitignore", $gitignore_visual_studio);
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2008_SDL/.gitignore", $gitignore_visual_studio);
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2013_DX_Desktop/.gitignore", $gitignore_visual_studio);
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2013_DX_Store/.gitignore", $gitignore_visual_studio);
-	generate_project::processFile(
+	
+	generate_project::processVisualStudioProjectFile(
 		"App_VS2008_OpenGL.vcproj.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj", \@l_code, 0, 0, 0, 
-		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines);
-	generate_project::processFile(
+		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
+		undef);
+	generate_project::processVisualStudioProjectFile(
 		"App_VS2008_SDL.vcproj.src", "$relt/App_VS2008_SDL/App_VS2008_SDL.vcproj", \@l_code, 1, 0, 0, 
-		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines);
-	generate_project::processFile(
+		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
+		undef);
+	generate_project::processVisualStudioProjectFile(
 		"App_VS2013_DX_Desktop.vcxproj.src", "$relt/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.vcxproj", \@l_code, 0, 1, 1,
-		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines);
-	generate_project::processFile(
+		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
+		undef);
+	generate_project::processVisualStudioProjectFile(
 		"App_VS2013_DX_Store.vcxproj.src", "$relt/App_VS2013_DX_Store/App_VS2013_DX_Store.vcxproj", \@l_code, 0, 1, 1,
-		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines);
+		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
+		$visual_studio_store_app_guid);
+
+	generate_project::processVisualStudioProjectUserFile(
+		"App_VS2008_OpenGL.vcproj.user.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj.user");
+	generate_project::processVisualStudioProjectUserFile(
+		"App_VS2008_SDL.vcproj.user.src", "$relt/App_VS2008_SDL/App_VS2008_SDL.vcproj.user");
+	generate_project::processVisualStudioProjectUserFile(
+		"App_VS2013_DX_Desktop.vcxproj.user.src", "$relt/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.vcxproj.user");
+	generate_project::processVisualStudioProjectUserFile(
+		"App_VS2013_DX_Store.vcxproj.user.src", "$relt/App_VS2013_DX_Store/App_VS2013_DX_Store.vcxproj.user");
+	
 	chdir $prevdir or die $prevdir;
 	# create solution files
 	copyOrFail(
-		"./common/Windows_VS2008_OpenGL/App_VS2008_OpenGL.sln",
+		"./common/Windows/App_VS2008_OpenGL.sln",
 		"$project_name/App_VS2008_OpenGL/App_VS2008_OpenGL.sln",
 		1);
 	copyOrFail(
-		"./common/Windows_VS2008_SDL/App_VS2008_SDL.sln",
+		"./common/Windows/App_VS2008_SDL.sln",
 		"$project_name/App_VS2008_SDL/App_VS2008_SDL.sln",
 		1);
 	copyOrFail(
-		"./common/Windows_VS2013_DX_Desktop/App_VS2013_DX_Desktop.sln",
+		"./common/Windows/App_VS2013_DX_Desktop.sln",
 		"$project_name/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.sln",
 		1);
 	copyOrFail(
-		"./common/Windows_VS2013_DX_Store/App_VS2013_DX_Store.sln",
+		"./common/Windows/Windows_VS2013_DX_Store/App_VS2013_DX_Store.sln",
 		"$project_name/App_VS2013_DX_Store/App_VS2013_DX_Store.sln",
 		1);
 
 	#------
 	print "Generating other stuff for App_VS2013_DX_Store\n";
-	my $in_st = "./common/Windows_VS2013_DX_Store";
+	my $in_st = "./common/Windows/Windows_VS2013_DX_Store";
 	my $out_st = "$project_name/App_VS2013_DX_Store";
 	copyOrFail("$in_st/Package.appxmanifest", "$out_st/Package.appxmanifest", 0);
 	copyr("$in_st/Assets", "$out_st/Assets", 0);
@@ -209,10 +223,7 @@ sub main()
 	print "Done.\n";
 	print "\n";
 	#unless (scalar glob("App_VS2008_OpenGL.vcproj.*.user") > 0 || -f scalar glob("App_VS2008_OpenGL.vcproj.user") > 0
-	print "Don't forget to set up the Working Directory of Visual Studio projects\n"
-		."to '..\\WorkDir' ('..\\WorkDirStore' for App_VS2013_DX_Store)\n";
-	print "Also, you may have to put new Visual Studio Project GUID numbers\n"
-		."(and Package.appxmanifest identity name)\n";
+	print "You may need to manually set up the new Visual Studio Project GUID numbers and Package.appxmanifest identity name for App_VS2013_DX_Store.\n";
 	print "\n";
 	
 	system('PAUSE') unless ($^O eq 'linux');
@@ -232,7 +243,7 @@ sub readSetupIniFile($)
 	foreach my $line (<FD>)
 	{
 		chomp $line;
-		unless ($line =~ /^;/)
+		unless ($line =~ /^;/ || $line eq '')
 		{
 			my @l_tabs = split(/=/, $line);
 			my $var = shift @l_tabs;
