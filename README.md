@@ -27,7 +27,7 @@ See [LICENSE.txt](./LICENSE.txt) to know the engine license. Read it before use!
 
 ### generate_project.pl
 
-[generate_project.pl](./generate_project.pl) is a Perl script which helps you to create a new empty project and maintain existing ones.
+The script [generate_project.pl](./generate_project.pl) is a Perl script which helps you to create a new empty project and maintain existing ones.
  * Installation:
   * On Linux, Perl should be already installed (if not, type: `apt-get install perl` or `yum install perl`)
   * On Windows, install http://strawberryperl.com/ . When Perl is installed, just double-click on the .pl file.
