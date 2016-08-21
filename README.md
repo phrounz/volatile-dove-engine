@@ -31,7 +31,7 @@ The script [generate_project.pl](./generate_project.pl) is a Perl script which h
   * On Linux, Perl should be already installed (if not, type: `apt-get install perl` or `yum install perl`)
   * On Windows, install http://strawberryperl.com/ . When Perl is installed, just double-click on the .pl file.
  * How it works: This script is used to:
-  * create a new project. A new directory with the name of your project will then be been created. You can then [take notice](./PROJECTS.md) of the particularities of each target platforms within this project. When a project is created for the first time, it is created with the file [setup.ini](./PROJECTS.md#setupini).
+  * create a new project. A new directory with the name of your project will then be been created with the file [setup.ini](./PROJECTS.md#setupini) in it. You can then [take notice](./PROJECTS.md) of the particularities of each target platforms within this project.
   * update an existing project. This can be useful if you pull changes from GitHub and new sources files are available, for example, or if there are new cpp/h files to take into consideration in code/, or to take into consideration the configuration you made manually in [setup.ini](./PROJECTS.md#setupini). If the .sln,.vcproj, and any other file which was created by the script is going to be updated, it will ask for changes confirmation in order to choose between the new generated version and the local version (note: for some items like code/MainClass.cpp, WorkDir/data/default_font.png, copy_work_dir_to_appx.bat, and files in App_VS2013_DX_Store/Assets/ , local version will always be kept if existing).
 
 ### Example projects
