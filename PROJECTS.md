@@ -7,7 +7,7 @@ Each example project "Application_XXXXXX" may contain the following directories,
 
 ### setup.ini
  * Contains the global configuration file of the project. You shall run [generate_project.pl](./README.md#generate_projectpl)    again to take into consideration any modification in this file.
-  * Note that in this file, the windows_* values must be separated by commas (if there are several values) and also they can have special optional syntaxes:
+  * Note that in this file, all the ```windows_*``` values (and ```visual_studio_app_guid```) must be separated by commas (if there are several values) and also they can have special optional syntaxes:
     * ```ONLY:the-directory:the-value```
     * ```EXCEPT:the-directory:the-value```
     * ```ONLY:the-directory:the-arch:the-value``` (``the-arch`` can be 64 or 32 or ARM)
