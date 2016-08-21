@@ -1,7 +1,7 @@
 
 ## The Volatile Dove Engine 
 
-... is a video game engine, using Visual Studio, Makefiles, etc and a script to manage your multi-plaftorm video games projects easily. See http://www.volatiledove.com/Engine for more informations.
+... is a video game engine, and includes Makefiles, Visual Studio projects, etc and a script to manage your multi-plaftorm video games projects easily. See http://www.volatiledove.com/Engine for more informations.
 
 See [LICENSE.txt](./LICENSE.txt) to know the engine license. Read it before use!
 
