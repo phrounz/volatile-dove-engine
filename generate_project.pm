@@ -20,11 +20,11 @@ my @L_DISABLE_3D_SKIPPED_H = map { "$_.cpp" } @L_DISABLE_3D_SKIPPED_MODULES;
 sub processVisualStudioProjectUserFile($$)
 {
 	my ($input_file, $output_file) = @_;
-	
+
 	open FD, $input_file or die $input_file;
 	my @lines = <FD>;
 	close FD;
-	
+
 	foreach my $line (@lines)
 	{
 		if ($line =~ m/^(.*)AUTOMATIC_HOST(.*)$/)
@@ -34,7 +34,7 @@ sub processVisualStudioProjectUserFile($$)
 			$line = "$1$host$2";
 		}
 	}
-	
+
 	writeFileWithConfirmationForDifferences($output_file, join('', @lines));
 }
 
@@ -43,25 +43,29 @@ sub processVisualStudioProjectUserFile($$)
 sub processVisualStudioProjectFile($$$$$$$$$$$$)
 {
 	my ($input_file, $output_file, $rl_high_level_src, $disable_3d, $recent_visual_studio, $use_directx, $steam_sdk_path_or_empty,
-		$rl_additional_include_dirs, $rl_additional_lib_dirs, $rl_additional_libs, $rl_additional_defines, $visual_studio_app_guid) = @_;
+		$rl_additional_include_dirs, $rl_additional_lib_dirs, $rl_additional_libs, $rl_additional_defines, $rl_visual_studio_app_guids) = @_;
 	die unless (defined $input_file && defined $output_file && defined $rl_high_level_src);
 	my $output_dir = basename(dirname($output_file));
-	
+
+	my @l_visual_studio_app_guids = filterOnlyAndExcept($rl_visual_studio_app_guids, $output_dir, undef);
+	die scalar(@l_visual_studio_app_guids) unless (@l_visual_studio_app_guids <= 1);
+	my $visual_studio_app_guid = (scalar(@l_visual_studio_app_guids)==0 ? '' : shift @l_visual_studio_app_guids);
+
 	my @l_additional_include_dirs_32 = filterOnlyAndExcept($rl_additional_include_dirs, $output_dir, "32");
 	my @l_additional_lib_dirs_32 = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir, "32");
 	my @l_additional_libs_32 = filterOnlyAndExcept($rl_additional_libs, $output_dir, "32");
 	my @l_additional_defines_32 = filterOnlyAndExcept($rl_additional_defines, $output_dir, "32");
-	
+
 	my @l_additional_include_dirs_64 = filterOnlyAndExcept($rl_additional_include_dirs, $output_dir, "64");
 	my @l_additional_lib_dirs_64 = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir, "64");
 	my @l_additional_libs_64 = filterOnlyAndExcept($rl_additional_libs, $output_dir, "64");
 	my @l_additional_defines_64 = filterOnlyAndExcept($rl_additional_defines, $output_dir, "64");
-	
+
 	my @l_additional_include_dirs_arm = filterOnlyAndExcept($rl_additional_include_dirs, $output_dir, "ARM");
 	my @l_additional_lib_dirs_arm = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir, "ARM");
 	my @l_additional_libs_arm = filterOnlyAndExcept($rl_additional_libs, $output_dir, "ARM");
 	my @l_additional_defines_arm = filterOnlyAndExcept($rl_additional_defines, $output_dir, "ARM");
-	
+
 	if ($steam_sdk_path_or_empty ne '')
 	{
 		push @l_additional_include_dirs_32, "$steam_sdk_path_or_empty\\sdk\\public";
@@ -72,12 +76,12 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 		push @l_additional_lib_dirs_64, "$steam_sdk_path_or_empty\\sdk\\public\\steam\\lib\\win64";
 		#push @l_additional_libs_32, "sdkencryptedappticket.lib";# already in Steam.cpp
 		#push @l_additional_libs_64, "sdkencryptedappticket64.lib";# already in Steam.cpp
-		
+
 		push @l_additional_defines_32, 'USES_STEAM_INTEGRATION';
 		push @l_additional_defines_64, 'USES_STEAM_INTEGRATION';
 		push @l_additional_defines_arm, 'USES_STEAM_INTEGRATION';
 	}
-	
+
 	#print "# Process file: $input_file\n";
 	#print "# Output file is: $output_file\n";
 	open FD, $input_file or die $input_file;
@@ -99,7 +103,7 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 		{
 			$arch = "ARM";
 		}
-		
+
 		if ($line =~ m/<File RelativePath="[^\"]+"><\/File>/)
 		{
 		}
@@ -245,7 +249,9 @@ sub filterOnlyAndExcept($$$)
 	my @l_values;
 	foreach (@$rl_values)
 	{
-		if (!($_ =~ m/^ONLY\:.+\:.+$/) && !($_ =~ m/^EXCEPT\:.+\:.+$/) && !($_ =~ m/^ONLY\:.+\:.+\:.+$/) && !($_ =~ m/^EXCEPT\:.+\:.+\:.+$/))
+		if ( !($_ =~ m/^ONLY\:.+\:.+$/) && !($_ =~ m/^EXCEPT\:.+\:.+$/)
+			&& !($_ =~ m/^ONLY\:.+\:.+\:.+$/) && !($_ =~ m/^EXCEPT\:.+\:.+\:.+$/)
+			&& !($_ =~ m/^ONLY_ARCH\:.+\:.+$/) && !($_ =~ m/^EXCEPT_ARCH\:.+\:.+$/))
 		{
 			push @l_values, $_;
 		}
@@ -253,7 +259,11 @@ sub filterOnlyAndExcept($$$)
 		{
 			push @l_values, $1;
 		}
-		elsif (($_ =~ m/^ONLY\:.+\:.+\:.+$/) && ($_ =~ m/^ONLY\:$output_dir\:$str_arch\:(.+)$/))
+		elsif (defined $str_arch && ($_ =~ m/^ONLY\:.+\:.+\:.+$/) && ($_ =~ m/^ONLY\:$output_dir\:$str_arch\:(.+)$/))
+		{
+			push @l_values, $1;
+		}
+		elsif (defined $str_arch && ($_ =~ m/^ONLY_ARCH\:.+\:.+$/) && ($_ =~ m/^ONLY_ARCH\:$str_arch\:(.+)$/))
 		{
 			push @l_values, $1;
 		}
@@ -261,7 +271,11 @@ sub filterOnlyAndExcept($$$)
 		{
 			push @l_values, $1;
 		}
-		elsif (!($_ =~ m/^EXCEPT\:$output_dir\:$str_arch\:.+$/) && ($_ =~ m/^EXCEPT\:.+\:.+\:(.+)$/))
+		elsif (defined $str_arch && !($_ =~ m/^EXCEPT\:$output_dir\:$str_arch\:.+$/) && ($_ =~ m/^EXCEPT\:.+\:.+\:(.+)$/))
+		{
+			push @l_values, $1;
+		}
+		elsif (defined $str_arch && !($_ =~ m/^EXCEPT_ARCH\:$str_arch\:.+$/) && ($_ =~ m/^EXCEPT_ARCH\:.+\:(.+)$/))
 		{
 			push @l_values, $1;
 		}
@@ -275,7 +289,7 @@ sub writeFileWithConfirmationForDifferences($$)
 {
 	my $output_file = shift;
 	my $content = shift;
-	
+
 	if (-f $output_file)
 	{
 		writeFile("$output_file.new", $content);

@@ -34,11 +34,11 @@ sub main()
 			$i++;
 		}
 	}
-	
+
 	print "Answer: ";
 	my $project_id = <>;# wait for user input
 	chomp $project_id;
-	
+
 	my $project_name = undef;
 	if ($project_id == 0)
 	{
@@ -53,7 +53,7 @@ sub main()
 		die "bad arg\n" unless defined $project_name;
 	}
 	print "\n";
-	
+
 	#------
 	print "Generating root directory '$project_name'\n";
 	mkd($project_name);
@@ -77,12 +77,12 @@ sub main()
 		{
 			$rh_setup_value_by_var->{$var} = '' unless defined $rh_setup_value_by_var->{$var};
 		}
-		writeFile("$project_name/setup.ini", 
+		writeFile("$project_name/setup.ini",
 			join("\n", map { "; $rh_setup_desc_by_var->{$_}\n$_=".($rh_setup_value_by_var->{$_})."\n" } sort keys %$rh_setup_desc_by_var));
 	}
 	else
 	{
-		writeFile("$project_name/setup.ini", 
+		writeFile("$project_name/setup.ini",
 			join("\n", map { "; $rh_setup_desc_by_var->{$_}\n$_=\n" } sort keys %$rh_setup_desc_by_var));
 		foreach (keys %$rh_setup_desc_by_var) { $rh_setup_value_by_var->{$_} = '' }
 	}
@@ -93,17 +93,17 @@ sub main()
 	my $DIRSRCS = "$project_name/code";
 	mkd($DIRSRCS);
 	writeFile("$DIRSRCS/MainClass.cpp", getStrMainClass()) unless (-f "$DIRSRCS/MainClass.cpp");
-	
+
 	#------
 	print "Generating App_JS_Emscripten\n";
 	mkd("$project_name/App_JS_Emscripten");
 	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_JS_Emscripten/.gitignore",
 		join("\n", qw/output.js output.data output.html output.html.mem compile.bat.new compile.sh.new .gitignore.new/)."\n");
-	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_JS_Emscripten/compile.bat", 
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_JS_Emscripten/compile.bat",
 		'@echo off'."\n"
 		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
 		."PAUSE\n");
-	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_JS_Emscripten/compile.sh", 
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_JS_Emscripten/compile.sh",
 		'#!/bin/sh'."\n\n"
 		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
 		);
@@ -114,7 +114,7 @@ sub main()
 	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_Linux/.gitignore", "compile.sh.new\n.gitignore.new\n");
 	my $add_args = (defined $rh_setup_value_by_var->{linux_make_additional_arguments}?$rh_setup_value_by_var->{linux_make_additional_arguments}:"");
 	$add_args .= " STEAMSDK_PATH='$rh_setup_value_by_var->{steam_sdk_path}' " if (defined $rh_setup_value_by_var->{steam_sdk_path} && $rh_setup_value_by_var->{steam_sdk_path} ne '');
-	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_Linux/compile.sh", 
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_Linux/compile.sh",
 		'#!/bin/sh'."\n"
 		.'make $* -f ../../common/Linux/Makefile SRCS=\'$(wildcard ../code/*.cpp)\''." $add_args\n"
 		);
@@ -140,30 +140,30 @@ sub main()
 	my @l_windows_additional_lib_dirs = split(/,/, $rh_setup_value_by_var->{windows_additional_lib_dirs});
 	my @l_windows_additional_libs = split(/,/, $rh_setup_value_by_var->{windows_additional_libs});
 	my @l_windows_additional_defines = split(/,/, $rh_setup_value_by_var->{windows_additional_defines});
-	my $visual_studio_app_guid = $rh_setup_value_by_var->{visual_studio_app_guid};
+	my @l_visual_studio_app_guids = split(/,/, $rh_setup_value_by_var->{visual_studio_app_guid});
 	my $gitignore_visual_studio = join("\n", qw/Debug Release *.ncb *.suo *.vcproj.*.user *.vcproj.new *.vcxproj.new .gitignore.new/)."\n";
-	
+
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2008_OpenGL/.gitignore", $gitignore_visual_studio);
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2008_SDL/.gitignore", $gitignore_visual_studio);
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2013_DX_Desktop/.gitignore", $gitignore_visual_studio);
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2013_DX_Store/.gitignore", $gitignore_visual_studio);
-	
+
 	generate_project::processVisualStudioProjectFile(
-		"App_VS2008_OpenGL.vcproj.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj", \@l_code, 0, 0, 0, 
+		"App_VS2008_OpenGL.vcproj.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj", \@l_code, 0, 0, 0,
 		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
-		$visual_studio_app_guid);
+		\@l_visual_studio_app_guids);
 	generate_project::processVisualStudioProjectFile(
-		"App_VS2008_SDL.vcproj.src", "$relt/App_VS2008_SDL/App_VS2008_SDL.vcproj", \@l_code, 1, 0, 0, 
+		"App_VS2008_SDL.vcproj.src", "$relt/App_VS2008_SDL/App_VS2008_SDL.vcproj", \@l_code, 1, 0, 0,
 		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
-		$visual_studio_app_guid);
+		\@l_visual_studio_app_guids);
 	generate_project::processVisualStudioProjectFile(
 		"App_VS2013_DX_Desktop.vcxproj.src", "$relt/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.vcxproj", \@l_code, 0, 1, 1,
 		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
-		$visual_studio_app_guid);
+		\@l_visual_studio_app_guids);
 	generate_project::processVisualStudioProjectFile(
 		"App_VS2013_DX_Store.vcxproj.src", "$relt/App_VS2013_DX_Store/App_VS2013_DX_Store.vcxproj", \@l_code, 0, 1, 1,
 		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
-		$visual_studio_app_guid);
+		\@l_visual_studio_app_guids);
 
 	generate_project::processVisualStudioProjectUserFile(
 		"App_VS2008_OpenGL.vcproj.user.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj.user");
@@ -173,7 +173,7 @@ sub main()
 		"App_VS2013_DX_Desktop.vcxproj.user.src", "$relt/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.vcxproj.user");
 	generate_project::processVisualStudioProjectUserFile(
 		"App_VS2013_DX_Store.vcxproj.user.src", "$relt/App_VS2013_DX_Store/App_VS2013_DX_Store.vcxproj.user");
-	
+
 	chdir $prevdir or die $prevdir;
 	# create solution files
 	copyOrFail(
@@ -192,7 +192,7 @@ sub main()
 		"./common/Windows/Windows_VS2013_DX_Store/App_VS2013_DX_Store.sln",
 		"$project_name/App_VS2013_DX_Store/App_VS2013_DX_Store.sln",
 		1);
-	
+
 	if (defined $rh_setup_value_by_var->{steam_sdk_path} && $rh_setup_value_by_var->{steam_sdk_path} ne '')
 	{
 		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/win32/sdkencryptedappticket.dll", "$project_name/WorkDir/sdkencryptedappticket.dll");
@@ -202,9 +202,9 @@ sub main()
 		mkd("$project_name/WorkDir/linux_dependancies");
 		mkd("$project_name/WorkDir/linux_dependancies/32bit");
 		mkd("$project_name/WorkDir/linux_dependancies/64bit");
-		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/Linux32/libsdkencryptedappticket.so", 
+		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/Linux32/libsdkencryptedappticket.so",
 			"$project_name/WorkDir/linux_dependancies/32bit/libsdkencryptedappticket.so");
-		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/Linux64/libsdkencryptedappticket.so", 
+		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/Linux64/libsdkencryptedappticket.so",
 			"$project_name/WorkDir/linux_dependancies/64bit/libsdkencryptedappticket.so");
 		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/linux32/libsteam_api.so", "$project_name/WorkDir/linux_dependancies/32bit/libsteam_api.so");
 		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/linux64/libsteam_api.so", "$project_name/WorkDir/linux_dependancies/64bit/libsteam_api.so");
@@ -219,7 +219,7 @@ sub main()
 	copyOrFail("$in_st/Package.appxmanifest", "$out_st/Package.appxmanifest", 0);
 	copyr("$in_st/Assets", "$out_st/Assets", 0);
 	copyOrFail("$in_st/copy_work_dir_to_appx.bat", "$project_name/copy_work_dir_to_appx.bat", 0);
-	
+
 	#------
 	print "Generating working directory\n";
 	mkd("$project_name/WorkDir");
@@ -238,16 +238,16 @@ sub main()
 	mkd("$project_name/WorkDirStore");
 	mkd("$project_name/WorkDirStore/AppX");
 	mkd("$project_name/WorkDirStore/AppX/data");
-	
+
 	#------
 	print "Done.\n";
 	print "\n";
 	#unless (scalar glob("App_VS2008_OpenGL.vcproj.*.user") > 0 || -f scalar glob("App_VS2008_OpenGL.vcproj.user") > 0
 	print "You may need to manually set up the new Visual Studio Project GUID numbers and Package.appxmanifest identity name for App_VS2013_DX_Store.\n";
 	print "\n";
-	
+
 	system('PAUSE') unless ($^O eq 'linux');
-	
+
 	return 0;
 }
 
