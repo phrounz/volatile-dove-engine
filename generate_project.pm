@@ -5,6 +5,7 @@ package generate_project;
 use strict;
 use warnings;
 use File::Basename qw/dirname basename/;
+use Data::Dumper;
 
 #----------------------------------------------
 
@@ -42,7 +43,7 @@ sub processVisualStudioProjectUserFile($$)
 sub processVisualStudioProjectFile($$$$$$$$$$$$)
 {
 	my ($input_file, $output_file, $rl_high_level_src, $disable_3d, $recent_visual_studio, $use_directx, $steam_sdk_path_or_empty,
-		$rl_additional_include_dirs, $rl_additional_lib_dirs, $rl_additional_libs, $rl_additional_defines, $visual_studio_store_app_guid) = @_;
+		$rl_additional_include_dirs, $rl_additional_lib_dirs, $rl_additional_libs, $rl_additional_defines, $visual_studio_app_guid) = @_;
 	die unless (defined $input_file && defined $output_file && defined $rl_high_level_src);
 	my $output_dir = basename(dirname($output_file));
 	
@@ -71,6 +72,10 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 		push @l_additional_lib_dirs_64, "$steam_sdk_path_or_empty\\sdk\\public\\steam\\lib\\win64";
 		#push @l_additional_libs_32, "sdkencryptedappticket.lib";# already in Steam.cpp
 		#push @l_additional_libs_64, "sdkencryptedappticket64.lib";# already in Steam.cpp
+		
+		push @l_additional_defines_32, 'USES_STEAM_INTEGRATION';
+		push @l_additional_defines_64, 'USES_STEAM_INTEGRATION';
+		push @l_additional_defines_arm, 'USES_STEAM_INTEGRATION';
 	}
 	
 	#print "# Process file: $input_file\n";
@@ -142,16 +147,20 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 		}
 		elsif ($line =~ m/^(.*)AUTOMATIC_STORE_GUID(.*)$/)
 		{
-			$visual_studio_store_app_guid = '90347322-85ff-4500-95e8-aafdc8cfa1bf' if ($visual_studio_store_app_guid eq '');
-			$line = $1.$visual_studio_store_app_guid.$2."\n";
+			$visual_studio_app_guid = '90347322-85ff-4500-95e8-aafdc8cfa1bf' if ($visual_studio_app_guid eq '');
+			$line = $1.$visual_studio_app_guid.$2."\n";
+		}
+		elsif ((($line =~ m/<ProjectGuid>\{([A-Z0-9\-]+)\}<\/ProjectGuid>$/) || ($line =~ /ProjectGUID=\"\{([A-Z0-9\-]+)\}\"/)) && ($visual_studio_app_guid ne ''))
+		{
+			$line = $1.$visual_studio_app_guid.$2."\n";
 		}
 		if ($recent_visual_studio)
 		{
-			if ((defined $steam_sdk_path_or_empty) && ($steam_sdk_path_or_empty ne '') && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
-			{
-				$line = "$1<PreprocessorDefinitions>$2;USES_STEAM_INTEGRATION;<\/PreprocessorDefinitions>$3\n";
-			}
-			elsif (($arch eq '32') && @l_additional_include_dirs_32 > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			# if ((defined $steam_sdk_path_or_empty) && ($steam_sdk_path_or_empty ne '') && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
+			# {
+				# $line = "$1<PreprocessorDefinitions>$2;USES_STEAM_INTEGRATION;<\/PreprocessorDefinitions>$3\n";
+			# }
+			if (($arch eq '32') && @l_additional_include_dirs_32 > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalIncludeDirectories>(.*)/)
 			{
 				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@l_additional_include_dirs_32).";<\/AdditionalIncludeDirectories>$3\n";
 			}
@@ -167,7 +176,7 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 			{
 				$line = "$1<PreprocessorDefinitions>$2;".join(';',@l_additional_defines_32).";<\/PreprocessorDefinitions>$3\n";
 			}
-			elsif (($arch eq '64') && @l_additional_include_dirs_64 > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			elsif (($arch eq '64') && @l_additional_include_dirs_64 > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalIncludeDirectories>(.*)/)
 			{
 				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@l_additional_include_dirs_64).";<\/AdditionalIncludeDirectories>$3\n";
 			}
@@ -180,10 +189,10 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 				$line = "$1<AdditionalDependencies>$2;".join(';',@l_additional_libs_64).";<\/AdditionalDependencies>$3\n";
 			}
 			elsif (($arch eq '64') && @l_additional_defines_64 > 0 && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
-			{
+			{die;
 				$line = "$1<PreprocessorDefinitions>$2;".join(';',@l_additional_defines_64).";<\/PreprocessorDefinitions>$3\n";
 			}
-			elsif (($arch eq 'ARM') && @l_additional_include_dirs_arm > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalLibraryDirectories>(.*)/)
+			elsif (($arch eq 'ARM') && @l_additional_include_dirs_arm > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalIncludeDirectories>(.*)/)
 			{
 				$line = "$1<AdditionalIncludeDirectories>$2;".join(';',@l_additional_include_dirs_arm).";<\/AdditionalIncludeDirectories>$3\n";
 			}
@@ -202,11 +211,11 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 		}
 		else
 		{
-			if ((defined $steam_sdk_path_or_empty) && ($steam_sdk_path_or_empty ne '') && $line =~ m/^(.*)PreprocessorDefinitions=\"([^"]*)\"(.*)$/)
-			{
-				$line = $1.'PreprocessorDefinitions="'.$2.';USES_STEAM_INTEGRATION;"'.$3."\n";
-			}
-			elsif (@l_additional_include_dirs_32 > 0 && $line =~ m/^(.*)AdditionalIncludeDirectories=\"([^"]*)\"(.*)$/)
+			# if ((defined $steam_sdk_path_or_empty) && ($steam_sdk_path_or_empty ne '') && $line =~ m/^(.*)PreprocessorDefinitions=\"([^"]*)\"(.*)$/)
+			# {
+				# $line = $1.'PreprocessorDefinitions="'.$2.';USES_STEAM_INTEGRATION;"'.$3."\n";
+			# }
+			if (@l_additional_include_dirs_32 > 0 && $line =~ m/^(.*)AdditionalIncludeDirectories=\"([^"]*)\"(.*)$/)
 			{
 				$line = $1.'AdditionalIncludeDirectories="'.$2.';'.join(';',@l_additional_include_dirs_32).'"'.$3."\n";
 			}

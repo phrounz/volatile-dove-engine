@@ -61,13 +61,13 @@ sub main()
 	#------
 	print "Generating or reading setup.ini\n";
 	my $rh_setup_desc_by_var = {
-		steam_sdk_path => 'Steam SDK path or empty string if the project does not use Steam SDK',
-		linux_make_additional_arguments => 'Arguments added when building App_Linux/compile.sh',
-		windows_additional_include_dirs => 'Additional include directories for Windows, comma-separated',
+		steam_sdk_path => 'Steam SDK path or empty string if the project does not use Steam SDK'."\n; Example: ADD_CC=' -I/usr/include/lua5.2 -fpermissive' ADD_LD='-llua5.2 ' ARCH=64",
+		linux_make_additional_arguments => 'Arguments added when building App_Linux/compile.sh'."\n; Example: c:\\Steam SDK - My Project",
+		windows_additional_include_dirs => 'Additional include directories for Windows, comma-separated'."\n; ".'Example: $(SolutionDir)\..\lua\lua51_VS2008\include;..\..',
 		windows_additional_lib_dirs => 'Additional library directories for Windows, comma-separated',
-		windows_additional_libs => 'Additional libraries for Windows, comma-separated',
+		windows_additional_libs => 'Additional libraries for Windows, comma-separated'."\n; ".'Example: $(SolutionDir)\..\lua\lua51_VS2008\lua5.1.lib',
 		windows_additional_defines => 'Additional #defines for Windows, comma-separated',
-		visual_studio_store_app_guid => 'Visual Studio 2013 For Windows - GUID of the project for a Store App (or empty for test default)'
+		visual_studio_app_guid => 'GUID of the Visual Studio project (or empty for default)'
 		};
 	my $rh_setup_value_by_var = {};
 	if (-f "$project_name/setup.ini")
@@ -78,12 +78,12 @@ sub main()
 			$rh_setup_value_by_var->{$var} = '' unless defined $rh_setup_value_by_var->{$var};
 		}
 		writeFile("$project_name/setup.ini", 
-			join("\n", map { "; $rh_setup_desc_by_var->{$_}\n$_=".($rh_setup_value_by_var->{$_}) } sort keys %$rh_setup_desc_by_var));
+			join("\n", map { "; $rh_setup_desc_by_var->{$_}\n$_=".($rh_setup_value_by_var->{$_})."\n" } sort keys %$rh_setup_desc_by_var));
 	}
 	else
 	{
 		writeFile("$project_name/setup.ini", 
-			join("\n", map { "; $rh_setup_desc_by_var->{$_}\n$_=" } keys %$rh_setup_desc_by_var));
+			join("\n", map { "; $rh_setup_desc_by_var->{$_}\n$_=\n" } sort keys %$rh_setup_desc_by_var));
 		foreach (keys %$rh_setup_desc_by_var) { $rh_setup_value_by_var->{$_} = '' }
 	}
 		#USES_STEAM_INTEGRATION;
@@ -140,7 +140,7 @@ sub main()
 	my @l_windows_additional_lib_dirs = split(/,/, $rh_setup_value_by_var->{windows_additional_lib_dirs});
 	my @l_windows_additional_libs = split(/,/, $rh_setup_value_by_var->{windows_additional_libs});
 	my @l_windows_additional_defines = split(/,/, $rh_setup_value_by_var->{windows_additional_defines});
-	my $visual_studio_store_app_guid = $rh_setup_value_by_var->{visual_studio_store_app_guid};
+	my $visual_studio_app_guid = $rh_setup_value_by_var->{visual_studio_app_guid};
 	my $gitignore_visual_studio = join("\n", qw/Debug Release *.ncb *.suo *.vcproj.*.user *.vcproj.new *.vcxproj.new .gitignore.new/)."\n";
 	
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2008_OpenGL/.gitignore", $gitignore_visual_studio);
@@ -151,19 +151,19 @@ sub main()
 	generate_project::processVisualStudioProjectFile(
 		"App_VS2008_OpenGL.vcproj.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj", \@l_code, 0, 0, 0, 
 		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
-		undef);
+		$visual_studio_app_guid);
 	generate_project::processVisualStudioProjectFile(
 		"App_VS2008_SDL.vcproj.src", "$relt/App_VS2008_SDL/App_VS2008_SDL.vcproj", \@l_code, 1, 0, 0, 
 		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
-		undef);
+		$visual_studio_app_guid);
 	generate_project::processVisualStudioProjectFile(
 		"App_VS2013_DX_Desktop.vcxproj.src", "$relt/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.vcxproj", \@l_code, 0, 1, 1,
 		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
-		undef);
+		$visual_studio_app_guid);
 	generate_project::processVisualStudioProjectFile(
 		"App_VS2013_DX_Store.vcxproj.src", "$relt/App_VS2013_DX_Store/App_VS2013_DX_Store.vcxproj", \@l_code, 0, 1, 1,
 		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
-		$visual_studio_store_app_guid);
+		$visual_studio_app_guid);
 
 	generate_project::processVisualStudioProjectUserFile(
 		"App_VS2008_OpenGL.vcproj.user.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj.user");
@@ -193,12 +193,24 @@ sub main()
 		"$project_name/App_VS2013_DX_Store/App_VS2013_DX_Store.sln",
 		1);
 	
-	# if (defined $rh_setup_value_by_var->{steam_sdk_path} && $rh_setup_value_by_var->{steam_sdk_path} ne '')
-	# {
-		# copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/public/steam/lib/win32/sdkencryptedappticket.dll", "$project_name/WorkDir/sdkencryptedappticket.dll");
-		# copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/public/steam/lib/win64/sdkencryptedappticket64.dll", "$project_name/WorkDir/sdkencryptedappticket64.dll");
-		# copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/public/steam/lib/Linux/libsdkencryptedappticket.so";
-	# }
+	if (defined $rh_setup_value_by_var->{steam_sdk_path} && $rh_setup_value_by_var->{steam_sdk_path} ne '')
+	{
+		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/win32/sdkencryptedappticket.dll", "$project_name/WorkDir/sdkencryptedappticket.dll");
+		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/win64/sdkencryptedappticket64.dll", "$project_name/WorkDir/sdkencryptedappticket64.dll");
+		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/steam_api.dll", "$project_name/WorkDir/steam_api.dll");
+		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/win64/steam_api64.dll", "$project_name/WorkDir/steam_api64.dll");
+		mkd("$project_name/WorkDir/linux_dependancies");
+		mkd("$project_name/WorkDir/linux_dependancies/32bit");
+		mkd("$project_name/WorkDir/linux_dependancies/64bit");
+		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/Linux32/libsdkencryptedappticket.so", 
+			"$project_name/WorkDir/linux_dependancies/32bit/libsdkencryptedappticket.so");
+		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/Linux64/libsdkencryptedappticket.so", 
+			"$project_name/WorkDir/linux_dependancies/64bit/libsdkencryptedappticket.so");
+		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/linux32/libsteam_api.so", "$project_name/WorkDir/linux_dependancies/32bit/libsteam_api.so");
+		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/linux64/libsteam_api.so", "$project_name/WorkDir/linux_dependancies/64bit/libsteam_api.so");
+		writeFile("$project_name/WorkDir/app32.sh", "#!/bin/sh\n".'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./linux_dependancies/32bit ./App_Linux_32bit*');
+		writeFile("$project_name/WorkDir/app64.sh", "#!/bin/sh\n".'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./linux_dependancies/64bit ./App_Linux_64bit*');
+	}
 
 	#------
 	print "Generating other stuff for App_VS2013_DX_Store\n";
