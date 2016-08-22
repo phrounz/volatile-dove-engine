@@ -184,24 +184,24 @@ sub main()
 		"$project_name/App_VS2013_DX_Store/App_VS2013_DX_Store.sln",
 		1);
 
+	mkd("$project_name/WorkDir/linux_dependancies");
+	mkd("$project_name/WorkDir/linux_dependancies/32bit");
+	mkd("$project_name/WorkDir/linux_dependancies/64bit");
 	if (defined $rh_setup_value_by_var->{steam_sdk_path} && $rh_setup_value_by_var->{steam_sdk_path} ne '')
 	{
 		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/win32/sdkencryptedappticket.dll", "$project_name/WorkDir/sdkencryptedappticket.dll");
 		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/win64/sdkencryptedappticket64.dll", "$project_name/WorkDir/sdkencryptedappticket64.dll");
 		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/steam_api.dll", "$project_name/WorkDir/steam_api.dll");
 		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/win64/steam_api64.dll", "$project_name/WorkDir/steam_api64.dll");
-		mkd("$project_name/WorkDir/linux_dependancies");
-		mkd("$project_name/WorkDir/linux_dependancies/32bit");
-		mkd("$project_name/WorkDir/linux_dependancies/64bit");
 		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/Linux32/libsdkencryptedappticket.so",
 			"$project_name/WorkDir/linux_dependancies/32bit/libsdkencryptedappticket.so");
 		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/Linux64/libsdkencryptedappticket.so",
 			"$project_name/WorkDir/linux_dependancies/64bit/libsdkencryptedappticket.so");
 		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/linux32/libsteam_api.so", "$project_name/WorkDir/linux_dependancies/32bit/libsteam_api.so");
 		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/linux64/libsteam_api.so", "$project_name/WorkDir/linux_dependancies/64bit/libsteam_api.so");
-		writeFile("$project_name/WorkDir/app32.sh", "#!/bin/sh\n".'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./linux_dependancies/32bit ./App_Linux_32bit*');
-		writeFile("$project_name/WorkDir/app64.sh", "#!/bin/sh\n".'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./linux_dependancies/64bit ./App_Linux_64bit*');
 	}
+	writeFile("$project_name/WorkDir/app32.sh", "#!/bin/sh\n".'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./linux_dependancies/32bit ./App_Linux_32bit*');
+	writeFile("$project_name/WorkDir/app64.sh", "#!/bin/sh\n".'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./linux_dependancies/64bit ./App_Linux_64bit*');
 
 	#------
 	print "Generating other stuff for App_VS2013_DX_Store\n";
