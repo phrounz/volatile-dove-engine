@@ -120,7 +120,7 @@ sub main()
 		\@l_windows_additional_libs, \@l_windows_additional_defines, \@l_visual_studio_app_guids, \@l_steam_sdk_path);
 	foreach (@l_steam_sdk_path)
 	{
-		$_ = getcwd().$_ unless (($_ =~ /^\//) || ($_ =~ /^\\/) || ($_ =~ /^[a-z]:\\/) || ($_ =~ /^[a-z]:\//));# set absolute if it is not absolute path
+		$_ = getcwd().'/'.$_ unless (($_ =~ /^\//) || ($_ =~ /^\\/) || ($_ =~ /^[a-z]:\\/) || ($_ =~ /^[a-z]:\//));# set absolute if it is not absolute path
 	}
 	
 	#------
