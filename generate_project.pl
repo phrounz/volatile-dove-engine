@@ -7,6 +7,7 @@ use Cwd qw/getcwd/;
 ##use File::Copy::Recursive qw(rcopy);
 use File::Copy qw/copy/;
 use Data::Dumper;
+use Cwd;
 
 use lib ".";
 use generate_project;
@@ -117,6 +118,10 @@ sub main()
 	my @l_args_process = (
 		\@l_steam_sdk_path, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, 
 		\@l_windows_additional_libs, \@l_windows_additional_defines, \@l_visual_studio_app_guids, \@l_steam_sdk_path);
+	foreach (@l_steam_sdk_path)
+	{
+		$_ = getcwd().$_ unless (($_ =~ /^\//) || ($_ =~ /^\\/) || ($_ =~ /^[a-z]:\\/) || ($_ =~ /^[a-z]:\//));# set absolute if it is not absolute path
+	}
 	
 	#------
 	
@@ -184,6 +189,19 @@ sub main()
 		"$project_name/App_VS2013_DX_Store/App_VS2013_DX_Store.sln",
 		1);
 
+	#------
+	print "Generating other stuff for App_VS2013_DX_Store\n";
+	my $in_st = "./common/Windows/Windows_VS2013_DX_Store";
+	my $out_st = "$project_name/App_VS2013_DX_Store";
+	copyOrFail("$in_st/Package.appxmanifest", "$out_st/Package.appxmanifest", 0);
+	copyr("$in_st/Assets", "$out_st/Assets", 0);
+	copyOrFail("$in_st/copy_work_dir_to_appx.bat", "$project_name/copy_work_dir_to_appx.bat", 0);
+
+	#------
+	print "Generating working directory\n";
+	mkd("$project_name/WorkDir");
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/WorkDir/.gitignore",
+		join("\n", qw/old *.dll *.zip *.exe steam_appid.txt App_Linux_*bit app32.sh app64.sh/)."\n");
 	mkd("$project_name/WorkDir/linux_dependancies");
 	mkd("$project_name/WorkDir/linux_dependancies/32bit");
 	mkd("$project_name/WorkDir/linux_dependancies/64bit");
@@ -203,17 +221,6 @@ sub main()
 	writeFile("$project_name/WorkDir/app32.sh", "#!/bin/sh\n".'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./linux_dependancies/32bit ./App_Linux_32bit*');
 	writeFile("$project_name/WorkDir/app64.sh", "#!/bin/sh\n".'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./linux_dependancies/64bit ./App_Linux_64bit*');
 
-	#------
-	print "Generating other stuff for App_VS2013_DX_Store\n";
-	my $in_st = "./common/Windows/Windows_VS2013_DX_Store";
-	my $out_st = "$project_name/App_VS2013_DX_Store";
-	copyOrFail("$in_st/Package.appxmanifest", "$out_st/Package.appxmanifest", 0);
-	copyr("$in_st/Assets", "$out_st/Assets", 0);
-	copyOrFail("$in_st/copy_work_dir_to_appx.bat", "$project_name/copy_work_dir_to_appx.bat", 0);
-
-	#------
-	print "Generating working directory\n";
-	mkd("$project_name/WorkDir");
 	mkd("$project_name/WorkDir/data");
 	unless (-f "$project_name/WorkDir/data/default_font.png")
 	{

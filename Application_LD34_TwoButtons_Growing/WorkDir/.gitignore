@@ -1,1 +1,8 @@
+old
 *.dll
+*.zip
+*.exe
+steam_appid.txt
+App_Linux_*bit
+app32.sh
+app64.sh

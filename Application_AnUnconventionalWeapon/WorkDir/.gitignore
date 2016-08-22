@@ -2,4 +2,7 @@ old
 *.dll
 *.zip
 *.exe
-App_Linux_*bits
+steam_appid.txt
+App_Linux_*bit
+app32.sh
+app64.sh
