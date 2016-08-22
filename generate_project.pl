@@ -108,16 +108,21 @@ sub main()
 		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
 		);
 
+	my @l_windows_additional_include_dirs = split(/,/, $rh_setup_value_by_var->{windows_additional_include_dirs});
+	my @l_windows_additional_lib_dirs = split(/,/, $rh_setup_value_by_var->{windows_additional_lib_dirs});
+	my @l_windows_additional_libs = split(/,/, $rh_setup_value_by_var->{windows_additional_libs});
+	my @l_windows_additional_defines = split(/,/, $rh_setup_value_by_var->{windows_additional_defines});
+	my @l_visual_studio_app_guids = split(/,/, $rh_setup_value_by_var->{visual_studio_app_guid});
+	my @l_steam_sdk_path = split(/,/, $rh_setup_value_by_var->{steam_sdk_path});
+	my @l_args_process = (
+		\@l_steam_sdk_path, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, 
+		\@l_windows_additional_libs, \@l_windows_additional_defines, \@l_visual_studio_app_guids, \@l_steam_sdk_path);
+	
 	#------
+	
 	print "Generating App_Linux\n";
 	mkd("$project_name/App_Linux");
-	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_Linux/.gitignore", "compile.sh.new\n.gitignore.new\n");
-	my $add_args = (defined $rh_setup_value_by_var->{linux_make_additional_arguments}?$rh_setup_value_by_var->{linux_make_additional_arguments}:"");
-	$add_args .= " STEAMSDK_PATH='$rh_setup_value_by_var->{steam_sdk_path}' " if (defined $rh_setup_value_by_var->{steam_sdk_path} && $rh_setup_value_by_var->{steam_sdk_path} ne '');
-	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_Linux/compile.sh",
-		'#!/bin/sh'."\n"
-		.'make $* -f ../../common/Linux/Makefile SRCS=\'$(wildcard ../code/*.cpp)\''." $add_args\n"
-		);
+	generate_project::processLinuxFiles($project_name, 'App_Linux', $rh_setup_value_by_var->{linux_make_additional_arguments}, \@l_steam_sdk_path);
 
 	#------
 	print "Generating App_VS2008_OpenGL, App_VS2008_SDL, App_VS2013_DX_Desktop, and App_VS2013_DX_Store\n";
@@ -136,34 +141,20 @@ sub main()
 		#glob("../../$DIRSRCS/*/*.cpp"), glob("../../$DIRSRCS/*/*.h")
 		);
 	#print "Source is: ".join(",", @l_code)."\n";
-	my @l_windows_additional_include_dirs = split(/,/, $rh_setup_value_by_var->{windows_additional_include_dirs});
-	my @l_windows_additional_lib_dirs = split(/,/, $rh_setup_value_by_var->{windows_additional_lib_dirs});
-	my @l_windows_additional_libs = split(/,/, $rh_setup_value_by_var->{windows_additional_libs});
-	my @l_windows_additional_defines = split(/,/, $rh_setup_value_by_var->{windows_additional_defines});
-	my @l_visual_studio_app_guids = split(/,/, $rh_setup_value_by_var->{visual_studio_app_guid});
 	my $gitignore_visual_studio = join("\n", qw/Debug Release *.ncb *.suo *.vcproj.*.user *.vcproj.new *.vcxproj.new .gitignore.new/)."\n";
-
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2008_OpenGL/.gitignore", $gitignore_visual_studio);
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2008_SDL/.gitignore", $gitignore_visual_studio);
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2013_DX_Desktop/.gitignore", $gitignore_visual_studio);
 	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2013_DX_Store/.gitignore", $gitignore_visual_studio);
 
 	generate_project::processVisualStudioProjectFile(
-		"App_VS2008_OpenGL.vcproj.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj", \@l_code, 0, 0, 0,
-		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
-		\@l_visual_studio_app_guids);
+		"App_VS2008_OpenGL.vcproj.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj", \@l_code, 0, 0, 0, \@l_args_process);
 	generate_project::processVisualStudioProjectFile(
-		"App_VS2008_SDL.vcproj.src", "$relt/App_VS2008_SDL/App_VS2008_SDL.vcproj", \@l_code, 1, 0, 0,
-		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
-		\@l_visual_studio_app_guids);
+		"App_VS2008_SDL.vcproj.src", "$relt/App_VS2008_SDL/App_VS2008_SDL.vcproj", \@l_code, 1, 0, 0, \@l_args_process);
 	generate_project::processVisualStudioProjectFile(
-		"App_VS2013_DX_Desktop.vcxproj.src", "$relt/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.vcxproj", \@l_code, 0, 1, 1,
-		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
-		\@l_visual_studio_app_guids);
+		"App_VS2013_DX_Desktop.vcxproj.src", "$relt/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.vcxproj", \@l_code, 0, 1, 1, \@l_args_process);
 	generate_project::processVisualStudioProjectFile(
-		"App_VS2013_DX_Store.vcxproj.src", "$relt/App_VS2013_DX_Store/App_VS2013_DX_Store.vcxproj", \@l_code, 0, 1, 1,
-		$rh_setup_value_by_var->{steam_sdk_path}, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, \@l_windows_additional_libs, \@l_windows_additional_defines,
-		\@l_visual_studio_app_guids);
+		"App_VS2013_DX_Store.vcxproj.src", "$relt/App_VS2013_DX_Store/App_VS2013_DX_Store.vcxproj", \@l_code, 0, 1, 1, \@l_args_process);
 
 	generate_project::processVisualStudioProjectUserFile(
 		"App_VS2008_OpenGL.vcproj.user.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj.user");

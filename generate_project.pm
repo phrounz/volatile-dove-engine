@@ -40,16 +40,40 @@ sub processVisualStudioProjectUserFile($$)
 
 #----------------------------------------------
 
-sub processVisualStudioProjectFile($$$$$$$$$$$$)
+sub processLinuxFiles($$$$)
 {
-	my ($input_file, $output_file, $rl_high_level_src, $disable_3d, $recent_visual_studio, $use_directx, $steam_sdk_path_or_empty,
-		$rl_additional_include_dirs, $rl_additional_lib_dirs, $rl_additional_libs, $rl_additional_defines, $rl_visual_studio_app_guids) = @_;
+	my ($project_name, $linux_dir, $linux_make_additional_arguments, $rl_steam_sdk_path_or_empty) = @_;
+	
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/$linux_dir/.gitignore", "compile.sh.new\n.gitignore.new\n");
+	
+	my $steam_sdk_path_or_empty = filterOnlyAndExceptOne($rl_steam_sdk_path_or_empty, $linux_dir, undef);
+	my $add_args = (defined $linux_make_additional_arguments?$linux_make_additional_arguments:"");
+	$add_args .= " STEAMSDK_PATH='$steam_sdk_path_or_empty' " if ((defined $steam_sdk_path_or_empty) && ($steam_sdk_path_or_empty ne ''));
+	writeFileWithConfirmationForDifferences("$project_name/$linux_dir/compile.sh",
+		'#!/bin/sh'."\n"
+		.'make $* -f ../../common/Linux/Makefile SRCS=\'$(wildcard ../code/*.cpp)\''." $add_args\n"
+		);
+}
+
+#------------------------
+# create a directory <arg> if it does not exist
+
+sub mkd($) { my $d = shift;unless (-d $d) { mkdir $d or die $d } }
+
+#----------------------------------------------
+
+sub processVisualStudioProjectFile($$$$$$$)
+{
+	my ($input_file, $output_file, $rl_high_level_src, $disable_3d, $recent_visual_studio, $use_directx, $rl_args_process) = @_;
+	my ($rl_steam_sdk_path_or_empty,
+		$rl_additional_include_dirs,
+		$rl_additional_lib_dirs,
+		$rl_additional_libs,
+		$rl_additional_defines,
+		$rl_visual_studio_app_guids,
+		$rl_steam_sdk_path_or_empty) = @$rl_args_process;
 	die unless (defined $input_file && defined $output_file && defined $rl_high_level_src);
 	my $output_dir = basename(dirname($output_file));
-
-	my @l_visual_studio_app_guids = filterOnlyAndExcept($rl_visual_studio_app_guids, $output_dir, undef);
-	die scalar(@l_visual_studio_app_guids) unless (@l_visual_studio_app_guids <= 1);
-	my $visual_studio_app_guid = (scalar(@l_visual_studio_app_guids)==0 ? '' : shift @l_visual_studio_app_guids);
 
 	my @l_additional_include_dirs_32 = filterOnlyAndExcept($rl_additional_include_dirs, $output_dir, "32");
 	my @l_additional_lib_dirs_32 = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir, "32");
@@ -65,6 +89,9 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 	my @l_additional_lib_dirs_arm = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir, "ARM");
 	my @l_additional_libs_arm = filterOnlyAndExcept($rl_additional_libs, $output_dir, "ARM");
 	my @l_additional_defines_arm = filterOnlyAndExcept($rl_additional_defines, $output_dir, "ARM");
+	
+	my $visual_studio_app_guid = filterOnlyAndExceptOne($rl_visual_studio_app_guids, $output_dir, undef);
+	my $steam_sdk_path_or_empty = filterOnlyAndExceptOne($rl_steam_sdk_path_or_empty, $output_dir, undef);
 
 	if ($steam_sdk_path_or_empty ne '')
 	{
@@ -242,6 +269,14 @@ sub processVisualStudioProjectFile($$$$$$$$$$$$)
 }
 
 #------------------------
+
+sub filterOnlyAndExceptOne($$$)
+{
+	my ($rl_visual_studio_app_guids, $output_dir, $str_arch) = @_;
+	my @l_visual_studio_app_guids = filterOnlyAndExcept($rl_visual_studio_app_guids, $output_dir, $str_arch);
+	die scalar(@l_visual_studio_app_guids) unless (@l_visual_studio_app_guids <= 1);
+	return (scalar(@l_visual_studio_app_guids)==0 ? '' : shift @l_visual_studio_app_guids);
+}
 
 sub filterOnlyAndExcept($$$)
 {
