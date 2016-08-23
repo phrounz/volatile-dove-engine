@@ -5,7 +5,6 @@ use warnings;
 use File::Basename qw/dirname basename/;
 use Cwd qw/getcwd/;
 ##use File::Copy::Recursive qw(rcopy);
-use File::Copy qw/copy/;
 use Data::Dumper;
 use Cwd;
 
@@ -143,51 +142,11 @@ sub main()
 	
 	#------
 	print "Generating other stuff for App_VS2013_DX_Store\n";
-	my $in_st = "./common/Windows/Windows_VS2013_DX_Store";
-	my $out_st = "$project_name/App_VS2013_DX_Store";
-	copyOrFail("$in_st/Package.appxmanifest", "$out_st/Package.appxmanifest", 0);
-	copyr("$in_st/Assets", "$out_st/Assets", 0);
-	copyOrFail("$in_st/copy_work_dir_to_appx.bat", "$project_name/copy_work_dir_to_appx.bat", 0);
+	generate_project::processOtherStuffVSStore($project_name, 'App_VS2013_DX_Store');
 
 	#------
 	print "Generating working directory\n";
-	mkd("$project_name/WorkDir");
-	generate_project::writeFileWithConfirmationForDifferences("$project_name/WorkDir/.gitignore",
-		join("\n", qw/old *.dll *.zip *.exe steam_appid.txt App_Linux_*bit app32.sh app64.sh/)."\n");
-	mkd("$project_name/WorkDir/linux_dependancies");
-	mkd("$project_name/WorkDir/linux_dependancies/32bit");
-	mkd("$project_name/WorkDir/linux_dependancies/64bit");
-	if (defined $rh_setup_value_by_var->{steam_sdk_path} && $rh_setup_value_by_var->{steam_sdk_path} ne '')
-	{
-		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/win32/sdkencryptedappticket.dll", "$project_name/WorkDir/sdkencryptedappticket.dll");
-		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/win64/sdkencryptedappticket64.dll", "$project_name/WorkDir/sdkencryptedappticket64.dll");
-		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/steam_api.dll", "$project_name/WorkDir/steam_api.dll");
-		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/win64/steam_api64.dll", "$project_name/WorkDir/steam_api64.dll");
-		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/linux32/libsdkencryptedappticket.so",
-			"$project_name/WorkDir/linux_dependancies/32bit/libsdkencryptedappticket.so");
-		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/public/steam/lib/linux64/libsdkencryptedappticket.so",
-			"$project_name/WorkDir/linux_dependancies/64bit/libsdkencryptedappticket.so");
-		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/linux32/libsteam_api.so", "$project_name/WorkDir/linux_dependancies/32bit/libsteam_api.so");
-		copyOrFail($rh_setup_value_by_var->{steam_sdk_path}."/sdk/redistributable_bin/linux64/libsteam_api.so", "$project_name/WorkDir/linux_dependancies/64bit/libsteam_api.so");
-	}
-	writeFile("$project_name/WorkDir/app32.sh", "#!/bin/sh\n".'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./linux_dependancies/32bit ./App_Linux_32bit*');
-	writeFile("$project_name/WorkDir/app64.sh", "#!/bin/sh\n".'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./linux_dependancies/64bit ./App_Linux_64bit*');
-
-	mkd("$project_name/WorkDir/data");
-	unless (-f "$project_name/WorkDir/data/default_font.png")
-	{
-		copy("common/default_font.png", "$project_name/WorkDir/data/default_font.png");
-	}
-	foreach my $file (glob("dependancy_libraries/dll/*"))
-	{
-		copy($file, "$project_name/WorkDir/".basename($file));
-	}
-	mkd("$project_name/WorkDir/shaders");
-	copy("./shaders/fragmentshader.glsl", "$project_name/WorkDir/shaders/fragmentshader.glsl");
-	copy("./shaders/vertexshader.glsl", "$project_name/WorkDir/shaders/vertexshader.glsl");
-	mkd("$project_name/WorkDirStore");
-	mkd("$project_name/WorkDirStore/AppX");
-	mkd("$project_name/WorkDirStore/AppX/data");
+	generate_project::processWorkDir($project_name, 'WorkDir', $rh_setup_value_by_var->{steam_sdk_path});
 
 	#------
 	print "Done.\n";
@@ -233,28 +192,6 @@ sub mkd($) { my $d = shift;unless (-d $d) { mkdir $d or die $d } }
 # write a file <first-arg> with the content string <second-arg> (clobber it if it already exists)
 
 sub writeFile($$) { (open FDWTMP, ">".shift()) and (print FDWTMP shift()) and (close FDWTMP) }
-
-#------------------------
-# copy all files from <first-arg> into <second-arg> (create <second-arg> if it does not exist)
-# if <third-arg> is true, clobber existing files
-
-sub copyr($$$) {
-	my ($src, $dest, $clobber) = @_;
-	mkd($dest);
-	foreach (glob("$src/*")) {
-		copyOrFail($_,"$dest/".basename($_), $clobber);
-	}
-}
-
-#------------------------
-# copy file <first-arg> <second-arg> (clobber it if it already exists and <third-arg> is true)
-
-sub copyOrFail($$$) {
-	my ($src, $dest, $clobber) = @_;
-	if ($clobber || !(-f $dest)) {
-		copy($src, $dest) or die "copy from $src to $dest failed";
-	}
-}
 
 #------------------------
 # get the content of original MainClass.cpp

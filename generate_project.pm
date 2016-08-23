@@ -6,15 +6,22 @@ use strict;
 use warnings;
 use File::Basename qw/dirname basename/;
 use Data::Dumper;
+use File::Copy qw/copy/;
 use Cwd;
 
-#----------------------------------------------
+#--------------------------------------------------------------------------------------------
+# config
+#--------------------------------------------------------------------------------------------
 
 my @L_DISABLE_3D_SKIPPED_MODULES = (
 	'Animated3DModel','GroupOfQuads','Material','Meshes3D','Obj3D','RenderGroup','Scene3D',
 	'Scene3DPrivate', 'VBO', 'VBOGroup', 'GroupOfQuadsByTexture' );
 my @L_DISABLE_3D_SKIPPED_CPP = map { "$_.cpp" } @L_DISABLE_3D_SKIPPED_MODULES;
 my @L_DISABLE_3D_SKIPPED_H = map { "$_.cpp" } @L_DISABLE_3D_SKIPPED_MODULES;
+
+#--------------------------------------------------------------------------------------------
+# public functions
+#--------------------------------------------------------------------------------------------
 
 #----------------------------------------------
 
@@ -73,7 +80,69 @@ sub processVS($$$$$$$)
 	processVisualStudioSolutionFile_("$name.sln", "$relt/$name/$name.sln", $rl_visual_studio_app_guids);
 }
 
-#----------------------------------------------
+#------------------------
+
+sub processOtherStuffVSStore($$)
+{
+	my ($project_name, $output_dir) = @_;
+	my $in_st = "./common/Windows/Windows_VS2013_DX_Store";
+	my $out_st = "$project_name/$output_dir";
+	copyOrFail("$in_st/Package.appxmanifest", "$out_st/Package.appxmanifest", 0);
+	copyr("$in_st/Assets", "$out_st/Assets", 0);
+	copyOrFail("$in_st/copy_work_dir_to_appx.bat", "$project_name/copy_work_dir_to_appx.bat", 0);
+}
+
+#------------------------
+
+sub processWorkDir($$$)
+{
+	my ($project_name, $workdir, $steam_sdk_path) = @_;
+	
+	mkd("$project_name/$workdir");
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/$workdir/.gitignore",
+		join("\n", qw/old *.dll *.zip *.exe steam_appid.txt App_Linux_*bit app32.sh app64.sh/)."\n");
+	mkd("$project_name/$workdir/linux_dependancies");
+	mkd("$project_name/$workdir/linux_dependancies/32bit");
+	mkd("$project_name/$workdir/linux_dependancies/64bit");
+	
+	if (defined $steam_sdk_path && $steam_sdk_path ne '')
+	{
+		copyOrFail($steam_sdk_path."/sdk/public/steam/lib/win32/sdkencryptedappticket.dll", "$project_name/$workdir/sdkencryptedappticket.dll");
+		copyOrFail($steam_sdk_path."/sdk/public/steam/lib/win64/sdkencryptedappticket64.dll", "$project_name/$workdir/sdkencryptedappticket64.dll");
+		copyOrFail($steam_sdk_path."/sdk/redistributable_bin/steam_api.dll", "$project_name/$workdir/steam_api.dll");
+		copyOrFail($steam_sdk_path."/sdk/redistributable_bin/win64/steam_api64.dll", "$project_name/$workdir/steam_api64.dll");
+		copyOrFail($steam_sdk_path."/sdk/public/steam/lib/linux32/libsdkencryptedappticket.so",
+			"$project_name/$workdir/linux_dependancies/32bit/libsdkencryptedappticket.so");
+		copyOrFail($steam_sdk_path."/sdk/public/steam/lib/linux64/libsdkencryptedappticket.so",
+			"$project_name/$workdir/linux_dependancies/64bit/libsdkencryptedappticket.so");
+		copyOrFail($steam_sdk_path."/sdk/redistributable_bin/linux32/libsteam_api.so", "$project_name/$workdir/linux_dependancies/32bit/libsteam_api.so");
+		copyOrFail($steam_sdk_path."/sdk/redistributable_bin/linux64/libsteam_api.so", "$project_name/$workdir/linux_dependancies/64bit/libsteam_api.so");
+	}
+	writeFile("$project_name/$workdir/app32.sh", "#!/bin/sh\n".'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./linux_dependancies/32bit ./App_Linux_32bit*');
+	writeFile("$project_name/$workdir/app64.sh", "#!/bin/sh\n".'LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./linux_dependancies/64bit ./App_Linux_64bit*');
+
+	mkd("$project_name/$workdir/data");
+	unless (-f "$project_name/$workdir/data/default_font.png")
+	{
+		copy("common/default_font.png", "$project_name/$workdir/data/default_font.png");
+	}
+	foreach my $file (glob("dependancy_libraries/dll/*"))
+	{
+		copy($file, "$project_name/$workdir/".basename($file));
+	}
+	mkd("$project_name/$workdir/shaders");
+	copy("./shaders/fragmentshader.glsl", "$project_name/$workdir/shaders/fragmentshader.glsl");
+	copy("./shaders/vertexshader.glsl", "$project_name/$workdir/shaders/vertexshader.glsl");
+	mkd("$project_name/WorkDirStore");
+	mkd("$project_name/WorkDirStore/AppX");
+	mkd("$project_name/WorkDirStore/AppX/data");
+
+}
+
+
+#--------------------------------------------------------------------------------------------
+# private functions
+#--------------------------------------------------------------------------------------------
 
 sub processVisualStudioSolutionFile_($$$)
 {
@@ -333,6 +402,8 @@ sub filterOnlyAndExceptOne($$$)
 	return (scalar(@l_visual_studio_app_guids)==0 ? '' : shift @l_visual_studio_app_guids);
 }
 
+#------------------------
+
 sub filterOnlyAndExcept($$$)
 {
 	my ($rl_values, $output_dir, $str_arch) = @_;
@@ -458,6 +529,28 @@ sub mkd($) { my $d = shift;unless (-d $d) { mkdir $d or die $d } }
 sub writeFile($$) { (open FDWTMP, ">".shift()) and (print FDWTMP shift()) and (close FDWTMP) }
 
 #------------------------
+# copy all files from <first-arg> into <second-arg> (create <second-arg> if it does not exist)
+# if <third-arg> is true, clobber existing files
+
+sub copyr($$$) {
+	my ($src, $dest, $clobber) = @_;
+	mkd($dest);
+	foreach (glob("$src/*")) {
+		copyOrFail($_,"$dest/".basename($_), $clobber);
+	}
+}
+
+#------------------------
+# copy file <first-arg> <second-arg> (clobber it if it already exists and <third-arg> is true)
+
+sub copyOrFail($$$) {
+	my ($src, $dest, $clobber) = @_;
+	if ($clobber || !(-f $dest)) {
+		copy($src, $dest) or die "copy from $src to $dest failed";
+	}
+}
+
+#------------------------
 
 sub getStrToInclude($$)
 {
@@ -478,6 +571,7 @@ sub getStrToInclude($$)
 
 sub isSourceFile() { my $file = shift; return ($file=~m/\.cpp$/ || $file=~m/\.c$/ || $file=~m/\.cc$/ ? 1 : 0); }
 
-#------------------------
+#--------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------
 
 1;
