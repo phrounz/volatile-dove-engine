@@ -172,10 +172,21 @@ sub main()
 
 	chdir $prevdir or die $prevdir;
 	# create solution files
-	copyOrFail(
-		"./common/Windows/App_VS2008_OpenGL.sln",
-		"$project_name/App_VS2008_OpenGL/App_VS2008_OpenGL.sln",
-		1);
+	
+	my @l_lines = readFile("./common/Windows/App_VS2008_OpenGL.sln");
+	my $visual_studio_app_guid = generate_project::filterOnlyAndExceptOne(\@l_visual_studio_app_guids, 'App_VS2008_OpenGL', undef);
+	foreach (@l_lines)
+	{
+		if ($_ =~ m/^(.*Project\(\"\{[A-Z0-9\-]+\}\"\) = \".+\", \".+\", \"\{)[A-Z0-9\-]+(\}\".*)$/ || $_ =~ m/^(.*\{)[A-Z0-9\-]+(\}\..*)$/)
+		{
+			$_ = $1.$visual_studio_app_guid.$2."\n";
+		}
+	}
+	writeFile("$project_name/App_VS2008_OpenGL/App_VS2008_OpenGL.sln", join('', @l_lines));
+	# copyOrFail(
+		# "./common/Windows/App_VS2008_OpenGL.sln",
+		# "$project_name/App_VS2008_OpenGL/App_VS2008_OpenGL.sln",
+		# 1);
 	copyOrFail(
 		"./common/Windows/App_VS2008_SDL.sln",
 		"$project_name/App_VS2008_SDL/App_VS2008_SDL.sln",
@@ -276,6 +287,10 @@ sub readSetupIniFile($)
 # create a directory <arg> if it does not exist
 
 sub mkd($) { my $d = shift;unless (-d $d) { mkdir $d or die $d } }
+
+#------------------------
+
+sub readFile($) { open FDRTMP, shift(); my @l_lines = <FDRTMP>; close FDRTMP; return @l_lines; }
 
 #------------------------
 # write a file <first-arg> with the content string <second-arg> (clobber it if it already exists)

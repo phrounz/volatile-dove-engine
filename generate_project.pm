@@ -92,7 +92,7 @@ sub processVisualStudioProjectFile($$$$$$$)
 	
 	my $visual_studio_app_guid = filterOnlyAndExceptOne($rl_visual_studio_app_guids, $output_dir, undef);
 	my $steam_sdk_path_or_empty = filterOnlyAndExceptOne($rl_steam_sdk_path_or_empty, $output_dir, undef);
-
+ 
 	if ($steam_sdk_path_or_empty ne '')
 	{
 		push @l_additional_include_dirs_32, "$steam_sdk_path_or_empty\\sdk\\public";
@@ -181,7 +181,7 @@ sub processVisualStudioProjectFile($$$$$$$)
 			$visual_studio_app_guid = '90347322-85ff-4500-95e8-aafdc8cfa1bf' if ($visual_studio_app_guid eq '');
 			$line = $1.$visual_studio_app_guid.$2."\n";
 		}
-		elsif ((($line =~ m/<ProjectGuid>\{([A-Z0-9\-]+)\}<\/ProjectGuid>$/) || ($line =~ /ProjectGUID=\"\{([A-Z0-9\-]+)\}\"/)) && ($visual_studio_app_guid ne ''))
+		elsif ((($line =~ m/^(.*<ProjectGuid>\{)[A-Z0-9\-]+(\}<\/ProjectGuid>.*)$/) || ($line =~ /^(.*ProjectGUID=\"\{)[A-Z0-9\-]+(\}\".*)$/)) && ($visual_studio_app_guid ne ''))
 		{
 			$line = $1.$visual_studio_app_guid.$2."\n";
 		}
