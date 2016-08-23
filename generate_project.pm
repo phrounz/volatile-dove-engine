@@ -6,6 +6,7 @@ use strict;
 use warnings;
 use File::Basename qw/dirname basename/;
 use Data::Dumper;
+use Cwd;
 
 #----------------------------------------------
 
@@ -17,7 +18,85 @@ my @L_DISABLE_3D_SKIPPED_H = map { "$_.cpp" } @L_DISABLE_3D_SKIPPED_MODULES;
 
 #----------------------------------------------
 
-sub processVisualStudioProjectUserFile($$)
+sub processEmscripten($$)
+{
+	my ($project_name, $emscripten_dir) = @_;
+	mkd("$project_name/$emscripten_dir");
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/$emscripten_dir/.gitignore",
+		join("\n", qw/output.js output.data output.html output.html.mem compile.bat.new compile.sh.new .gitignore.new/)."\n");
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/$emscripten_dir/compile.bat",
+		'@echo off'."\n"
+		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
+		."PAUSE\n");
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/$emscripten_dir/compile.sh",
+		'#!/bin/sh'."\n\n"
+		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
+		);
+}
+
+#----------------------------------------------
+
+sub processLinuxFiles($$$$)
+{
+	my ($project_name, $linux_dir, $linux_make_additional_arguments, $rl_steam_sdk_path_or_empty) = @_;
+	
+	mkd("$project_name/$linux_dir");
+	
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/$linux_dir/.gitignore", "compile.sh.new\n.gitignore.new\n");
+	
+	my $steam_sdk_path_or_empty = filterOnlyAndExceptOne($rl_steam_sdk_path_or_empty, $linux_dir, undef);
+	my $add_args = (defined $linux_make_additional_arguments?$linux_make_additional_arguments:"");
+	$add_args .= " STEAMSDK_PATH='$steam_sdk_path_or_empty' " if ((defined $steam_sdk_path_or_empty) && ($steam_sdk_path_or_empty ne ''));
+	writeFileWithConfirmationForDifferences("$project_name/$linux_dir/compile.sh",
+		'#!/bin/sh'."\n"
+		.'make $* -f ../../common/Linux/Makefile SRCS=\'$(wildcard ../code/*.cpp)\''." $add_args\n"
+		);
+}
+
+#------------------------
+
+sub processVS($$$$$$$)
+{
+	my ($name, $relt, $rl_code, $disable_3d, $recent_visual_studio, $use_directx, $rll_args_process) = @_;
+	
+	mkd("$relt/$name");
+	
+	my $gitignore_visual_studio = join("\n", qw/Debug Release *.ncb *.suo *.vcproj.*.user *.vcproj.new *.vcxproj.new .gitignore.new/)."\n";
+	writeFileWithConfirmationForDifferences("$relt/App_VS2008_OpenGL/.gitignore", $gitignore_visual_studio);
+
+	my $vcproj = ($recent_visual_studio ? 'vcxproj' : 'vcproj');
+	processVisualStudioProjectFile_("$name.$vcproj.src", "$relt/$name/$name.$vcproj", $rl_code, $disable_3d, $recent_visual_studio, $use_directx, $rll_args_process);
+
+	processVisualStudioProjectUserFile_("$name.$vcproj.user.src", "$relt/$name/$name.$vcproj.user");
+
+	my $rl_visual_studio_app_guids = $$rll_args_process[5];
+	processVisualStudioSolutionFile_("$name.sln", "$relt/$name/$name.sln", $rl_visual_studio_app_guids);
+}
+
+#----------------------------------------------
+
+sub processVisualStudioSolutionFile_($$$)
+{
+	my ($input_file, $output_file, $rl_visual_studio_app_guids) = @_;
+	
+	my $output_dir = basename(dirname($output_file));
+
+	my @l_lines = readFile($input_file);
+	my $visual_studio_app_guid = filterOnlyAndExceptOne($rl_visual_studio_app_guids, $output_dir, undef);
+	$visual_studio_app_guid = '90347322-85ff-4500-95e8-aafdc8cfa1bf' if ($visual_studio_app_guid eq ''); # note: you can use guidgen.exe
+	foreach (@l_lines)
+	{
+		if ($_ =~ m/^(.*Project\(\"\{[A-Za-z0-9\-]+\}\"\) = \".+\", \".+\", \"\{)[A-Za-z0-9\-]+(\}\".*)$/ || $_ =~ m/^(.*\{)[A-Za-z0-9\-]+(\}\..*)$/)
+		{
+			$_ = $1.$visual_studio_app_guid.$2."\n";
+		}
+	}
+	writeFileWithConfirmationForDifferences($output_file, join('', @l_lines));
+}
+
+#----------------------------------------------
+
+sub processVisualStudioProjectUserFile_($$)
 {
 	my ($input_file, $output_file) = @_;
 
@@ -40,29 +119,7 @@ sub processVisualStudioProjectUserFile($$)
 
 #----------------------------------------------
 
-sub processLinuxFiles($$$$)
-{
-	my ($project_name, $linux_dir, $linux_make_additional_arguments, $rl_steam_sdk_path_or_empty) = @_;
-	
-	generate_project::writeFileWithConfirmationForDifferences("$project_name/$linux_dir/.gitignore", "compile.sh.new\n.gitignore.new\n");
-	
-	my $steam_sdk_path_or_empty = filterOnlyAndExceptOne($rl_steam_sdk_path_or_empty, $linux_dir, undef);
-	my $add_args = (defined $linux_make_additional_arguments?$linux_make_additional_arguments:"");
-	$add_args .= " STEAMSDK_PATH='$steam_sdk_path_or_empty' " if ((defined $steam_sdk_path_or_empty) && ($steam_sdk_path_or_empty ne ''));
-	writeFileWithConfirmationForDifferences("$project_name/$linux_dir/compile.sh",
-		'#!/bin/sh'."\n"
-		.'make $* -f ../../common/Linux/Makefile SRCS=\'$(wildcard ../code/*.cpp)\''." $add_args\n"
-		);
-}
-
-#------------------------
-# create a directory <arg> if it does not exist
-
-sub mkd($) { my $d = shift;unless (-d $d) { mkdir $d or die $d } }
-
-#----------------------------------------------
-
-sub processVisualStudioProjectFile($$$$$$$)
+sub processVisualStudioProjectFile_($$$$$$$)
 {
 	my ($input_file, $output_file, $rl_high_level_src, $disable_3d, $recent_visual_studio, $use_directx, $rl_args_process) = @_;
 	my ($rl_steam_sdk_path_or_empty,
@@ -111,9 +168,7 @@ sub processVisualStudioProjectFile($$$$$$$)
 
 	#print "# Process file: $input_file\n";
 	#print "# Output file is: $output_file\n";
-	open FD, $input_file or die $input_file;
-	my @lines = <FD>;
-	close FD;
+	my @lines = readFile($input_file);
 
 	my $arch = "32";
 	foreach my $line (@lines)
@@ -379,6 +434,23 @@ sub diffCrossPlaftorm($)
 		return $diff_output;
 	}
 }
+
+#------------------------
+# read a file, get its contents
+
+sub readFile($)
+{
+	my $filepath = shift;
+	open (FDRTMP, $filepath) or die("could not read $filepath (current dir = ".getcwd().")");
+	my @l_lines = <FDRTMP>;
+	close FDRTMP;
+	return @l_lines;
+}
+
+#------------------------
+# create a directory <arg> if it does not exist
+
+sub mkd($) { my $d = shift;unless (-d $d) { mkdir $d or die $d } }
 
 #------------------------
 # write a file <first-arg> with the content string <second-arg> (clobber it if it already exists)

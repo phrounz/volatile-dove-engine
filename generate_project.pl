@@ -97,17 +97,10 @@ sub main()
 
 	#------
 	print "Generating App_JS_Emscripten\n";
-	mkd("$project_name/App_JS_Emscripten");
-	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_JS_Emscripten/.gitignore",
-		join("\n", qw/output.js output.data output.html output.html.mem compile.bat.new compile.sh.new .gitignore.new/)."\n");
-	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_JS_Emscripten/compile.bat",
-		'@echo off'."\n"
-		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
-		."PAUSE\n");
-	generate_project::writeFileWithConfirmationForDifferences("$project_name/App_JS_Emscripten/compile.sh",
-		'#!/bin/sh'."\n\n"
-		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
-		);
+	generate_project::processEmscripten($project_name, 'App_JS_Emscripten');
+		
+	#------
+	# get data from setup.ini into arrays
 
 	my @l_windows_additional_include_dirs = split(/,/, $rh_setup_value_by_var->{windows_additional_include_dirs});
 	my @l_windows_additional_lib_dirs = split(/,/, $rh_setup_value_by_var->{windows_additional_lib_dirs});
@@ -126,17 +119,12 @@ sub main()
 	#------
 	
 	print "Generating App_Linux\n";
-	mkd("$project_name/App_Linux");
 	generate_project::processLinuxFiles($project_name, 'App_Linux', $rh_setup_value_by_var->{linux_make_additional_arguments}, \@l_steam_sdk_path);
 
-	#------
+	#----------------------
+	# create visual studio projects and solutions
+	
 	print "Generating App_VS2008_OpenGL, App_VS2008_SDL, App_VS2013_DX_Desktop, and App_VS2013_DX_Store\n";
-	# create directories
-	mkd("$project_name/App_VS2008_OpenGL");
-	mkd("$project_name/App_VS2008_SDL");
-	mkd("$project_name/App_VS2013_DX_Desktop");
-	mkd("$project_name/App_VS2013_DX_Store");
-	# create projects
 	my $COMWIN = "./common/Windows";
 	my $prevdir = getcwd;
 	chdir $COMWIN or die $COMWIN;
@@ -145,61 +133,14 @@ sub main()
 		glob("../../$DIRSRCS/*.cpp"), glob("../../$DIRSRCS/*.h")
 		#glob("../../$DIRSRCS/*/*.cpp"), glob("../../$DIRSRCS/*/*.h")
 		);
-	#print "Source is: ".join(",", @l_code)."\n";
-	my $gitignore_visual_studio = join("\n", qw/Debug Release *.ncb *.suo *.vcproj.*.user *.vcproj.new *.vcxproj.new .gitignore.new/)."\n";
-	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2008_OpenGL/.gitignore", $gitignore_visual_studio);
-	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2008_SDL/.gitignore", $gitignore_visual_studio);
-	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2013_DX_Desktop/.gitignore", $gitignore_visual_studio);
-	generate_project::writeFileWithConfirmationForDifferences("$relt/App_VS2013_DX_Store/.gitignore", $gitignore_visual_studio);
-
-	generate_project::processVisualStudioProjectFile(
-		"App_VS2008_OpenGL.vcproj.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj", \@l_code, 0, 0, 0, \@l_args_process);
-	generate_project::processVisualStudioProjectFile(
-		"App_VS2008_SDL.vcproj.src", "$relt/App_VS2008_SDL/App_VS2008_SDL.vcproj", \@l_code, 1, 0, 0, \@l_args_process);
-	generate_project::processVisualStudioProjectFile(
-		"App_VS2013_DX_Desktop.vcxproj.src", "$relt/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.vcxproj", \@l_code, 0, 1, 1, \@l_args_process);
-	generate_project::processVisualStudioProjectFile(
-		"App_VS2013_DX_Store.vcxproj.src", "$relt/App_VS2013_DX_Store/App_VS2013_DX_Store.vcxproj", \@l_code, 0, 1, 1, \@l_args_process);
-
-	generate_project::processVisualStudioProjectUserFile(
-		"App_VS2008_OpenGL.vcproj.user.src", "$relt/App_VS2008_OpenGL/App_VS2008_OpenGL.vcproj.user");
-	generate_project::processVisualStudioProjectUserFile(
-		"App_VS2008_SDL.vcproj.user.src", "$relt/App_VS2008_SDL/App_VS2008_SDL.vcproj.user");
-	generate_project::processVisualStudioProjectUserFile(
-		"App_VS2013_DX_Desktop.vcxproj.user.src", "$relt/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.vcxproj.user");
-	generate_project::processVisualStudioProjectUserFile(
-		"App_VS2013_DX_Store.vcxproj.user.src", "$relt/App_VS2013_DX_Store/App_VS2013_DX_Store.vcxproj.user");
-
-	chdir $prevdir or die $prevdir;
-	# create solution files
 	
-	my @l_lines = readFile("./common/Windows/App_VS2008_OpenGL.sln");
-	my $visual_studio_app_guid = generate_project::filterOnlyAndExceptOne(\@l_visual_studio_app_guids, 'App_VS2008_OpenGL', undef);
-	foreach (@l_lines)
-	{
-		if ($_ =~ m/^(.*Project\(\"\{[A-Z0-9\-]+\}\"\) = \".+\", \".+\", \"\{)[A-Z0-9\-]+(\}\".*)$/ || $_ =~ m/^(.*\{)[A-Z0-9\-]+(\}\..*)$/)
-		{
-			$_ = $1.$visual_studio_app_guid.$2."\n";
-		}
-	}
-	writeFile("$project_name/App_VS2008_OpenGL/App_VS2008_OpenGL.sln", join('', @l_lines));
-	# copyOrFail(
-		# "./common/Windows/App_VS2008_OpenGL.sln",
-		# "$project_name/App_VS2008_OpenGL/App_VS2008_OpenGL.sln",
-		# 1);
-	copyOrFail(
-		"./common/Windows/App_VS2008_SDL.sln",
-		"$project_name/App_VS2008_SDL/App_VS2008_SDL.sln",
-		1);
-	copyOrFail(
-		"./common/Windows/App_VS2013_DX_Desktop.sln",
-		"$project_name/App_VS2013_DX_Desktop/App_VS2013_DX_Desktop.sln",
-		1);
-	copyOrFail(
-		"./common/Windows/Windows_VS2013_DX_Store/App_VS2013_DX_Store.sln",
-		"$project_name/App_VS2013_DX_Store/App_VS2013_DX_Store.sln",
-		1);
-
+	generate_project::processVS('App_VS2008_OpenGL', $relt, \@l_code, 0, 0, 0, \@l_args_process);
+	generate_project::processVS('App_VS2008_SDL', $relt, \@l_code, 1, 0, 0, \@l_args_process);
+	generate_project::processVS('App_VS2013_DX_Desktop', $relt, \@l_code, 0, 1, 1, \@l_args_process);
+	generate_project::processVS('App_VS2013_DX_Store', $relt, \@l_code, 0, 1, 1, \@l_args_process);
+	
+	chdir $prevdir or die $prevdir;
+	
 	#------
 	print "Generating other stuff for App_VS2013_DX_Store\n";
 	my $in_st = "./common/Windows/Windows_VS2013_DX_Store";
@@ -287,10 +228,6 @@ sub readSetupIniFile($)
 # create a directory <arg> if it does not exist
 
 sub mkd($) { my $d = shift;unless (-d $d) { mkdir $d or die $d } }
-
-#------------------------
-
-sub readFile($) { open FDRTMP, shift(); my @l_lines = <FDRTMP>; close FDRTMP; return @l_lines; }
 
 #------------------------
 # write a file <first-arg> with the content string <second-arg> (clobber it if it already exists)

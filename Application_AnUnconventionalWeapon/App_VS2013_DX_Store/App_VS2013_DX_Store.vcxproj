@@ -27,7 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{90347322-85ff-4500-95e8-aafdc8cfa1bf}</ProjectGuid>
+    <ProjectGuid>{90347322-85FF-4500-95E8-AAFDC8CFA1BF}</ProjectGuid>
     <RootNamespace>App_VS2013_DX_Store</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
