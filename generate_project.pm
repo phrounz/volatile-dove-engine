@@ -344,7 +344,7 @@ sub processVisualStudioProjectFile_($$$$$$$)
 				$line = "$1<AdditionalDependencies>$2;".join(';',@l_additional_libs_64).";<\/AdditionalDependencies>$3\n";
 			}
 			elsif (($arch eq '64') && @l_additional_defines_64 > 0 && $line =~ m/^(.*)<PreprocessorDefinitions>([^<]+)<\/PreprocessorDefinitions>(.*)/)
-			{die;
+			{
 				$line = "$1<PreprocessorDefinitions>$2;".join(';',@l_additional_defines_64).";<\/PreprocessorDefinitions>$3\n";
 			}
 			elsif (($arch eq 'ARM') && @l_additional_include_dirs_arm > 0 && $line =~ m/^(.*)<AdditionalIncludeDirectories>([^<]+)<\/AdditionalIncludeDirectories>(.*)/)
