@@ -224,7 +224,7 @@ sub processVisualStudioProjectFile_($$$$$$$)
 		push @l_additional_include_dirs_32, "$steam_sdk_path_or_empty\\sdk\\public";
 		push @l_additional_include_dirs_64, "$steam_sdk_path_or_empty\\sdk\\public\\steam\\lib\\win64";
 		push @l_additional_lib_dirs_32, "$steam_sdk_path_or_empty\\sdk\\redistributable_bin";
-		push @l_additional_lib_dirs_64, "$steam_sdk_path_or_empty\\sdk\\redistributable_bin";
+		push @l_additional_lib_dirs_64, "$steam_sdk_path_or_empty\\sdk\\redistributable_bin\\win64";
 		push @l_additional_lib_dirs_32, "$steam_sdk_path_or_empty\\sdk\\public\\steam\\lib\\win32";
 		push @l_additional_lib_dirs_64, "$steam_sdk_path_or_empty\\sdk\\public\\steam\\lib\\win64";
 		#push @l_additional_libs_32, "sdkencryptedappticket.lib";# already in Steam.cpp

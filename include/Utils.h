@@ -108,7 +108,8 @@ namespace Utils
 	#ifdef USES_WINDOWS8_METRO
 		#define Assert( a ) Utils::assertion(__LINE__, __FILE__, ( a ) )
 	#else
-		#define Assert Utils::assertion
+		//#define Assert Utils::assertion
+		#define Assert( a ) Utils::assertion(__LINE__, __FILE__, ( a ) )
 	#endif
 	#define AssertMessage( a , b ) {if ( ! (a) ) {Utils::dieErrorMessageToUser( b );}}
   #endif

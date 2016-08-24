@@ -128,7 +128,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;dxgi.lib;ole32.lib;windowscodecs.lib;dwrite.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;$(SolutionDir)\..\lua\lua-5.2.3_Win64_vc12_lib\lua52.lib;pthreadVC2.lib;libxml2.lib;zlib.lib;libiconv.lib;WSock32.Lib;XInput.lib;D3DCompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\VisualStudioOtherLibs\lib;c:\progs\GnuWin32\lib;D:\progs\OpenAL 1.1 SDK\libs\Win32;d:\Desktop\Steam SDK - Asteroids Minesweeper\Steam SDK - Asteroids Minesweeper\sdk\redistributable_bin\win64;d:\Desktop\Steam SDK - Asteroids Minesweeper\Steam SDK - Asteroids Minesweeper\sdk\public\steam\lib\win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\lib;c:\progs\GnuWin32\lib;D:\progs\OpenAL 1.1 SDK\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)\..</AdditionalIncludeDirectories>
@@ -184,7 +184,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>d2d1.lib;d3d11.lib;dxgi.lib;ole32.lib;windowscodecs.lib;dwrite.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;$(SolutionDir)\..\lua\lua-5.2.3_Win64_vc12_lib\lua52.lib;pthreadVC2.lib;libxml2.lib;zlib.lib;libiconv.lib;WSock32.Lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\VisualStudioOtherLibs\lib;c:\progs\GnuWin32\lib;D:\progs\OpenAL 1.1 SDK\libs\Win32;d:\Desktop\Steam SDK - Asteroids Minesweeper\Steam SDK - Asteroids Minesweeper\sdk\redistributable_bin\win64;d:\Desktop\Steam SDK - Asteroids Minesweeper\Steam SDK - Asteroids Minesweeper\sdk\public\steam\lib\win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\lib;c:\progs\GnuWin32\lib;D:\progs\OpenAL 1.1 SDK\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)\..</AdditionalIncludeDirectories>

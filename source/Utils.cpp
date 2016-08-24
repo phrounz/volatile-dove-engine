@@ -132,6 +132,7 @@ void dieErrorMessageToUser(const std::string& message)
 {
 	Utils::print("ERROR: ");
 	Utils::print(message.c_str());
+	Utils::print(s_errorMessageEndUser.c_str());
 	Utils::print("\n");
 	if (THROW_ERROR) throw EngineError(message);
 #if !defined(USES_LINUX) && !defined(USES_JS_EMSCRIPTEN) && !defined(USES_WINDOWS8_METRO)
@@ -143,7 +144,39 @@ void dieErrorMessageToUser(const std::string& message)
 		std::string str = "ERROR (call stack infos missing)";
 	#endif
 	outputln(str.c_str());
-	MessageBox(NULL, Utils::convertStringToWString(message).c_str(), L"Fatal error", MB_OK|MB_ICONEXCLAMATION);
+	MessageBox(NULL, Utils::convertStringToWString(message).c_str(), L"Fatal error - please provide this information to the developers", MB_OK|MB_ICONEXCLAMATION);
+#endif
+
+	/*#ifndef USES_WINDOWS8_METRO
+		system("PAUSE");
+	#endif*/
+#ifdef USES_JS_EMSCRIPTEN
+	emscripten_force_exit(1);
+#endif
+
+ 	exit(1);
+}
+
+//-------------------------------------------------------------------------
+
+void dieBothErrorMessagesToUser(const std::string& message)
+{
+	Utils::print("ERROR: ");
+	Utils::print(message.c_str());
+	Utils::print(s_errorMessageEndUser.c_str());
+	Utils::print("\n");
+	if (THROW_ERROR) throw EngineError(message);
+#if !defined(USES_LINUX) && !defined(USES_JS_EMSCRIPTEN) && !defined(USES_WINDOWS8_METRO)
+	#ifdef ENABLE_CALLSTACK
+		MyStackWalker sw;
+		sw.ShowCallstack();
+		std::string str = sw.getStr();
+	#else
+		std::string str = "ERROR (call stack infos missing)";
+	#endif
+	outputln(str.c_str());
+	std::wstring mess = Utils::convertStringToWString(message) + L"\n\n" + s_errorMessageEndUser;
+	MessageBox(NULL, mess.c_str(), L"Fatal error - please provide this information to the developers", MB_OK|MB_ICONEXCLAMATION);
 #endif
 
 	/*#ifndef USES_WINDOWS8_METRO
@@ -523,7 +556,7 @@ void assertion(int line, const char* filename, bool condition)
 	{
 		std::stringstream sstr;
 		sstr << "Assertion failed at line " << line << " of file " << filename;
-		Utils::dieErrorMessageToUser(sstr.str());
+		Utils::dieBothErrorMessagesToUser(sstr.str());
 	}
 }
 
