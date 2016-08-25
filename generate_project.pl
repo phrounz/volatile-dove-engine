@@ -20,40 +20,25 @@ sub main()
 	#if ($^O eq 'MSWin32') { `mode 180,1200 ` }
 
 	$SIG{INT} = sub { print "\nCaught a sigint, stopping now.\n"; exit 1; };
-
-	print "Please select a project to create/maintain:\n";
-	print "0) NEW PROJECT\n";
-	my $i = 1;
-	my %h_project_by_answer;
-	foreach my $project (glob("*"))
+	
+	my $project_name = undef;
+	foreach my $arg (@ARGV)
 	{
-		if (-d $project && -f "$project/setup.ini")
+		if ($arg eq '-y')
 		{
-			print "$i) $project\n";
-			$h_project_by_answer{$i} = $project;
-			$i++;
+			$generate_project::autoconfirm = 1;
+		}
+		elsif (($arg eq '-h') || ($arg eq '--help'))
+		{
+			usageAndDie();
+		}
+		else
+		{
+			$project_name = $arg;
 		}
 	}
-
-	print "Answer: ";
-	my $project_id = <>;# wait for user input
-	chomp $project_id;
-
-	my $project_name = undef;
-	if ($project_id == 0)
-	{
-		print "Please enter the name of the project: ";
-		$project_name = <>;# wait for user input
-		chomp $project_name;
-		die if ($project_name eq '');
-	}
-	else
-	{
-		$project_name = $h_project_by_answer{$project_id};
-		die "bad arg\n" unless defined $project_name;
-	}
-	print "\n";
-
+	$project_name = getProjectNameFromInput() unless defined $project_name;
+	
 	#------
 	print "Generating root directory '$project_name'\n";
 	mkd($project_name);
@@ -109,7 +94,7 @@ sub main()
 	my @l_steam_sdk_path = split(/,/, $rh_setup_value_by_var->{steam_sdk_path});
 	my @l_args_process = (
 		\@l_steam_sdk_path, \@l_windows_additional_include_dirs, \@l_windows_additional_lib_dirs, 
-		\@l_windows_additional_libs, \@l_windows_additional_defines, \@l_visual_studio_app_guids, \@l_steam_sdk_path);
+		\@l_windows_additional_libs, \@l_windows_additional_defines, \@l_visual_studio_app_guids);
 	foreach (@l_steam_sdk_path)
 	{
 		$_ = getcwd().'/'.$_ unless (($_ =~ /^\//) || ($_ =~ /^\\/) || ($_ =~ /^[a-z]:\\/) || ($_ =~ /^[a-z]:\//));# set absolute if it is not absolute path
@@ -161,6 +146,56 @@ sub main()
 }
 
 exit main();
+
+#------------------------
+
+sub usageAndDie()
+{
+	print "\n"
+		."usage: perl $0 [PROJECT_NAME] [-y]\n\n"
+		."\t./PROJECT_NAME is created if missing. Without argument, it is asked with a prompt\n\n"
+		."\t-y: never prompts when files change, always replace old ones\n\n";
+	exit 1;
+}
+
+#------------------------
+
+sub getProjectNameFromInput()
+{
+	print "Please select a project to create/maintain:\n";
+	print "0) NEW PROJECT\n";
+	my $i = 1;
+	my %h_project_by_answer;
+	foreach my $project (glob("*"))
+	{
+		if (-d $project && -f "$project/setup.ini")
+		{
+			print "$i) $project\n";
+			$h_project_by_answer{$i} = $project;
+			$i++;
+		}
+	}
+
+	print "Answer: ";
+	my $project_id = <>;# wait for user input
+	chomp $project_id;
+
+	my $project_name = undef;
+	if ($project_id == 0)
+	{
+		print "Please enter the name of the project: ";
+		$project_name = <>;# wait for user input
+		chomp $project_name;
+		die if ($project_name eq '');
+	}
+	else
+	{
+		$project_name = $h_project_by_answer{$project_id};
+		die "bad arg\n" unless defined $project_name;
+	}
+	print "\n";
+	return $project_name;
+}
 
 #------------------------
 

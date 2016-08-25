@@ -20,6 +20,12 @@ my @L_DISABLE_3D_SKIPPED_CPP = map { "$_.cpp" } @L_DISABLE_3D_SKIPPED_MODULES;
 my @L_DISABLE_3D_SKIPPED_H = map { "$_.cpp" } @L_DISABLE_3D_SKIPPED_MODULES;
 
 #--------------------------------------------------------------------------------------------
+# globals
+#--------------------------------------------------------------------------------------------
+
+our $autoconfirm = 0;
+
+#--------------------------------------------------------------------------------------------
 # public functions
 #--------------------------------------------------------------------------------------------
 
@@ -196,8 +202,7 @@ sub processVisualStudioProjectFile_($$$$$$$)
 		$rl_additional_lib_dirs,
 		$rl_additional_libs,
 		$rl_additional_defines,
-		$rl_visual_studio_app_guids,
-		$rl_steam_sdk_path_or_empty) = @$rl_args_process;
+		$rl_visual_studio_app_guids) = @$rl_args_process;
 	die unless (defined $input_file && defined $output_file && defined $rl_high_level_src);
 	my $output_dir = basename(dirname($output_file));
 
@@ -464,11 +469,19 @@ sub writeFileWithConfirmationForDifferences($$)
 			print "..... $_\n" foreach (split(/\n/, $diff_output));
 			print "................................................................\n";
 			##`color 7`;
-			print "\nFile '$output_file' changed, see above the differences:\n";
-			print "Confirm overwriting (y/n): ";
-			my $yes_no = <>;# wait for user input
-			chomp $yes_no;
-			print "\n";
+			print "\nFile '$output_file' changed, see above the differences.\n";
+			my $yes_no = 'y';
+			unless ($autoconfirm)
+			{
+				$yes_no = '?';
+				while (($yes_no ne 'y') && ($yes_no ne 'n'))
+				{
+					print "Confirm overwriting (y/n): ";
+					$yes_no = <STDIN>;# wait for user input
+					chomp $yes_no;
+				}
+				print "\n";
+			}
 			rename "$output_file.new", $output_file if ($yes_no eq "y");
 		}
 		else
