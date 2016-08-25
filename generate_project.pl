@@ -61,8 +61,8 @@ sub main()
 	#------
 	print "Generating or reading setup.ini\n";
 	my $rh_setup_desc_by_var = {
-		steam_sdk_path => 'Steam SDK path or empty string if the project does not use Steam SDK'."\n; Example: ADD_CC=' -I/usr/include/lua5.2 -fpermissive' ADD_LD='-llua5.2 ' ARCH=64",
-		linux_make_additional_arguments => 'Arguments added when building App_Linux/compile.sh'."\n; Example: c:\\Steam SDK - My Project",
+		steam_sdk_path => 'Steam SDK path or empty string if the project does not use Steam SDK'."\n; Example: c:\\Steam SDK - My Project",
+		linux_make_additional_arguments => 'Arguments added when building App_Linux/compile.sh'."\n; Example: ADD_CC=' -I/usr/include/lua5.2 -fpermissive' ADD_LD='-llua5.2 ' ARCH=64",
 		windows_additional_include_dirs => 'Additional include directories for Windows, comma-separated'."\n; ".'Example: $(SolutionDir)\..\lua\lua51_VS2008\include;..\..',
 		windows_additional_lib_dirs => 'Additional library directories for Windows, comma-separated',
 		windows_additional_libs => 'Additional libraries for Windows, comma-separated'."\n; ".'Example: $(SolutionDir)\..\lua\lua51_VS2008\lua5.1.lib',
