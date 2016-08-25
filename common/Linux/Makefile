@@ -6,13 +6,6 @@ SRCS :=
 STEAMSDK_PATH :=
 ARCH := 32
 
-ifeq ($(ARCH),local)
-ARCH2 := $(shell uname -m)
-ifeq ($(ARCH2),x86_64)
-ARCH := 64
-endif
-endif
-
 MOPTION := -m32
 TARGET := App_Linux_32bit.$(shell uname -r)
 ifeq ($(ARCH),64)
