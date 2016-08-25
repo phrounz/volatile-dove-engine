@@ -71,7 +71,12 @@ bool KeyboardManager::getModifier(int key, bool waitForNoRepeat) const
 	if (key == KEY_SHIFT) return ((modifiers & GLUT_ACTIVE_SHIFT) != 0);
 	else if (key == KEY_CONTROL) return ((modifiers & GLUT_ACTIVE_CTRL) != 0);
 	else if (key == KEY_ALT) return ((modifiers & GLUT_ACTIVE_ALT) != 0);
-	else Utils::die();
+	else
+	{
+		std::stringstream keystr;
+		keystr << "file=" << __FILE__ << " line=" << __LINE__ << "; key= " << key;
+		AssertMessage(false, keystr.str());
+	}
 #endif
 	return false;
 }

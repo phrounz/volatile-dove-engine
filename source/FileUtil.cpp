@@ -39,7 +39,7 @@ namespace FileUtil
 #else
 			size_t res_str;
 			errno_t res = wcstombs_s(&res_str, c, 2, &str[i], 1);
-			if (res != 0) Utils::die();
+			Assert(res == 0);
 #endif
 			out += c;
 		}

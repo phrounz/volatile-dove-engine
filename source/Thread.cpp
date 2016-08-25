@@ -63,12 +63,12 @@ namespace Threading
 
 	void Thread::claimSemaphore()
 	{
-		Utils::die();// TODO
+		Assert(false);// TODO
 	}
 
 	void Thread::releaseSemaphore()
 	{
-		Utils::die();// TODO
+		Assert(false);// TODO
 	}
 
 	void Thread::deinitSemaphore()

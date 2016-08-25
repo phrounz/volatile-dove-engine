@@ -467,11 +467,16 @@ void checkHResult(HRESULT hresult)
 			// ... do something with the string - log it, display it to the user, etc.
 			outputln("#### Bad hresult: " << errorText);
 
+			AssertMessage(false, std::string("Invalid hresult: ") + Utils::convertWStringToString(errorText));
+
 			// release memory allocated by FormatMessage()
 			//LocalFree(errorText);//TODO
 			errorText = NULL;
 		}
-		Utils::die();
+		else
+		{
+			Assert(false);
+		}
 	}
 }
 #endif
@@ -621,7 +626,7 @@ std::string convertWStringToString(std::wstring str)
 #else
 		errno_t res = wcstombs_s(&res_str, c, 2, &str[i], 1);
 #endif
-		if (res != 0) Utils::die();
+		Assert(res == 0);
 		//wcstombs(&c, &str[i], 1);
 		out += c;
 	}

@@ -155,7 +155,7 @@ const Float3& Camera::getPosition() const
 
 Float3 Camera::convertPositionInCameraCoordinates(const Float3& parPositionInWorldCoordinates) const
 {
-	Utils::die();// not implemented
+	Assert(false);// not implemented
 	/*
 	Float3 diff = parPositionInWorldCoordinates - this->getPosition();
 	Float4 pos(diff.x(), diff.y(), diff.z(), 0.f);
