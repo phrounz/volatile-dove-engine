@@ -38,7 +38,7 @@ void SimpleConfig::loadFile(const char *fileName, bool parFailIfDoNotExist)
 #ifndef COMPILE_SIMPLE_CONFIG
 	Assert(false);
 #else
-	std::string filepath = FileUtil::getFullPath(FileUtil::APPLICATION_DATA_FOLDER, "") + fileName;
+	std::wstring filepath = FileUtil::getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, "") + Utils::convertStringToWString(std::string(fileName));
     itemsString.clear();
     itemsDouble.clear();
     itemsInt.clear();
@@ -47,7 +47,7 @@ void SimpleConfig::loadFile(const char *fileName, bool parFailIfDoNotExist)
     {
         if (parFailIfDoNotExist)
         {
-			AssertMessage(false, (std::string("File missing: ")+filepath).c_str());
+			AssertMessage(false, (std::wstring(L"File missing: ")+filepath).c_str());
         }
         else
             return;
@@ -61,12 +61,12 @@ void SimpleConfig::loadFile(const char *fileName, bool parFailIfDoNotExist)
     //open the XML document
 	xmlDocPtr doc = xmlParseMemory(buffer_text, sizeFile);//filepath.c_str());
 
-    AssertMessage(doc != NULL, (std::string("Could not parse xml file ") + filepath + " (maybe not an XML document)").c_str());
+    AssertMessage(doc != NULL, (std::wstring(L"Could not parse xml file ") + filepath + L" (maybe not an XML document)"));
 
     //get the root element
     xmlNode* root = xmlDocGetRootElement(doc);
 
-	AssertMessage(root != NULL, (std::string("Could not parse xml file ") + filepath + " (root node missing)").c_str());// + xmlGetLastError()->message
+	AssertMessage(root != NULL, (std::wstring(L"Could not parse xml file ") + filepath + L" (root node missing)"));// + xmlGetLastError()->message
 
     //for each node in the current node
     for(xmlNode *node = root->children; node != NULL; node = node->next)
@@ -139,7 +139,7 @@ void SimpleConfig::saveFile(const char* fileName) const
 #ifndef COMPILE_SIMPLE_CONFIG
 	Assert(false);
 #else
-	std::string filepath = FileUtil::getFullPath(FileUtil::APPLICATION_DATA_FOLDER, "") + fileName;
+	std::wstring filepath = FileUtil::getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, "") + Utils::convertStringToWString(fileName);
 	/*FILE* f = fopen(filepath.c_str(),"w");
     fprintf(f, "<root>\n");
 
@@ -199,7 +199,7 @@ void SimpleConfig::saveFile(const char* fileName) const
 		xmlNewChild(bool_node, NULL, BAD_CAST (*it).first.c_str(), BAD_CAST ((*it).second ? "true" : "false"));
 	}
 
-	int res = xmlSaveFormatFileEnc(filepath.c_str(), doc, "UTF-8", 1);
+	int res = xmlSaveFormatFileEnc(Utils::convertWStringToString(filepath, true).c_str(), doc, "UTF-8", 1);
 	Assert(res > -1);
 
 	xmlFreeDoc(doc);

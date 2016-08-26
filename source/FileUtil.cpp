@@ -24,29 +24,6 @@ namespace FileUtil
 	std::string s_currentDirVirtual = "";
 
 	//-----------------------------------------------------------------------------------
-	//-----------------------------------------------------------------------------------
-
-	std::string convertWStringToString(std::wstring str)
-	{
-		std::string out;
-		for (size_t i = 0; i < str.length(); i++)
-		{
-			char c[2];
-			c[0] = '\0';
-			c[1] = '\0';
-#if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
-			wcstombs(c, &str[i], 1);
-#else
-			size_t res_str;
-			errno_t res = wcstombs_s(&res_str, c, 2, &str[i], 1);
-			Assert(res == 0);
-#endif
-			out += c;
-		}
-		return out;
-	}
-
-	//-----------------------------------------------------------------------------------
 #if defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS8_METRO)
 	Windows::Storage::StorageFolder^ getStorageFolder(FileLocalization fileLocalization)
 	{
@@ -127,7 +104,7 @@ namespace FileUtil
 		return dataCopy;
 #elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullpath = getFullPathUnicode(fileLocalization, filepath);
-		std::string fullpathstr = Utils::convertWStringToString(fullpath);
+		std::string fullpathstr = Utils::convertWStringToStringFatal(fullpath);
 		FILE* file = fopen(fullpathstr.c_str(), "rb");
 		AssertMessage(file != NULL, (std::string("Could not open ") + fullpathstr).c_str());
 		fseek(file, 0, SEEK_END);
@@ -175,8 +152,8 @@ namespace FileUtil
 		std::wstring fullpath = getFullPathUnicode(fileLocalization, filepath);
 		if (fileLocalization == FileUtil::APPLICATION_DATA_FOLDER && !fileExists(FileUtil::APPLICATION_DATA_FOLDER, "."))
 			FileUtil::mkdir(FileUtil::APPLICATION_DATA_FOLDER, "");
-		FILE* file = fopen(Utils::convertWStringToString(fullpath).c_str(), "wb");
-		AssertMessage(file != NULL, (std::string("could not write file ") + Utils::convertWStringToString(fullpath)).c_str());
+		FILE* file = fopen(Utils::convertWStringToString(fullpath, true).c_str(), "wb");
+		AssertMessage(file != NULL, (std::string("could not write file ") + Utils::convertWStringToString(fullpath, false)).c_str());
 		fwrite(buffer, size, 1, file);
 		fclose(file);
 #else
@@ -233,7 +210,7 @@ namespace FileUtil
 #elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullfilepath = getFullPathUnicode(fileLocalization, filepath);
 		struct stat st;
-		return (stat(Utils::convertWStringToString(fullfilepath).c_str(), &st) == 0);
+		return (stat(Utils::convertWStringToString(fullfilepath, true).c_str(), &st) == 0);
 #else
 	#error
 #endif
@@ -252,7 +229,7 @@ namespace FileUtil
 		return CreateDirectoryW(fullpath.c_str(), NULL) ? true : false;
 #elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullfilepath = getFullPathUnicode(fileLocalization, filepath);
-		return ::mkdir(Utils::convertWStringToString(fullfilepath).c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0;
+		return ::mkdir(Utils::convertWStringToString(fullfilepath, true).c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0;
 #else
 	#error
 #endif
@@ -269,7 +246,7 @@ namespace FileUtil
 		return RemoveDirectoryW(fullpath.c_str()) ? true : false;
 #elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullfilepath = getFullPathUnicode(fileLocalization, filepath);
-		return ::rmdir(Utils::convertWStringToString(fullfilepath).c_str()) == 0;
+		return ::rmdir(Utils::convertWStringToString(fullfilepath, true).c_str()) == 0;
 #else
 #error
 #endif
@@ -286,7 +263,7 @@ namespace FileUtil
 		return DeleteFileW(fullpath.c_str()) ? true : false;
 #elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullfilepath = getFullPathUnicode(fileLocalization, filepath);
-		return unlink(Utils::convertWStringToString(fullfilepath).c_str()) == 0;
+		return unlink(Utils::convertWStringToString(fullfilepath, true).c_str()) == 0;
 #else
 #error
 #endif
@@ -305,7 +282,7 @@ namespace FileUtil
 		return SetCurrentDirectoryW(fullpath.c_str());*/
 #elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullfilepath = getFullPathUnicode(fileLocalization, filepath);
-		return chdir(Utils::convertWStringToString(fullfilepath).c_str()) == 0;
+		return chdir(Utils::convertWStringToString(fullfilepath, true).c_str()) == 0;
 #else
 #error
 #endif
@@ -385,10 +362,10 @@ namespace FileUtil
 
 	//-----------------------------------------------------------------------------------
 
-	std::string getFullPath(FileLocalization fileLocalization, const char* filepath)
+	/*std::string getFullPath(FileLocalization fileLocalization, const char* filepath)
 	{
 		return Utils::convertWStringToString(getFullPathUnicode(fileLocalization, filepath));
-	}
+	}*/
 
 	//-----------------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------

@@ -33,7 +33,7 @@ namespace FileUtil
 	bool setCurrentDirectory(FileLocalization fileLocalization, const char* filepath);
 	std::wstring getAbsoluteCurrentDirectory();
 
-	std::string getFullPath(FileLocalization fileLocalization, const char* filepath);
+	//std::string getFullPath(FileLocalization fileLocalization, const char* filepath);
 	std::wstring getFullPathUnicode(FileLocalization fileLocalization, const char* filepath);
 
 	//-----------------------------------------------------------------------------------

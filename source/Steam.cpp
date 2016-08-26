@@ -14,6 +14,8 @@
 #pragma comment(lib,"sdkencryptedappticket.lib")
 #endif
 
+#include <direct.h>
+
 #include "steam/steam_api.h"
 #include "steam/isteamuserstats.h"
 #include "steam/isteamremotestorage.h"
@@ -317,17 +319,20 @@ namespace Steam
 		// create a new thread in the game proc and we don't want to force that on games that don't
 		// have native Steam controller implementations
 
-		std::string rgchCWD = Utils::getCurrentDirectory();
+		char rgchCWD[1024];
+		_getcwd( rgchCWD, sizeof( rgchCWD ) );
+
+		//std::string rgchCWD = Utils::getCurrentDirectory();
 
 		char rgchFullPath[1024];
 #if defined(_WIN32)
-		_snprintf(rgchFullPath, sizeof(rgchFullPath), "%s\\%s", rgchCWD.c_str(), "controller.vdf");
+		_snprintf(rgchFullPath, sizeof(rgchFullPath), "%s\\%s", rgchCWD, "controller.vdf");//.c_str()
 #elif defined(OSX)
 		// hack for now, because we do not have utility functions available for finding the resource path
 		// alternatively we could disable the SteamController init on OS X
-		_snprintf(rgchFullPath, sizeof(rgchFullPath), "%s/steamworksexample.app/Contents/Resources/%s", rgchCWD.c_str(), "controller.vdf");
+		_snprintf(rgchFullPath, sizeof(rgchFullPath), "%s/steamworksexample.app/Contents/Resources/%s", rgchCWD, "controller.vdf");
 #else
-		_snprintf(rgchFullPath, sizeof(rgchFullPath), "%s/%s", rgchCWD.c_str(), "controller.vdf");
+		_snprintf(rgchFullPath, sizeof(rgchFullPath), "%s/%s", rgchCWD, "controller.vdf");
 #endif
 		if (!SteamController()->Init(rgchFullPath))
 		{

@@ -25,7 +25,7 @@ namespace DX
 			::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 				NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), pText, 9999, NULL);
 			OutputDebugStringW(pText);
-			std::string fullMessage = Utils::convertWStringToString(pText);
+			std::wstring fullMessage = pText;
 			delete [] pText;
 			throw EngineError(fullMessage);
 
@@ -45,7 +45,7 @@ namespace DX
 			OutputDebugStringW(str.c_str());
 			OutputDebugStringW(pText);
 
-			std::string fullMessage = Utils::convertWStringToString(str + pText);
+			std::wstring fullMessage = pText;
 			delete [] pText;
 
 			throw EngineError(fullMessage);

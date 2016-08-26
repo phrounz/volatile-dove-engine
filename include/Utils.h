@@ -23,11 +23,14 @@ namespace Utils
 	void assertion(bool condition);
 	void assertion(int line, const char* filename, bool condition);
 	void dieErrorMessageToUser(const std::string& message);
+	void dieErrorMessageToUser(const std::wstring& message);
 	void warningMessageToUser(const std::string& message);
+	void warningMessageToUser(const std::wstring& message);
 
 	void enableMessagesInLogFile(bool yesNo);
 	void setLogFileName(const std::string& filename);
-	std::string getLogFileFullPath();
+	//std::string getLogFileFullPath();
+	std::wstring getLogFileFullPathUnicode();
 
 	void indentLog();
 	void unindentLog();
@@ -40,7 +43,7 @@ namespace Utils
 	void print(int number);
 	
 	std::wstring convertStringToWString(std::string str);
-	std::string convertWStringToString(std::wstring str);
+	std::string convertWStringToString(std::wstring str, bool errorIsFatal);
 
 	#if !defined(USES_LINUX) && !defined(USES_JS_EMSCRIPTEN)
 		void checkHResult(HRESULT hresult);
@@ -58,7 +61,7 @@ namespace Utils
 	const wchar_t* getDirectoryFromFilePathStatic(const wchar_t* filename);//TODO check
 
 	wchar_t* getCurrentDirectoryStatic();//TODO check
-	std::string getCurrentDirectory();
+	//std::string getCurrentDirectory();
 	std::wstring getCurrentDirectoryUnicode();
 #ifndef USES_WINDOWS8_METRO
 	bool changeCurrentDirectory(const char* path);
@@ -96,6 +99,7 @@ namespace Utils
 
 #define output( a ) {std::stringstream sstr;sstr << a ;Utils::print(sstr.str().c_str());}
 #define outputln( a ) {std::stringstream sstr;sstr << a << std::endl;Utils::print(sstr.str().c_str());}//Utils::print((sstr.str() + "\n").c_str());}
+#define outputwln( a ) {std::wstringstream sstr;sstr << a << std::endl;Utils::print(sstr.str().c_str());}//Utils::print((sstr.str() + "\n").c_str());}
 /*#ifdef USES_LINUX
   #define Assert( a ) {if ( ! (a) ) {std::stringstream sstr;sstr << "ASSERTION FAILED: " << __FILE__ << ":" << __LINE__ <<"\n";Utils::print(sstr.str().c_str());exit(1);}}
 #else*/

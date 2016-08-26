@@ -19,8 +19,11 @@
 #include <iostream>
 #include <sstream>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <cmath>
+#include <cerrno>
+#include <wchar.h>
 #ifdef USES_JS_EMSCRIPTEN
 	#include <emscripten.h>
 	#include <cassert>
@@ -130,12 +133,20 @@ void die()
 
 void dieErrorMessageToUser(const std::string& message)
 {
-	Utils::print("ERROR: ");
+	dieErrorMessageToUser(Utils::convertStringToWString(message));
+}
+
+//-------------------------------------------------------------------------
+
+void dieErrorMessageToUser(const std::wstring& message)
+{
+	Utils::print(L"ERROR: ");
 	Utils::print(message.c_str());
 	Utils::print(s_errorMessageEndUser.c_str());
-	Utils::print("\n");
+	Utils::print(L"\n");
 	if (THROW_ERROR) throw EngineError(message);
 #if !defined(USES_LINUX) && !defined(USES_JS_EMSCRIPTEN) && !defined(USES_WINDOWS8_METRO)
+	
 	#ifdef ENABLE_CALLSTACK
 		MyStackWalker sw;
 		sw.ShowCallstack();
@@ -144,7 +155,8 @@ void dieErrorMessageToUser(const std::string& message)
 		std::string str = "ERROR (call stack infos missing)";
 	#endif
 	outputln(str.c_str());
-	MessageBox(NULL, Utils::convertStringToWString(message).c_str(), L"Fatal error - please provide this information to the developers", MB_OK|MB_ICONEXCLAMATION);
+
+	MessageBox(NULL, message.c_str(), L"Fatal error - please provide this information to the developers", MB_OK|MB_ICONEXCLAMATION);
 #endif
 
 	/*#ifndef USES_WINDOWS8_METRO
@@ -191,6 +203,15 @@ void dieBothErrorMessagesToUser(const std::string& message)
 
 //-------------------------------------------------------------------------
 
+void warningMessageToUser(const std::wstring& message)
+{
+	Utils::print(L"WARNING: ");
+	Utils::print(message.c_str());
+	Utils::print(L"\n");
+}
+
+//-------------------------------------------------------------------------
+
 void warningMessageToUser(const std::string& message)
 {
 	Utils::print("WARNING: ");
@@ -208,7 +229,8 @@ static int s_logIndentation = 0;
 
 void enableMessagesInLogFile(bool yesNo) { s_logMessages = yesNo; }
 void setLogFileName(const std::string& filename) { log_basename = filename; }
-std::string getLogFileFullPath() { return FileUtil::getFullPath(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()); }
+//std::string getLogFileFullPath() { return FileUtil::getFullPath(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()); }
+std::wstring getLogFileFullPathUnicode() { return FileUtil::getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()); }
 
 void indentLog() { s_logIndentation++; }
 void unindentLog() { s_logIndentation--; }
@@ -224,15 +246,36 @@ void print(const char* text)
 
 	std::cout << finalText << std::flush;
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN) || defined(USES_WINDOWS8_DESKTOP)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_JS_EMSCRIPTEN) || defined(USES_WINDOWS8_DESKTOP)
 	#ifdef USES_WINDOWS_OPENGL
 		OutputDebugStringW(Utils::convertStringToWString(finalText).c_str());
 	#endif
 	if (s_logMessages)
 	{
-		if (fdLog == NULL) fdLog = fopen(FileUtil::getFullPath(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()).c_str(), "w");
-		fprintf(fdLog, "%s", finalText.c_str());
-		fflush(fdLog);
+		if (fdLog == NULL)
+		{
+			//errno_t res = 
+			_wfopen_s(&fdLog, getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()).c_str(), L"w");
+		}
+
+		if (fdLog != NULL)
+		{
+			fprintf(fdLog, "%s", finalText.c_str());
+			fflush(fdLog);
+		}
+	}
+#elif defined (USES_LINUX)
+	if (s_logMessages)
+	{
+		if (fdLog == NULL)
+		{
+			fdLog = fopen(Utils::convertWStringToString(FileUtil::getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()), true), "w");
+		}
+		if (fdLog != NULL)
+		{
+			fprintf(fdLog, "%s", finalText.c_str());
+			fflush(fdLog);
+		}
 	}
 #elif defined(USES_WINDOWS8_METRO)
 	OutputDebugStringW(Utils::convertStringToWString(std::string(finalText)).c_str());
@@ -262,7 +305,67 @@ void print(const char* text)
 
 void print(const wchar_t* text)
 {
-	Utils::print(Utils::convertWStringToString(std::wstring(text)).c_str());
+	//Utils::print(Utils::convertWStringToString(std::wstring(text)).c_str());return;
+
+	std::wstring finalText = L"";
+	for (int i = 0; i < s_logIndentation; ++i) finalText += L"  ";
+	finalText += text;
+
+	std::wcout << finalText << std::flush;
+
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN) || defined(USES_WINDOWS8_DESKTOP)
+	#ifdef USES_WINDOWS_OPENGL
+		OutputDebugStringW(finalText.c_str());
+	#endif
+	if (s_logMessages)
+	{
+		if (fdLog == NULL)
+		{
+			//errno_t res = 
+			_wfopen_s(&fdLog, getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()).c_str(), L"w");
+		}
+
+		if (fdLog != NULL)
+		{
+			fwprintf(fdLog, L"%s", finalText.c_str());
+			fflush(fdLog);
+		}
+	}
+#elif defined (USES_LINUX)
+	if (s_logMessages)
+	{
+		if (fdLog == NULL)
+		{
+			fdLog = fopen(Utils::convertWStringToString(FileUtil::getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()), true), "w");
+		}
+		if (fdLog != NULL)
+		{
+			fwprintf(fdLog, "%s", finalText.c_str());
+			fflush(fdLog);
+		}
+	}
+#elif defined(USES_WINDOWS8_METRO)
+	OutputDebugStringW(finalText.c_str());
+	if (s_logMessages)
+	{
+		size_t size = 0;
+		unsigned char* buffer = NULL;
+		if (FileUtil::fileExists(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()))
+		{
+			buffer = FileUtil::readFile(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str(), &size);
+		}
+		size_t size2 = size + finalText.size()*sizeof(wchar_t);
+
+		wchar_t* buffer2 = new wchar_t[size2];
+		if (size > 0) memcpy(buffer2, buffer, size);
+		memcpy(&buffer2[size], finalText.c_str(), finalText.size()*sizeof(wchar_t));
+
+		FileUtil::writeFile(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str(), buffer2, size2);
+
+		delete [] buffer;
+		delete [] buffer2;
+	}
+#endif
 }
 
 //-------------------------------------------------------------------------
@@ -467,7 +570,7 @@ void checkHResult(HRESULT hresult)
 			// ... do something with the string - log it, display it to the user, etc.
 			outputln("#### Bad hresult: " << errorText);
 
-			AssertMessage(false, std::string("Invalid hresult: ") + Utils::convertWStringToString(errorText));
+			AssertMessage(false, std::wstring(L"checkHResult: Invalid hresult: ") + errorText);
 
 			// release memory allocated by FormatMessage()
 			//LocalFree(errorText);//TODO
@@ -486,7 +589,7 @@ wchar_t* getCurrentDirectoryStatic()
 {
 			//s_pwd = L"foobar";
 #if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
-	std::wstring wstr = Utils::convertStringToWString(getCurrentDirectory());
+	std::wstring wstr = getCurrentDirectoryUnicode();
 	strcpy((char*)s_pwd, (const char*)wstr.c_str());
 #elif defined(USES_WINDOWS8_DESKTOP) || defined(USES_WINDOWS_OPENGL)
 	GetCurrentDirectoryW(MAX_PATH,s_pwd);
@@ -496,7 +599,7 @@ wchar_t* getCurrentDirectoryStatic()
 
 //-------------------------------------------------------------------------
 
-std::string getCurrentDirectory()
+/*std::string getCurrentDirectory()
 {
 #if defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	char pwdtmp[MAX_PATH];
@@ -504,7 +607,7 @@ std::string getCurrentDirectory()
 #else
 	return Utils::convertWStringToString(std::wstring(getCurrentDirectoryStatic()));
 #endif
-}
+}*/
 
 //-------------------------------------------------------------------------
 
@@ -611,7 +714,7 @@ std::wstring convertStringToWString(std::string str)
 
 //-------------------------------------------------------------------------
 
-std::string convertWStringToString(std::wstring str)
+std::string convertWStringToString(std::wstring str, bool errorIsFatal)
 {
 	std::string out;
 	for (size_t i = 0; i < str.length(); i++)
@@ -625,10 +728,20 @@ std::string convertWStringToString(std::wstring str)
 		res_str = wcstombs(c, &str[i], 1);
 #else
 		errno_t res = wcstombs_s(&res_str, c, 2, &str[i], 1);
+
 #endif
-		Assert(res == 0);
-		//wcstombs(&c, &str[i], 1);
-		out += c;
+		if (res != 0)
+		{
+			Assert(!errorIsFatal);
+			//if (res == EILSEQ) return std::string("<Could-not-convert-wstring-EILSEQ>");
+			//else return std::string("<Could-not-convert-wstring>");
+			out += "?";
+		}
+		else
+		{
+			//wcstombs(&c, &str[i], 1);
+			out += c;
+		}
 	}
 	return out;
 }

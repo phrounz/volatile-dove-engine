@@ -208,14 +208,19 @@ namespace
 
 	std::pair<std::string, std::string> getKeyboardLayoutNameAndIso3166Name(const HKL& hkl)
 	{
-		wchar_t szBuf[512];
+		char szBuf[512];
 		DWORD temp = (UINT)hkl & 0xffffffff;
 		// http://stackoverflow.com/questions/12364659/retrieving-language-name-for-keyboard-layout-from-win-xp-os-using-win-api
-		GetLocaleInfo(MAKELCID(temp,SORT_DEFAULT), LOCALE_SLANGUAGE , szBuf, 512);
+		// https://msdn.microsoft.com/en-us/library/windows/desktop/dd318101(v=vs.85).aspx
+		// When the ANSI version of this function is used with a Unicode-only locale identifier, 
+		// the function can succeed because the operating system uses the system code page. 
+		// However, characters that are undefined in the system code page appear in the string as a question mark (?). 
+		//GetLocaleInfo(MAKELCID(temp,SORT_DEFAULT), LOCALE_SLANGUAGE , szBuf, 512);
+		GetLocaleInfoA(MAKELCID(temp,SORT_DEFAULT), LOCALE_SLANGUAGE , szBuf, 512);
 		std::pair<std::string, std::string> output;
-		output.first = Utils::convertWStringToString(std::wstring(szBuf));
-		GetLocaleInfo(MAKELCID(temp,SORT_DEFAULT), LOCALE_SISO3166CTRYNAME, szBuf, 512);
-		output.second = Utils::convertWStringToString(std::wstring(szBuf));
+		output.first = std::string(szBuf);
+		GetLocaleInfoA(MAKELCID(temp,SORT_DEFAULT), LOCALE_SISO3166CTRYNAME, szBuf, 512);
+		output.second = std::string(szBuf);
 		return output;
 	}
 }
