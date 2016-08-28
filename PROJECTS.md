@@ -23,6 +23,7 @@ Each example project "Application_XXXXXX" may contain the following directories,
  * Should work just by opening the solution with **Visual Studio 2008 Express** and 
    compiling+running it (with F5).
  * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
+ * When providing the application to a client on another machine, the [redistribuable package for VS2008](https://www.microsoft.com/en-us/download/details.aspx?id=29) or [VS2008 SP1] (https://www.microsoft.com/en-us/download/details.aspx?id=5582) should be installed to ensure it works.
 
 ### App_VS2013_DX_Desktop
  * Should work just by opening the solution with **Visual Studio 2013 Express for Desktop** 
@@ -30,6 +31,7 @@ Each example project "Application_XXXXXX" may contain the following directories,
  * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
  * Note: if your Visual Studio is not in "C:\Program files (x86)\", you have to change
    the option C/C++->General->"Additional #using directory".
+ * When providing the application to a client on another machine, the [redistribuable package for VS2013](https://www.microsoft.com/en-us/download/details.aspx?id=40784) should be installed to ensure it works.
 
 ### App_VS2013_DX_WinStore
  * Requires to compile+run the solution with **Visual Studio 2013 Express For Windows**,
