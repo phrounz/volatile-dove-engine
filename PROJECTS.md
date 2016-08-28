@@ -1,6 +1,6 @@
 ## Conventions for each example project
 
-Each example project "Application_XXXXXX" may contain the following directories, which correspond to different targets/environments:
+Each example project "Application_XXXXXX" may contain the following directories. Thoses starting with App_... correspond to different targets/environments:
 
 ### code/
  * Contains the common C++ source code, used by all targets.
