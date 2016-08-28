@@ -3,7 +3,7 @@
 Each example project "Application_XXXXXX" may contain the following directories. Thoses starting with App_... correspond to different targets/environments:
 
 ### code/
- * Contains the common C++ source code, used by all targets.
+ * Contains your common C++ source code, used by all targets. The entry point of the application is MainClass.cpp.
 
 ### setup.ini
  * Contains the global configuration file of the project. You shall run [generate_project.pl](./README.md#generate_projectpl)    again to take into consideration any modification in this file.
