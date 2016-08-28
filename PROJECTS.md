@@ -51,11 +51,8 @@ Each example project "Application_XXXXXX" may contain the following directories.
    cd Application_[...]/App_Linux/
    sh compile.sh
    cd ../WorkDir/
-   if [ "`uname -m`" = x86_64 ];then
-     sh app64.sh
-   else
-     sh app32.sh
-   fi
+   sh app32.sh # if you compiled the 32 bit version
+   sh app64.sh # if you compiled the 64 bit version
 ```
  * Working directory is set to "WorkDir" (Included on Git. Contains the data files.)
  * You can pass Makefile parameters to "sh compile.sh", for example "sh compile.sh clean" cleanups the output files
