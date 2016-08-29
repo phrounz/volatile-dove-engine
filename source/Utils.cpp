@@ -269,7 +269,8 @@ void print(const char* text)
 	{
 		if (fdLog == NULL)
 		{
-			fdLog = fopen(Utils::convertWStringToString(FileUtil::getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()), true), "w");
+			std::string logPath = Utils::convertWStringToString(FileUtil::getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()), true);
+			fdLog = fopen(logPath.c_str(), "w");
 		}
 		if (fdLog != NULL)
 		{
