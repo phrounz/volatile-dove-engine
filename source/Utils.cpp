@@ -313,7 +313,7 @@ void print(const wchar_t* text)
 
 	std::wcout << finalText << std::flush;
 
-#if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN) || defined(USES_WINDOWS8_DESKTOP)
+#if defined(USES_WINDOWS_OPENGL) || defined(USES_WINDOWS8_DESKTOP)
 	#ifdef USES_WINDOWS_OPENGL
 		OutputDebugStringW(finalText.c_str());
 	#endif
@@ -331,7 +331,7 @@ void print(const wchar_t* text)
 			fflush(fdLog);
 		}
 	}
-#elif defined (USES_LINUX)
+#elif defined (USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 	if (s_logMessages)
 	{
 		if (fdLog == NULL)
@@ -344,7 +344,7 @@ void print(const wchar_t* text)
 			fflush(fdLog);
 		}
 	}
-#elif defined(USES_WINDOWS8_METRO)
+#elif defined(USES_WINDOWS8_METRO) // this below is really slow!
 	OutputDebugStringW(finalText.c_str());
 	if (s_logMessages)
 	{
