@@ -14,7 +14,9 @@
 #pragma comment(lib,"sdkencryptedappticket.lib")
 #endif
 
+#ifndef USES_LINUX
 #include <direct.h>
+#endif
 
 #include "steam/steam_api.h"
 #include "steam/isteamuserstats.h"
@@ -319,10 +321,13 @@ namespace Steam
 		// create a new thread in the game proc and we don't want to force that on games that don't
 		// have native Steam controller implementations
 
+#ifdef USES_LINUX
+		std::string rgchCWDstr = Utils::getCurrentDirectory();
+		const char* rgchCWD = rgchCWDstr.c_str();
+#else
 		char rgchCWD[1024];
 		_getcwd( rgchCWD, sizeof( rgchCWD ) );
-
-		//std::string rgchCWD = Utils::getCurrentDirectory();
+#endif
 
 		char rgchFullPath[1024];
 #if defined(_WIN32)
