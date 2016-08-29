@@ -336,7 +336,7 @@ void print(const wchar_t* text)
 	{
 		if (fdLog == NULL)
 		{
-			fdLog = fopen(Utils::convertWStringToString(FileUtil::getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()), true), "w");
+			fdLog = fopen(Utils::convertWStringToString(FileUtil::getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()), true).c_str(), "w");
 		}
 		if (fdLog != NULL)
 		{

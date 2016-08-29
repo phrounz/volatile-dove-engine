@@ -322,7 +322,7 @@ namespace Steam
 		// have native Steam controller implementations
 
 #ifdef USES_LINUX
-		std::string rgchCWDstr = Utils::convertWStringToString(Utils::getCurrentDirectoryUnicode(), false);
+		std::string rgchCWDstr = Utils::convertWStringToString(Utils::getCurrentDirectoryUnicode(), true);
 		const char* rgchCWD = rgchCWDstr.c_str();
 #else
 		char rgchCWD[1024];
