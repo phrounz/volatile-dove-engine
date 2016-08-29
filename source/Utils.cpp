@@ -340,7 +340,7 @@ void print(const wchar_t* text)
 		}
 		if (fdLog != NULL)
 		{
-			fwprintf(fdLog, "%s", finalText.c_str());
+			fwprintf(fdLog, L"%s", finalText.c_str());
 			fflush(fdLog);
 		}
 	}
