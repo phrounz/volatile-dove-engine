@@ -130,6 +130,7 @@ public:
 	//void injectKeyForDebugFPSCollision(unsigned char key, Object3D* model);
 
 	static void setGlReadPixelsMultiplier(float value);// 1.f or 256.f is advised (1.f is default)
+	static void setUnProjectDebug(bool yesNo);// (false is default)
 
 	//! Get Field of view
 	float getHorizontalFOV() const;
