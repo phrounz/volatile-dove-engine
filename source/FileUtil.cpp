@@ -104,7 +104,7 @@ namespace FileUtil
 		return dataCopy;
 #elif defined(USES_LINUX) || defined(USES_JS_EMSCRIPTEN)
 		std::wstring fullpath = getFullPathUnicode(fileLocalization, filepath);
-		std::string fullpathstr = Utils::convertWStringToStringFatal(fullpath);
+		std::string fullpathstr = Utils::convertWStringToString(fullpath, true);
 		FILE* file = fopen(fullpathstr.c_str(), "rb");
 		AssertMessage(file != NULL, (std::string("Could not open ") + fullpathstr).c_str());
 		fseek(file, 0, SEEK_END);
