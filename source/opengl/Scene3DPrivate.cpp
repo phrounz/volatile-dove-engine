@@ -25,6 +25,11 @@ namespace
 
 //---------------------------------------------------------------------
 
+float Scene3DPrivate::s_glReadPixelsMultiplier = 1.f;
+bool Scene3DPrivate::s_unProjectDebug = false;
+
+//---------------------------------------------------------------------
+
 Scene3DPrivate::Scene3DPrivate():angleDebugFPSVision(0)
 {
 	Assert(GL_MAX_LIGHTS >= MAX_LIGHTS);
@@ -1542,7 +1547,33 @@ Float3 Scene3DPrivate::get3DPosFrom2D(const Int2& pos) const
 	GLfloat winZ = 0.f;
     glReadPixels( pos.x(), int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
 
+	// hack debug code to see through the eyes of glReadPixels
+	/*std::stringstream sstr;
+	sstr << "P2\n# test\n" << (viewport[2]/10) << " " << (viewport[3]/10) << "65536\n";
+	for (int i = 0; i < viewport[2]; i+=10)
+	{
+		for (int j = 0; j < viewport[3]; j+=10)
+		{
+			glReadPixels( (float)i, (float)viewport[3] - (float)j, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+			sstr << int(winZ*65536) << " ";
+			sstr.str();
+		}
+		sstr << "\n";
+	}
+	FILE* fdw = fopen("buf.txt", "wb");
+	fwrite((const void*)sstr.str().c_str(), sstr.str().size(), 1, fdw);
+	fclose(fdw);
+	exit(0);*/
+	if (s_glReadPixelsMultiplier != 1.f)
+	{
+		winZ *= s_glReadPixelsMultiplier;//256.f;
+	}
+	
     gluUnProject( winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
+	if (s_unProjectDebug)
+	{
+		outputln("-debug-unproject: (" << winX << "," << winY << "," << winZ << ") - " << posX << "," << posY << "," << posZ);
+	}
 
     return Float3((float)posX, (float)posY, (float)posZ);
 }

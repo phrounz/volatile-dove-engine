@@ -176,6 +176,9 @@ void Scene3D::set3DMode(bool enableLighting)
 
 #if defined(USES_WINDOWS_OPENGL) || defined(USES_LINUX)
 
+void Scene3D::setGlReadPixelsMultiplier(float value) { Scene3DPrivate::setGlReadPixelsMultiplier(value); }
+void Scene3D::setUnProjectDebug(bool yesNo) { Scene3DPrivate::setUnProjectDebug(yesNo); }
+
 // get field of view
 float Scene3D::getHorizontalFOV() const
 {

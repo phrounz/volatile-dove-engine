@@ -94,6 +94,8 @@ public:
 
 	const float* getCameraInfos() const { return eyeMatrix; }
 
+	static void setGlReadPixelsMultiplier(float value) { s_glReadPixelsMultiplier = value; }
+	static void setUnProjectDebug(bool yesNo) { s_unProjectDebug = yesNo; }
 	~Scene3DPrivate();
 private:
 
@@ -109,6 +111,9 @@ private:
 
 	float maxVisibleDistance;
 	mutable int nbTrianglesDrawn;
+
+	static float s_glReadPixelsMultiplier;
+	static bool s_unProjectDebug;
 };
 
 #endif //Scene3DPrivate_h_INCLUDED
