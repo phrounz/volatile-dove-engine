@@ -167,7 +167,7 @@ void WinStoreApp::Run()
 			
 			this->BeginDraw();
 			Engine::instance().clearScreen(CoreUtils::colorBlack);
-			Engine::instance().getScene2DMgr().drawText(NULL, e.getFullText().c_str(), Int2(20, 40), 18, CoreUtils::colorWhite);
+			Engine::instance().getScene2DMgr().drawText(NULL, Utils::convertWStringToString(e.getFullText(), false).c_str(), Int2(20, 40), 18, CoreUtils::colorWhite);
 			this->EndDraw();
 			Engine::instance().m_frameDuration = m_frameDurationCounter.retrieve();
 		}

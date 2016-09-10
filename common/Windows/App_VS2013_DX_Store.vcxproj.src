@@ -104,18 +104,25 @@
     <ClCompile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+	  <AdditionalIncludeDirectories>$(SolutionDir)\..\..</AdditionalIncludeDirectories>
+	  <PrecompiledHeader>NotUsing</PrecompiledHeader>
+	  <PreprocessorDefinitions>USES_WINDOWS8_METRO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+	  <AdditionalIncludeDirectories>$(SolutionDir)\..\..</AdditionalIncludeDirectories>
+	  <PrecompiledHeader>NotUsing</PrecompiledHeader>
+	  <PreprocessorDefinitions>USES_WINDOWS8_METRO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+	  <AdditionalIncludeDirectories>$(SolutionDir)\..\..</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>USES_WINDOWS8_METRO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -130,6 +137,7 @@
     <ClCompile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+	  <AdditionalIncludeDirectories>$(SolutionDir)\..\..</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>USES_WINDOWS8_METRO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -144,12 +152,18 @@
     <ClCompile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+	  <AdditionalIncludeDirectories>$(SolutionDir)\..\..</AdditionalIncludeDirectories>
+	  <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>USES_WINDOWS8_METRO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
+	  <AdditionalIncludeDirectories>$(SolutionDir)\..\..</AdditionalIncludeDirectories>
+	  <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>USES_WINDOWS8_METRO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
