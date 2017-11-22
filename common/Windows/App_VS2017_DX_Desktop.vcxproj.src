@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EE29564D-734F-4780-ABE1-6DC11327264F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>App_VS2017_DX_Desktop</RootNamespace>
+	<WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Platform)_$(Configuration)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Platform)_$(Configuration)</TargetName>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Platform)_$(Configuration)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;VERSION_X86;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <MinimalRebuild>false</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>dxgi.lib;d2d1.lib;d3d11.lib;ole32.lib;windowscodecs.lib;dwrite.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;pthreadVC2.lib;libxml2.lib;zlib.lib;libiconv.lib;WSock32.Lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\lib</AdditionalLibraryDirectories>
+    </Link>
+    <FxCompile>
+      <ObjectFileOutput>..\WorkDir\shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <!--<PostBuildEvent>
+      <Command>copy $(SolutionDir)\..\..\common\dependancy_libraries\dll\*.dll $(SolutionDir)\..\WorkDir\</Command>
+    </PostBuildEvent>-->
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;CUBEENGINE_DISABLE_OPTIM_MERGE_QUADS;_CRT_SECURE_NO_WARNINGS;USES_STEAM_INTEGRATION;VERSION_X64;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions);_WINSOCK_DEPRECATED_NO_WARNINGS</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <MinimalRebuild>false</MinimalRebuild>
+      <AdditionalUsingDirectories>C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\lua\lua-5.2.3_Win64_vc12_lib\include;$(SolutionDir)\..\..\VisualStudioOtherLibs\include;C:\progs\GnuWin32\include;d:\progs\OpenAL 1.1 SDK\include;C:\Users\moi\Documents\GitHub\volatile-dove-engine;d:\Desktop\Steam SDK - Asteroids Minesweeper\Steam SDK - Asteroids Minesweeper\sdk\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;dxgi.lib;ole32.lib;windowscodecs.lib;dwrite.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;$(SolutionDir)\..\lua\lua-5.2.3_Win64_vc12_lib\lua52.lib;pthreadVC2.lib;libxml2.lib;zlib.lib;libiconv.lib;WSock32.Lib;XInput.lib;D3DCompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\lib;c:\progs\GnuWin32\lib;D:\progs\OpenAL 1.1 SDK\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <FxCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..</AdditionalIncludeDirectories>
+      <ObjectFileOutput>$(LocalDebuggerWorkingDirectory)\shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;VERSION_X86;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>dxgi.lib;d2d1.lib;d3d11.lib;ole32.lib;windowscodecs.lib;dwrite.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;pthreadVC2.lib;libxml2.lib;zlib.lib;libiconv.lib;WSock32.Lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\lib</AdditionalLibraryDirectories>
+    </Link>
+    <FxCompile>
+      <ObjectFileOutput>..\WorkDir\shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <!--<PostBuildEvent>
+      <Command>copy $(SolutionDir)\..\..\common\dependancy_libraries\dll\*.dll $(SolutionDir)\..\WorkDir\</Command>
+    </PostBuildEvent>-->
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;CUBEENGINE_DISABLE_OPTIM_MERGE_QUADS;_CRT_SECURE_NO_WARNINGS;USES_STEAM_INTEGRATION;VERSION_X64;WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions);_WINSOCK_DEPRECATED_NO_WARNINGS</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <AdditionalUsingDirectories>C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\lua\lua-5.2.3_Win64_vc12_lib\include;$(SolutionDir)\..\..\VisualStudioOtherLibs\include;C:\progs\GnuWin32\include;d:\progs\OpenAL 1.1 SDK\include;C:\Users\moi\Documents\GitHub\volatile-dove-engine;d:\Desktop\Steam SDK - Asteroids Minesweeper\Steam SDK - Asteroids Minesweeper\sdk\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;dxgi.lib;ole32.lib;windowscodecs.lib;dwrite.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;$(SolutionDir)\..\lua\lua-5.2.3_Win64_vc12_lib\lua52.lib;pthreadVC2.lib;libxml2.lib;zlib.lib;libiconv.lib;WSock32.Lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\lib;c:\progs\GnuWin32\lib;D:\progs\OpenAL 1.1 SDK\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <FxCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..</AdditionalIncludeDirectories>
+      <ObjectFileOutput>$(LocalDebuggerWorkingDirectory)\shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    AUTOMATIC_HIGH_LEVEL_CODE
+	<!--<ClCompile Include="..\code\*.cpp" />-->
+  </ItemGroup>
+  <ItemGroup>
+    AUTOMATIC_SOURCE_PATHS
+    <!--<ClCompile Include="..\..\source\*.cpp" /><ClCompile Include="..\..\source\directx\*.cpp" />-->
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\shaders\SimplePixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+	  <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\SimpleVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+	  <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    AUTOMATIC_INCLUDE_PATHS
+    <!--<ClInclude Include="..\..\include\*.h" />
+    <ClInclude Include="..\..\source\*.h" />
+    <ClInclude Include="..\..\source\directx\*.h" />-->
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

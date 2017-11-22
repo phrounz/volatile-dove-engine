@@ -108,7 +108,7 @@ sub main()
 	#----------------------
 	# create visual studio projects and solutions
 	
-	print "Generating App_VS2008_OpenGL, App_VS2008_SDL, App_VS2013_DX_Desktop, and App_VS2013_DX_Store\n";
+	print "Generating App_VS2008_OpenGL, App_VS2008_SDL, App_VS2013_DX_Desktop, App_VS2017_DX_Desktop, and App_VS2013_DX_Store\n";
 	my $COMWIN = "./common/Windows";
 	my $prevdir = getcwd;
 	chdir $COMWIN or die $COMWIN;
@@ -121,6 +121,7 @@ sub main()
 	generate_project::processVS('App_VS2008_OpenGL', $relt, \@l_code, 0, 0, 0, \@l_args_process);
 	generate_project::processVS('App_VS2008_SDL', $relt, \@l_code, 1, 0, 0, \@l_args_process);
 	generate_project::processVS('App_VS2013_DX_Desktop', $relt, \@l_code, 0, 1, 1, \@l_args_process);
+	generate_project::processVS('App_VS2017_DX_Desktop', $relt, \@l_code, 0, 1, 1, \@l_args_process);
 	# no steam for Store
 	shift @l_args_process;
 	@l_args_process = ([], @l_args_process);

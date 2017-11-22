@@ -1,0 +1,401 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EE29564D-734F-4780-ABE1-6DC11327264F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>App_VS2017_DX_Desktop</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Platform)_$(Configuration)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Platform)_$(Configuration)</TargetName>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Platform)_$(Configuration)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;VERSION_X86;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <MinimalRebuild>false</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>dxgi.lib;d2d1.lib;d3d11.lib;ole32.lib;windowscodecs.lib;dwrite.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;pthreadVC2.lib;libxml2.lib;zlib.lib;libiconv.lib;WSock32.Lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\lib</AdditionalLibraryDirectories>
+    </Link>
+    <FxCompile>
+      <ObjectFileOutput>..\WorkDir\shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <!--<PostBuildEvent>
+      <Command>copy $(SolutionDir)\..\..\common\dependancy_libraries\dll\*.dll $(SolutionDir)\..\WorkDir\</Command>
+    </PostBuildEvent>-->
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;CUBEENGINE_DISABLE_OPTIM_MERGE_QUADS;_CRT_SECURE_NO_WARNINGS;USES_STEAM_INTEGRATION;VERSION_X64;WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions);_WINSOCK_DEPRECATED_NO_WARNINGS</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <MinimalRebuild>false</MinimalRebuild>
+      <AdditionalUsingDirectories>C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\lua\lua-5.2.3_Win64_vc12_lib\include;$(SolutionDir)\..\..\VisualStudioOtherLibs\include;C:\progs\GnuWin32\include;d:\progs\OpenAL 1.1 SDK\include;C:\Users\moi\Documents\GitHub\volatile-dove-engine;d:\Desktop\Steam SDK - Asteroids Minesweeper\Steam SDK - Asteroids Minesweeper\sdk\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;dxgi.lib;ole32.lib;windowscodecs.lib;dwrite.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;$(SolutionDir)\..\lua\lua-5.2.3_Win64_vc12_lib\lua52.lib;pthreadVC2.lib;libxml2.lib;zlib.lib;libiconv.lib;WSock32.Lib;XInput.lib;D3DCompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\lib;c:\progs\GnuWin32\lib;D:\progs\OpenAL 1.1 SDK\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <FxCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..</AdditionalIncludeDirectories>
+      <ObjectFileOutput>$(LocalDebuggerWorkingDirectory)\shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;VERSION_X86;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <AdditionalUsingDirectories>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>dxgi.lib;d2d1.lib;d3d11.lib;ole32.lib;windowscodecs.lib;dwrite.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;pthreadVC2.lib;libxml2.lib;zlib.lib;libiconv.lib;WSock32.Lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\lib</AdditionalLibraryDirectories>
+    </Link>
+    <FxCompile>
+      <ObjectFileOutput>..\WorkDir\shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <!--<PostBuildEvent>
+      <Command>copy $(SolutionDir)\..\..\common\dependancy_libraries\dll\*.dll $(SolutionDir)\..\WorkDir\</Command>
+    </PostBuildEvent>-->
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>USES_WINDOWS8_DESKTOP;CUBEENGINE_DISABLE_OPTIM_MERGE_QUADS;_CRT_SECURE_NO_WARNINGS;USES_STEAM_INTEGRATION;VERSION_X64;WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions);_WINSOCK_DEPRECATED_NO_WARNINGS</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <AdditionalUsingDirectories>C:\progs\Microsoft Visual Studio 12.0\VC\vcpackages;C:\Program Files %28x86%29\Windows Kits\8.1\References\CommonConfiguration\Neutral;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\lua\lua-5.2.3_Win64_vc12_lib\include;$(SolutionDir)\..\..\VisualStudioOtherLibs\include;C:\progs\GnuWin32\include;d:\progs\OpenAL 1.1 SDK\include;C:\Users\moi\Documents\GitHub\volatile-dove-engine;d:\Desktop\Steam SDK - Asteroids Minesweeper\Steam SDK - Asteroids Minesweeper\sdk\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>d2d1.lib;d3d11.lib;dxgi.lib;ole32.lib;windowscodecs.lib;dwrite.lib;xaudio2.lib;mfcore.lib;mfplat.lib;mfreadwrite.lib;$(SolutionDir)\..\lua\lua-5.2.3_Win64_vc12_lib\lua52.lib;pthreadVC2.lib;libxml2.lib;zlib.lib;libiconv.lib;WSock32.Lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\..\common\dependancy_libraries\lib;c:\progs\GnuWin32\lib;D:\progs\OpenAL 1.1 SDK\libs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <FxCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..</AdditionalIncludeDirectories>
+      <ObjectFileOutput>$(LocalDebuggerWorkingDirectory)\shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Application_AnUnconventionalWeapon\code\Burning.cpp" />
+    <ClCompile Include="..\..\Application_AnUnconventionalWeapon\code\Cannon.cpp" />
+    <ClCompile Include="..\..\Application_AnUnconventionalWeapon\code\CannonBullet.cpp" />
+    <ClCompile Include="..\..\Application_AnUnconventionalWeapon\code\Chara.cpp" />
+    <ClCompile Include="..\..\Application_AnUnconventionalWeapon\code\Enemy.cpp" />
+    <ClCompile Include="..\..\Application_AnUnconventionalWeapon\code\EnemyBullet.cpp" />
+    <ClCompile Include="..\..\Application_AnUnconventionalWeapon\code\EngineSystem.cpp" />
+    <ClCompile Include="..\..\Application_AnUnconventionalWeapon\code\MainClass.cpp" />
+    <ClCompile Include="..\..\Application_AnUnconventionalWeapon\code\Swarm.cpp" />
+    <ClInclude Include="..\..\Application_AnUnconventionalWeapon\code\Autodestroyable.h" />
+    <ClInclude Include="..\..\Application_AnUnconventionalWeapon\code\Burning.h" />
+    <ClInclude Include="..\..\Application_AnUnconventionalWeapon\code\Cannon.h" />
+    <ClInclude Include="..\..\Application_AnUnconventionalWeapon\code\CannonBullet.h" />
+    <ClInclude Include="..\..\Application_AnUnconventionalWeapon\code\Chara.h" />
+    <ClInclude Include="..\..\Application_AnUnconventionalWeapon\code\Cloud.h" />
+    <ClInclude Include="..\..\Application_AnUnconventionalWeapon\code\Enemy.h" />
+    <ClInclude Include="..\..\Application_AnUnconventionalWeapon\code\EnemyBullet.h" />
+    <ClInclude Include="..\..\Application_AnUnconventionalWeapon\code\EngineSystem.h" />
+    <ClInclude Include="..\..\Application_AnUnconventionalWeapon\code\Swarm.h" />
+    <ClInclude Include="..\..\Application_AnUnconventionalWeapon\code\WaterSystem.h" />
+    <!--<ClCompile Include="..\code\*.cpp" />-->
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\AppSetup.cpp" />
+    <ClInclude Include="..\..\source\AppSetup.h" />
+    <ClCompile Include="..\..\source\Bitmap.cpp" />
+    <ClCompile Include="..\..\source\BoundingBoxes.cpp" />
+    <ClCompile Include="..\..\source\Camera.cpp" />
+    <ClCompile Include="..\..\source\CompressUtil.cpp" />
+    <ClCompile Include="..\..\source\Connection.cpp" />
+    <ClInclude Include="..\..\source\Connection.h" />
+    <ClInclude Include="..\..\source\ConstantBuffer.h" />
+    <ClCompile Include="..\..\source\CoreUtils.cpp" />
+    <ClCompile Include="..\..\source\Cube3D.cpp" />
+    <ClCompile Include="..\..\source\EditText.cpp" />
+    <ClCompile Include="..\..\source\Engine.cpp" />
+    <ClInclude Include="..\..\source\EngineError.h" />
+    <ClCompile Include="..\..\source\FileUtil.cpp" />
+    <ClCompile Include="..\..\source\Font.cpp" />
+    <ClInclude Include="..\..\source\Font.h" />
+    <ClInclude Include="..\..\source\FrameDurationCounter.h" />
+    <ClCompile Include="..\..\source\GroupOfQuads.cpp" />
+    <ClCompile Include="..\..\source\GroupOfQuadsByTexture.cpp" />
+    <ClInclude Include="..\..\source\GroupOfQuadsByTexture.h" />
+    <ClCompile Include="..\..\source\Image.cpp" />
+    <ClCompile Include="..\..\source\JoystickManager.cpp" />
+    <ClCompile Include="..\..\source\KeyboardManager.cpp" />
+    <ClCompile Include="..\..\source\Material.cpp" />
+    <ClCompile Include="..\..\source\MathUtils.cpp" />
+    <ClCompile Include="..\..\source\MemoryPool.cpp" />
+    <ClCompile Include="..\..\source\MessageDialog.cpp" />
+    <ClCompile Include="..\..\source\MouseManager.cpp" />
+    <ClCompile Include="..\..\source\Network.cpp" />
+    <ClCompile Include="..\..\source\Obj3D.cpp" />
+    <ClCompile Include="..\..\source\ParallelTasks.cpp" />
+    <ClCompile Include="..\..\source\PositionsGraph.cpp" />
+    <ClCompile Include="..\..\source\RenderGroup.cpp" />
+    <ClCompile Include="..\..\source\ResolutionChanger.cpp" />
+    <ClInclude Include="..\..\source\ResolutionChanger.h" />
+    <ClCompile Include="..\..\source\Scene2D.cpp" />
+    <ClCompile Include="..\..\source\Scene3D.cpp" />
+    <ClCompile Include="..\..\source\Server.cpp" />
+    <ClInclude Include="..\..\source\Server.h" />
+    <ClCompile Include="..\..\source\SimpleConfig.cpp" />
+    <ClCompile Include="..\..\source\SoundManager.cpp" />
+    <ClCompile Include="..\..\source\Sphere3D.cpp" />
+    <ClCompile Include="..\..\source\Sprite.cpp" />
+    <ClCompile Include="..\..\source\StackWalker.cpp" />
+    <ClInclude Include="..\..\source\StackWalker.h" />
+    <ClCompile Include="..\..\source\Steam.cpp" />
+    <ClInclude Include="..\..\source\Steam.h" />
+    <ClCompile Include="..\..\source\Texture.cpp" />
+    <ClInclude Include="..\..\source\Texture.h" />
+    <ClInclude Include="..\..\source\TextureReal.h" />
+    <ClCompile Include="..\..\source\Thread.cpp" />
+    <ClCompile Include="..\..\source\Utils.cpp" />
+    <ClCompile Include="..\..\source\VBOGroup.cpp" />
+    <ClCompile Include="..\..\source\lodepng.cpp" />
+    <ClInclude Include="..\..\source\lodepng.h" />
+    <ClCompile Include="..\..\source\main.cpp" />
+    <ClInclude Include="..\..\source\network_stdincludes.h" />
+    <ClInclude Include="..\..\source\directx\AbstractWindow.h" />
+    <ClCompile Include="..\..\source\directx\BasicReaderWriter.cpp" />
+    <ClCompile Include="..\..\source\directx\BasicTimer.cpp" />
+    <ClInclude Include="..\..\source\directx\BasicTimer.h" />
+    <ClCompile Include="..\..\source\directx\DXMain.cpp" />
+    <ClInclude Include="..\..\source\directx\DXMain.h" />
+    <ClCompile Include="..\..\source\directx\DesktopApp.cpp" />
+    <ClInclude Include="..\..\source\directx\DesktopApp.h" />
+    <ClCompile Include="..\..\source\directx\DesktopAppControls.cpp" />
+    <ClInclude Include="..\..\source\directx\DesktopAppControls.h" />
+    <ClCompile Include="..\..\source\directx\DesktopWindow.cpp" />
+    <ClInclude Include="..\..\source\directx\DesktopWindow.h" />
+    <ClCompile Include="..\..\source\directx\DirectXBase.cpp" />
+    <ClInclude Include="..\..\source\directx\DirectXBase.h" />
+    <ClCompile Include="..\..\source\directx\DirectXDraw.cpp" />
+    <ClInclude Include="..\..\source\directx\DirectXDraw.h" />
+    <ClCompile Include="..\..\source\directx\DirectXHelper.cpp" />
+    <ClInclude Include="..\..\source\directx\DirectXHelper.h" />
+    <ClCompile Include="..\..\source\directx\FileUtilAsync.cpp" />
+    <ClInclude Include="..\..\source\directx\FileUtilAsync.h" />
+    <ClCompile Include="..\..\source\directx\MediaStreamer.cpp" />
+    <ClInclude Include="..\..\source\directx\MediaStreamer.h" />
+    <ClCompile Include="..\..\source\directx\Multisampling.cpp" />
+    <ClInclude Include="..\..\source\directx\Multisampling.h" />
+    <ClCompile Include="..\..\source\directx\Picking3D.cpp" />
+    <ClInclude Include="..\..\source\directx\Picking3D.h" />
+    <ClCompile Include="..\..\source\directx\RandomAccessReader.cpp" />
+    <ClInclude Include="..\..\source\directx\RandomAccessReader.h" />
+    <ClCompile Include="..\..\source\directx\ScenarioImageSource.cpp" />
+    <ClInclude Include="..\..\source\directx\ScenarioImageSource.h" />
+    <ClCompile Include="..\..\source\directx\Scene3DPrivate.cpp" />
+    <ClInclude Include="..\..\source\directx\Scene3DPrivate.h" />
+    <ClCompile Include="..\..\source\directx\Shader.cpp" />
+    <ClInclude Include="..\..\source\directx\Shader.h" />
+    <ClCompile Include="..\..\source\directx\SoundFileReader.cpp" />
+    <ClInclude Include="..\..\source\directx\SoundFileReader.h" />
+    <ClCompile Include="..\..\source\directx\Sound_Basic.cpp" />
+    <ClInclude Include="..\..\source\directx\Sound_Basic.h" />
+    <ClCompile Include="..\..\source\directx\Sound_Stream.cpp" />
+    <ClInclude Include="..\..\source\directx\Sound_Stream.h" />
+    <ClCompile Include="..\..\source\directx\StreamEffect.cpp" />
+    <ClInclude Include="..\..\source\directx\StreamEffect.h" />
+    <ClCompile Include="..\..\source\directx\TextElement.cpp" />
+    <ClInclude Include="..\..\source\directx\TextElement.h" />
+    <ClCompile Include="..\..\source\directx\TextureReal.cpp" />
+    <ClCompile Include="..\..\source\directx\VBO.cpp" />
+    <ClInclude Include="..\..\source\directx\VBO.h" />
+    <ClCompile Include="..\..\source\directx\WinStoreApp.cpp" />
+    <ClInclude Include="..\..\source\directx\WinStoreApp.h" />
+    <ClCompile Include="..\..\source\directx\WinStoreAppControls.cpp" />
+    <ClInclude Include="..\..\source\directx\WinStoreAppControls.h" />
+    <ClCompile Include="..\..\source\directx\WinStoreAppWindow.cpp" />
+    <ClInclude Include="..\..\source\directx\WinStoreAppWindow.h" />
+    <ClCompile Include="..\..\source\directx\XAudio2SoundPlayer.cpp" />
+    <ClInclude Include="..\..\source\directx\XAudio2SoundPlayer.h" />
+    <ClInclude Include="..\..\source\directx\basicreaderwriter.h" />
+    <ClInclude Include="..\..\source\directx\directx_inc.h" />
+    <!--<ClCompile Include="..\..\source\*.cpp" /><ClCompile Include="..\..\source\directx\*.cpp" />-->
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\shaders\SimplePixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\..\shaders\SimpleVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\AbstractBar.h" />
+    <ClInclude Include="..\..\include\AbstractMainClass.h" />
+    <ClInclude Include="..\..\include\Animated3DModel.h" />
+    <ClInclude Include="..\..\include\AppSetupInfos.h" />
+    <ClInclude Include="..\..\include\BasicMath.h" />
+    <ClInclude Include="..\..\include\BasicVertex.h" />
+    <ClInclude Include="..\..\include\Bitmap.h" />
+    <ClInclude Include="..\..\include\BoundingBoxes.h" />
+    <ClInclude Include="..\..\include\BufferUtils.h" />
+    <ClInclude Include="..\..\include\Camera.h" />
+    <ClInclude Include="..\..\include\CompressUtil.h" />
+    <ClInclude Include="..\..\include\CoreUtils.h" />
+    <ClInclude Include="..\..\include\Cube3D.h" />
+    <ClInclude Include="..\..\include\EditText.h" />
+    <ClInclude Include="..\..\include\Engine.h" />
+    <ClInclude Include="..\..\include\FileUtil.h" />
+    <ClInclude Include="..\..\include\global_defines.h" />
+    <ClInclude Include="..\..\include\GroupOfQuads.h" />
+    <ClInclude Include="..\..\include\Image.h" />
+    <ClInclude Include="..\..\include\JoystickManager.h" />
+    <ClInclude Include="..\..\include\KeyboardManager.h" />
+    <ClInclude Include="..\..\include\Material.h" />
+    <ClInclude Include="..\..\include\MathUtils.h" />
+    <ClInclude Include="..\..\include\MemoryPool.h" />
+    <ClInclude Include="..\..\include\Meshes3D.h" />
+    <ClInclude Include="..\..\include\MessageDialog.h" />
+    <ClInclude Include="..\..\include\MouseManager.h" />
+    <ClInclude Include="..\..\include\Network.h" />
+    <ClInclude Include="..\..\include\Obj3D.h" />
+    <ClInclude Include="..\..\include\ParallelTasks.h" />
+    <ClInclude Include="..\..\include\PositionsGraph.h" />
+    <ClInclude Include="..\..\include\RenderGroup.h" />
+    <ClInclude Include="..\..\include\Scene2D.h" />
+    <ClInclude Include="..\..\include\Scene3D.h" />
+    <ClInclude Include="..\..\include\SimpleConfig.h" />
+    <ClInclude Include="..\..\include\Sound.h" />
+    <ClInclude Include="..\..\include\SoundManager.h" />
+    <ClInclude Include="..\..\include\Sphere3D.h" />
+    <ClInclude Include="..\..\include\Sprite.h" />
+    <ClInclude Include="..\..\include\stdint.h" />
+    <ClInclude Include="..\..\include\Thread.h" />
+    <ClInclude Include="..\..\include\Utils.h" />
+    <ClInclude Include="..\..\include\VBOGroup.h" />
+    <!--<ClInclude Include="..\..\include\*.h" />
+    <ClInclude Include="..\..\source\*.h" />
+    <ClInclude Include="..\..\source\directx\*.h" />-->
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

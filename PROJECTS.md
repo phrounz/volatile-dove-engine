@@ -40,6 +40,14 @@ Each example project "Application_XXXXXX" may contain the following directories.
    * then run the solution again.
  * Working directory is: WorkDirStore\AppX\
    
+### App_VS2017_DX_Desktop
+ * Should work just by opening the solution with **Visual Studio Community 2017** 
+   and compiling+running it (with F5).
+ * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
+ * Note: if your Visual Studio is not in "C:\Program files (x86)\", you may have to change
+   the option C/C++->General->"Additional #using directory".
+ * When providing the application to a client on another machine, the [redistribuable package for VS2017 64 bits](https://go.microsoft.com/fwlink/?LinkId=746572) or [32 bits](https://go.microsoft.com/fwlink/?LinkId=746571) should be installed to ensure it works.
+
 ### App_Linux
  * Should work on **Ubuntu 14.04 Desktop LTS 32 bits** and **SteamOS 2.0**.
  * Install the missing packages listed in common/Linux/install_dependancies.sh, compile with "sh compile.sh", and
