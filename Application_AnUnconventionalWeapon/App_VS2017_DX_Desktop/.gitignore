@@ -1,0 +1,9 @@
+Debug
+Release
+*.ncb
+*.suo
+*.vcproj.*.user
+*.vcproj.new
+*.vcxproj.new
+.gitignore.new
+.vs
