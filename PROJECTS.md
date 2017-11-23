@@ -36,7 +36,7 @@ Each example project "Application_XXXXXX" may contain the following directories.
 ### App_VS2013_DX_WinStore
  * Requires to compile+run the solution with **Visual Studio 2013 Express For Windows**,
    * then stop debugging after it crashes,
-   * then run copy_work_dir_to_appx.sh,
+   * then run copy_work_dir_to_appx.bat,
    * then run the solution again.
  * Working directory is: WorkDirStore\AppX\
    
