@@ -3,6 +3,7 @@ Release
 *.ncb
 *.suo
 *.vcproj.*.user
+*.vcxproj.user.new
 *.vcproj.new
 *.vcxproj.new
 .gitignore.new
