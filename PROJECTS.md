@@ -20,13 +20,13 @@ Each example project "Application_XXXXXX" may contain the following directories.
 ```
 
 ### App_VS2008_OpenGL
- * Should work just by opening the solution with **Visual Studio 2008 Express** and 
+ * Should work just by opening the solution with **Visual Studio 2008 Express** and
    compiling+running it (with F5).
  * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
  * When providing the application to a client on another machine, the [redistribuable package for VS2008](https://www.microsoft.com/en-us/download/details.aspx?id=29) or [VS2008 SP1](https://www.microsoft.com/en-us/download/details.aspx?id=5582) should be installed to ensure it works.
 
 ### App_VS2013_DX_Desktop
- * Should work just by opening the solution with **Visual Studio 2013 Express for Desktop** 
+ * Should work just by opening the solution with **Visual Studio 2013 Express for Desktop**
    and compiling+running it (with F5).
  * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
  * Note: if your Visual Studio is not in "C:\Program files (x86)\", you have to change
@@ -39,9 +39,9 @@ Each example project "Application_XXXXXX" may contain the following directories.
    * then run copy_work_dir_to_appx.bat,
    * then run the solution again.
  * Working directory is: WorkDirStore\AppX\
-   
+
 ### App_VS2017_DX_Desktop
- * Should work just by opening the solution with **Visual Studio Community 2017** 
+ * Should work just by opening the solution with **Visual Studio Community 2017**
    and compiling+running it (with F5).
  * Working directory is set to "WorkDir" (Included on Git. Contains the data file.)
  * Note: if your Visual Studio is not in "C:\Program files (x86)\", you may have to change
@@ -77,13 +77,17 @@ Each example project "Application_XXXXXX" may contain the following directories.
 ### App_JS_Emscripten (Highly Experimental)
  * Requires Perl.
  * On Windows please:
-   * Install [Emscripten SDK 1.35.0](https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-1.35.0-full-64bit.exe)
-   * Install http://strawberryperl.com/
-   * Run compile.bat in Application_[...]/App_JS_Emscripten/
+   * Installation:
+     * Download [the latest version of Emscripten 64bits](https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable-64bit.zip) or [32bits](https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.zip)
+     * Unzip the zip file in the folder <volatile-dove-engine>\common\JS_Emscripten
+      (so that for example the file <volatile-dove-engine>\common\JS_Emscripten\emsdk-portable-64bit\emsdk.bat or <volatile-dove-engine>\common\JS_Emscripten\emsdk-portable\emsdk.bat should exist )
+     * run install_emsdk.bat in <volatile-dove-engine>\common\JS_Emscripten\ with administrative privileges
+   * Run compile.bat or compile_sdl2.bat in Application_[...]/App_JS_Emscripten/
    * Open output.html in your browser
  * On Linux:
 ```
 	cd common/JS_Emscripten/ && get_emsdk.sh && cd ../..
-	cd Application_[...]/App_JS_Emscripten/ && sh compile.sh
+	cd Application_[...]/App_JS_Emscripten/
+  sh compile.sh # or sh compile_sdl2.sh
 	# Open output.html in your browser
 ```

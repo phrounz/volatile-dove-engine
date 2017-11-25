@@ -168,7 +168,7 @@ void OpenGLAppControls::initControls(AbstractMainClass* mainClass)
 
 int convertSDLKeycodeToKeyboardManagerKeycode(SDL_Keycode sym)
 {
-#ifdef __EMSCRIPTEN__
+#if defined(USES_JS_EMSCRIPTEN) // defined(__EMSCRIPTEN__)
 	#pragma message("TODO workaround emscripten SDL_Event keycode wrong")
 	//sym = t SDL_SCANCODE_TO_KEYCODE(sdlEvent.key.keysym.scancode);
 	//sym = SDL_GetKeyFromScancode(sdlEvent.key.keysym.scancode);
@@ -191,6 +191,10 @@ int convertSDLKeycodeToKeyboardManagerKeycode(SDL_Keycode sym)
 	else if(sym == 76) sym = SDLK_DELETE;
 	else if(sym == 77) sym = SDLK_END;
 	else if(sym == 78) sym = SDLK_PAGEDOWN;
+	#if defined(USES_JS_EMSCRIPTEN) && defined(USES_SDL2)
+		#pragma message("TODO key RETURN with EMSCRIPTEN/SDL2")
+		else if (sym == 106) sym = SDLK_RETURN;//only for SDL2, but it's also 'j' WTF
+	#endif
 #endif
 	int c = 0;
 	//outputln((int)sym << ";" << (int)SDLK_a);
@@ -225,6 +229,8 @@ int convertSDLKeycodeToKeyboardManagerKeycode(SDL_Keycode sym)
 #pragma message("TODO add support for all remaining keys")
 		}
 	}
+	outputln("test:" << int(sym));
+	
 	return c;
 }
 

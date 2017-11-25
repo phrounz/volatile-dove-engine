@@ -8,9 +8,14 @@
 	#define GL_GLEXT_PROTOTYPES
 
 	#ifdef USES_SDL_INSTEAD_OF_GLUT
-		#include <SDL/SDL.h>
-		#include <SDL/SDL_image.h>
-		#include <SDL/SDL_opengl.h>
+		// https://stackoverflow.com/questions/37568585/unknown-type-name-sdl-rendererflip-using-sdl2-emscripten
+		#ifdef USES_SDL2
+			#include <SDL.h>
+		#else
+			#include <SDL/SDL.h>
+			#include <SDL/SDL_image.h>
+			#include <SDL/SDL_opengl.h>
+		#endif
 		#include <GL/gl.h>
 		#include <GL/glu.h>
 	#else

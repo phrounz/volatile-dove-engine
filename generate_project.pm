@@ -41,10 +41,16 @@ sub processEmscripten($$)
 		'@echo off'."\n"
 		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
 		."PAUSE\n");
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/$emscripten_dir/compile_sdl2.bat",
+		'@echo off'."\n"
+		.'perl ../../common/JS_Emscripten/compile.pl -sdl2 ../code/*.cpp'."\n"
+		."PAUSE\n");
 	generate_project::writeFileWithConfirmationForDifferences("$project_name/$emscripten_dir/compile.sh",
 		'#!/bin/sh'."\n\n"
-		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n"
-		);
+		.'perl ../../common/JS_Emscripten/compile.pl ../code/*.cpp'."\n");
+	generate_project::writeFileWithConfirmationForDifferences("$project_name/$emscripten_dir/compile_sdl2.sh",
+		'#!/bin/sh'."\n\n"
+		.'perl ../../common/JS_Emscripten/compile.pl -sdl2 ../code/*.cpp'."\n");
 }
 
 #----------------------------------------------
@@ -52,11 +58,11 @@ sub processEmscripten($$)
 sub processLinuxFiles($$$$)
 {
 	my ($project_name, $linux_dir, $linux_make_additional_arguments, $rl_steam_sdk_path_or_empty) = @_;
-	
+
 	mkd("$project_name/$linux_dir");
-	
+
 	generate_project::writeFileWithConfirmationForDifferences("$project_name/$linux_dir/.gitignore", "compile.sh.new\n.gitignore.new\n");
-	
+
 	my $steam_sdk_path_or_empty = filterOnlyAndExceptOne($rl_steam_sdk_path_or_empty, $linux_dir, undef);
 	my $add_args = (defined $linux_make_additional_arguments?$linux_make_additional_arguments:"");
 	$add_args .= " STEAMSDK_PATH='$steam_sdk_path_or_empty' " if ((defined $steam_sdk_path_or_empty) && ($steam_sdk_path_or_empty ne ''));
@@ -71,9 +77,9 @@ sub processLinuxFiles($$$$)
 sub processVS($$$$$$$)
 {
 	my ($name, $relt, $rl_code, $disable_3d, $recent_visual_studio, $use_directx, $rll_args_process) = @_;
-	
+
 	mkd("$relt/$name");
-	
+
 	my $gitignore_visual_studio = join("\n", qw/Debug Release *.ncb *.suo *.vcproj.*.user *.vcproj.new *.vcxproj.new .gitignore.new/)."\n";
 	writeFileWithConfirmationForDifferences("$relt/App_VS2008_OpenGL/.gitignore", $gitignore_visual_studio);
 
@@ -103,14 +109,14 @@ sub processOtherStuffVSStore($$)
 sub processWorkDir($$$)
 {
 	my ($project_name, $workdir, $steam_sdk_path) = @_;
-	
+
 	mkd("$project_name/$workdir");
 	generate_project::writeFileWithConfirmationForDifferences("$project_name/$workdir/.gitignore",
 		join("\n", qw/old *.dll *.zip *.exe steam_appid.txt App_Linux_*bit app32.sh app64.sh/)."\n");
 	mkd("$project_name/$workdir/linux_dependancies");
 	mkd("$project_name/$workdir/linux_dependancies/32bit");
 	mkd("$project_name/$workdir/linux_dependancies/64bit");
-	
+
 	if (defined $steam_sdk_path && $steam_sdk_path ne '')
 	{
 		copyOrFail($steam_sdk_path."/sdk/public/steam/lib/win32/sdkencryptedappticket.dll", "$project_name/$workdir/sdkencryptedappticket.dll");
@@ -153,7 +159,7 @@ sub processWorkDir($$$)
 sub processVisualStudioSolutionFile_($$$)
 {
 	my ($input_file, $output_file, $rl_visual_studio_app_guids) = @_;
-	
+
 	my $output_dir = basename(dirname($output_file));
 
 	my @l_lines = readFile($input_file);
@@ -220,10 +226,10 @@ sub processVisualStudioProjectFile_($$$$$$$)
 	my @l_additional_lib_dirs_arm = filterOnlyAndExcept($rl_additional_lib_dirs, $output_dir, "ARM");
 	my @l_additional_libs_arm = filterOnlyAndExcept($rl_additional_libs, $output_dir, "ARM");
 	my @l_additional_defines_arm = filterOnlyAndExcept($rl_additional_defines, $output_dir, "ARM");
-	
+
 	my $visual_studio_app_guid = filterOnlyAndExceptOne($rl_visual_studio_app_guids, $output_dir, undef);
 	my $steam_sdk_path_or_empty = filterOnlyAndExceptOne($rl_steam_sdk_path_or_empty, $output_dir, undef);
- 
+
 	if ($steam_sdk_path_or_empty ne '')
 	{
 		push @l_additional_include_dirs_32, "$steam_sdk_path_or_empty\\sdk\\public";

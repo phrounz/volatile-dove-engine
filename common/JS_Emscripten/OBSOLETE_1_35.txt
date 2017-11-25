@@ -1,0 +1,26 @@
+
+Alternative version to use Emscripten 1.35 with SDL2 support.
+Not advised any more.
+
+===> On Windows :
+
+ * Install [Emscripten SDK 1.35.0](https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-1.35.0-full-64bit.exe)
+ * Install http://strawberryperl.com/
+ * Then:
+
+curl -sL https://github.com/emscripten-ports/SDL2/archive/master.zip | unzip 
+cd SDL-emscripten/
+emconfigure ./configure --host=asmjs-unknown-emscripten --disable-assembly --disable-threads --enable-cpuinfo=false CFLAGS="-O2"
+emmake make
+PAUSE
+
+===> On Linux :
+
+ * Run get_emsdk.sh
+ * Then:
+
+wget https://github.com/emscripten-ports/SDL2/archive/master.zip 
+unzip master.zip 
+cd SDL2-master
+../emsdk_portable/emscripten/master/emconfigure ./configure --host=asmjs-unknown-emscripten --disable-assembly --disable-threads --enable-cpuinfo=false CFLAGS="-O2"
+../emsdk_portable/emscripten/master/emmake make

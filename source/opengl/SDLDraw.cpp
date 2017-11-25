@@ -99,13 +99,16 @@ void SDLDraw::drawTextureRotated(const SDL_Texture* texture,
 	destRect.h = height;
 
 	#pragma message("TODO SDLDraw::drawTextureRotated")
-	/*SDL_RendererFlip flip = SDL_FLIP_NONE;
+#if defined(USES_SDL2)
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
 	if (mirrorAxisX && mirrorAxisY) flip = (SDL_RendererFlip)(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL);
 	else if (mirrorAxisX) flip = SDL_FLIP_HORIZONTAL;
 	else if (mirrorAxisY) flip = SDL_FLIP_VERTICAL;
 	// cast removing constness below, hate this SDL crap
-	SDL_RenderCopyEx(s_sdlRenderer, (SDL_Texture*)texture, NULL, &destRect, angleDegree, NULL, flip);*/
+	SDL_RenderCopyEx(s_sdlRenderer, (SDL_Texture*)texture, NULL, &destRect, angleDegree, NULL, flip);
+#else
 	SDL_RenderCopy(s_sdlRenderer, (SDL_Texture*)texture, NULL, &destRect);
+#endif
 }
 
 void SDLDraw::resetColor()

@@ -146,7 +146,7 @@ void dieErrorMessageToUser(const std::wstring& message)
 	Utils::print(L"\n");
 	if (THROW_ERROR) throw EngineError(message);
 #if !defined(USES_LINUX) && !defined(USES_JS_EMSCRIPTEN) && !defined(USES_WINDOWS8_METRO)
-	
+
 	#ifdef ENABLE_CALLSTACK
 		MyStackWalker sw;
 		sw.ShowCallstack();
@@ -254,8 +254,13 @@ void print(const char* text)
 	{
 		if (fdLog == NULL)
 		{
-			//errno_t res = 
-			_wfopen_s(&fdLog, getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()).c_str(), L"w");
+			#if defined(USES_JS_EMSCRIPTEN)
+				std::string logPath = Utils::convertWStringToString(FileUtil::getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()), true);
+				fdLog = fopen(logPath.c_str(), "w");
+			#else
+				//errno_t res =
+				_wfopen_s(&fdLog, getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()).c_str(), L"w");
+			#endif
 		}
 
 		if (fdLog != NULL)
@@ -322,7 +327,7 @@ void print(const wchar_t* text)
 	{
 		if (fdLog == NULL)
 		{
-			//errno_t res = 
+			//errno_t res =
 			_wfopen_s(&fdLog, getFullPathUnicode(FileUtil::APPLICATION_DATA_FOLDER, log_basename.c_str()).c_str(), L"w");
 		}
 
