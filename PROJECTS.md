@@ -88,6 +88,6 @@ Each example project "Application_XXXXXX" may contain the following directories.
 ```
 	cd common/JS_Emscripten/ && get_emsdk.sh && cd ../..
 	cd Application_[...]/App_JS_Emscripten/
-  sh compile.sh # or sh compile_sdl2.sh
+	sh compile.sh # or sh compile_sdl2.sh
 	# Open output.html in your browser
 ```
