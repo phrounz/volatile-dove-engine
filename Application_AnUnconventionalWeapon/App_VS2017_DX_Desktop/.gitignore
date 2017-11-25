@@ -8,3 +8,4 @@ Release
 *.vcxproj.new
 .gitignore.new
 .vs
+*.sln.new
